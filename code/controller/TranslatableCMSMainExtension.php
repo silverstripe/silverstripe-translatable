@@ -4,16 +4,11 @@
  */
 class TranslatableCMSMainExtension extends Extension {
 
-	function extraStatics() {
-		return array(
-			'allowed_actions' => array(
-				'createtranslation',
-			)
-		);
-	}
+	static $allowed_actions = array(
+		'createtranslation',
+	);
 
 	function init() {
-		
 		// Locale" attribute is either explicitly added by LeftAndMain Javascript logic,
 		// or implied on a translated record (see {@link Translatable->updateCMSFields()}).
 		// $Lang serves as a "context" which can be inspected by Translatable - hence it
@@ -76,7 +71,7 @@ class TranslatableCMSMainExtension extends Extension {
 			$translatedRecord->ID,
 			$langCode
 		);
-		
+
 		return Director::redirect($url);
 	}
 	

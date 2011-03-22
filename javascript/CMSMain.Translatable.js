@@ -48,29 +48,22 @@
 		 * Requires:
 		 *  jquery.metadata
 		 */
-		$('.CMSMain .createTranslation').entwine({
+		$('.CMSMain :input[name=action_createtranslation]').entwine({
 			
-			/**
-			 * Constructor: onmatch
-			 */
-			onmatch: function() {
-				var self = this;
-			
-				this.find(':input[name=action_createtranslation]').bind('click', function(e) {
-					var form = self.parents('form');
-					// redirect to new URL
-					// TODO This should really be a POST request
-				
-					document.location.href = $('base').attr('href') + 
-						jQuery(self).metadata().url + 
-						'?ID=' + form.find(':input[name=ID]').val() + 
-						'&newlang=' + self.find(':input[name=NewTransLang]').val() +
-						'&locale=' + form.find(':input[name=Locale]').val(); 
+			onclick: function() {
+				var form = this.parents('form'), locale = form.find(':input[name=NewTransLang]').val();
+				var params = {
+					'ID': form.find(':input[name=ID]').val(), 
+					'newlang': locale,
+					'locale': locale,
+					'SecurityID': form.find(':input[name=SecurityID]').val()
+				};
+				// redirect to new URL
+				// TODO This should really be a POST request
+				// TODO Fix hardcode URL
+				document.location.href = $('base').attr('href') + 'admin/createtranslation?' + $.param(params);
 
-					return false;
-				});
-			
-				this._super();
+				return false;
 			}
 		});
 	});
