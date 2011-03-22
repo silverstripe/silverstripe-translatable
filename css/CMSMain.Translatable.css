@@ -1,0 +1,13 @@
+ul.tree span.untranslated a:link, 
+ul.tree span.untranslated a:hover, 
+ul.tree span.untranslated a:visited {
+	color: #ccc
+}
+
+.right form .createTranslationButton .middleColumn {
+	background: none;
+}
+
+.right form#Form_EditForm div.createTranslation {
+	margin-left: 0;
+}
