@@ -158,8 +158,7 @@
  * @author Michael Gall <michael (at) wakeless (dot) net>
  * @author Bernat Foj Capell <bernat@silverstripe.com>
  * 
- * @package sapphire
- * @subpackage i18n
+ * @package translatable
  */
 class Translatable extends DataObjectDecorator implements PermissionProvider {
 

@@ -33,8 +33,7 @@
  * http://mydomain.com/dev/tasks/MigrateTranslatableTask
  * </example>
  * 
- * @package sapphire
- * @subpackage tasks
+ * @package translatable
  */
 class MigrateTranslatableTask extends BuildTask {
 	protected $title = "Migrate Translatable Task";

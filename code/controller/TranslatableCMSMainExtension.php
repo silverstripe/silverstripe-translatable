@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package translatable
+ */
 class TranslatableCMSMainExtension extends Extension {
 
 	function extraStatics() {

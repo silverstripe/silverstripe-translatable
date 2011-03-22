@@ -1,7 +1,6 @@
 <?php
 /**
- * @package sapphire
- * @subpackage testing
+ * @package translatable
  */
 class TranslatableSearchFormTest extends FunctionalTest {
 	

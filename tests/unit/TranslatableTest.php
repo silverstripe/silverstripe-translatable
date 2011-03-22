@@ -2,8 +2,7 @@
 /**
  * @todo Test Versioned getters
  * 
- * @package sapphire
- * @subpackage tests
+ * @package translatable
  */
 class TranslatableTest extends FunctionalTest {
 	

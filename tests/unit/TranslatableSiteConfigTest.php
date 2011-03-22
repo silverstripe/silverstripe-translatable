@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package translatable
+ */
 class TranslatableSiteConfigTest extends SapphireTest {
 	
 	static $fixture_file = 'translatable/tests/unit/TranslatableSiteConfigTest.yml';
