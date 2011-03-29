@@ -13,6 +13,10 @@ See `/docs/en/index.md` for details.
 
  * Ingo Schommer <ingo at silverstripe dot com>
 
+## Issues ##
+
+See [open.silverstripe.org](http://open.silverstripe.org/query?status=!closed&summary=~Translatable)
+
 ## TODO ##
 
 This module was originally part of the SilverStripe CMS core codebase.
