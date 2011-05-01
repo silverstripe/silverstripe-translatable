@@ -868,7 +868,7 @@ class TranslatableTest extends FunctionalTest {
 		
 		$adminUser->logIn();
 		
-		$cmsMain = new CMSMain();
+		$cmsMain = new CMSPageEditController();
 		
 		$origLocale = Translatable::get_current_locale();
 		Translatable::set_current_locale('fr_FR');
@@ -876,13 +876,11 @@ class TranslatableTest extends FunctionalTest {
 		$form = $cmsMain->getEditForm($frPage->ID);
 		$form->loadDataFrom(array(
 			'Title' => 'Translated', // $db field
-			'ViewerGroups' => $group->ID // $many_many field
 		));
 		$form->saveInto($frPage);
 		$frPage->write();
 	
 		$this->assertEquals('Translated', $frPage->Title);
-		$this->assertEquals(array($group->ID), $frPage->ViewerGroups()->column('ID'));
 		
 		$adminUser->logOut();
 		Translatable::set_current_locale($origLocale);

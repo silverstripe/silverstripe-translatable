@@ -1028,6 +1028,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$langDropdown->addExtraClass('languageDropdown');
 		$createButton->addExtraClass('createTranslationButton');
 	}
+	
+	function updateSettingsFields(&$fields) {
+		return $this->updateCMSFields();
+	}
 		
 	/**
 	 * Get the names of all translatable fields on this class
