@@ -962,7 +962,7 @@ class TranslatableTest_DataObject extends DataObject implements TestOnly {
 	);
 }
 
-class TranslatableTest_Decorator extends DataObjectDecorator implements TestOnly {
+class TranslatableTest_Extension extends DataExtension implements TestOnly {
 	
 	function extraStatics() {
 		return array(
@@ -982,5 +982,5 @@ class TranslatableTest_Page extends Page implements TestOnly {
 	);
 }
 
-DataObject::add_extension('TranslatableTest_DataObject', 'TranslatableTest_Decorator');
+DataObject::add_extension('TranslatableTest_DataObject', 'TranslatableTest_Extension');
 ?>

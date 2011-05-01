@@ -160,7 +160,7 @@
  * 
  * @package translatable
  */
-class Translatable extends DataObjectDecorator implements PermissionProvider {
+class Translatable extends DataExtension implements PermissionProvider {
 
 	/**
 	 * The 'default' language.
