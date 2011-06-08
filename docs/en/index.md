@@ -248,12 +248,14 @@ Example:
 
 ### Locales and language tags
 
-For the Translatable class, a "locale" consists of a language code plus a region code separated by an underscore, 
+For the `Translatable` class, a "locale" consists of a language code plus a region code separated by an underscore, 
 for example "de_AT" for German language ("de") in the region Austria ("AT").
 See [http://www.w3.org/International/articles/language-tags/](http://www.w3.org/International/articles/language-tags/)
-for a detailed description.
+for a detailed description. You can get the locale on any object through the `Locale` property,
+e.g. `$myPage->Locale`. For page templates, use `$ContentLocale` instead (it defaults to the locale
+of the currently displayed page, and falls back to `i18n::get_locale()`).
 
-Uninstalling/Disabling
+### Uninstalling/Disabling
 
 Disabling Translatable after creating translations will lead to all
 pages being shown in the default sitetree regardless of their language.
@@ -285,6 +287,20 @@ By user preference (place this in your Page_Controller->init() method):
 	}
 
 ### Templates
+
+To declare the correct language, use the `lang` attribute on the `<html>` tag (see [W3C recommendation](http://www.w3.org/TR/2007/NOTE-i18n-html-tech-lang-20070412/#ri20060630.133619987)).
+SilverStripe provides `$ContentLocale` for this purpose.
+
+Declaring the language for HTML templates:
+
+	:::ss
+	<html lang="$ContentLocale">...</html>
+
+Declaring the language for HTML templates:
+
+	:::ss
+	<html lang="$ContentLocale" xml:lang="$ContentLocale" xmlns= "http://www.w3.org/1999/xhtml">
+
 
 As every page has its own unique URL, language selection mostly happens explicitly: A user requests a page, which always
 has only one language. But how does a user coming to your English default language know that there's a Japanese version
