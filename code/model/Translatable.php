@@ -945,6 +945,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// and a translation. Include the current locale (record might not be saved yet).
 		$alreadyTranslatedLocales = $this->getTranslatedLocales();
 		$alreadyTranslatedLocales[$this->owner->Locale] = $this->owner->Locale;
+		$alreadyTranslatedLocales = array_combine($alreadyTranslatedLocales, $alreadyTranslatedLocales);
 
 		if($originalRecord && $isTranslationMode) {
 			$originalLangID = Session::get($this->owner->ID . '_originalLangID');
@@ -1009,7 +1010,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 				new HeaderField('ExistingTransHeader', _t('Translatable.EXISTING', 'Existing translations:'), 3)
 			);
 			$existingTransHTML = '<ul>';
-			foreach($alreadyTranslatedLocales as $i => $langCode) {		
+			foreach($alreadyTranslatedLocales as $langCode) {		
 				$existingTranslation = $this->owner->getTranslation($langCode);
 				if($existingTranslation) {
 					$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
