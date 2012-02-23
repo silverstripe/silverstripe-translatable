@@ -1276,7 +1276,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$tags .= sprintf($template,
 				Convert::raw2xml($translation->Title),
 				i18n::convert_rfc1766($translation->Locale),
-				$translation->Link()
+				$translation->AbsoluteLink()
 			);
 		}
 	}
