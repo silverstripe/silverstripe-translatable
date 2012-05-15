@@ -11,3 +11,17 @@ ul.tree span.untranslated a:visited {
 .right form#Form_EditForm div.createTranslation {
 	margin-left: 0;
 }
+
+.CMSMain #Form_LangForm #Locale .middleColumn,
+.CMSMain #Form_LangForm #Locale label {
+	display: inline-block;
+}
+
+.CMSMain #Form_LangForm .Actions {
+	display: none;
+}
+
+/* Language dropdown has its own spacing */
+.cms-content-toolbar {
+	margin-bottom: 7px;
+}

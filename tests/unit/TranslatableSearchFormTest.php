@@ -28,10 +28,11 @@ class TranslatableSearchFormTest extends FunctionalTest {
 	
 	function setUpOnce() {
 		// HACK Postgres doesn't refresh TSearch indexes when the schema changes after CREATE TABLE
-		if(is_a(DB::getConn(), 'PostgreSQLDatabase')) {
-			self::kill_temp_db();
-		}
-		
+		// MySQL will need a different table type
+		self::kill_temp_db();
+		FulltextSearchable::enable();
+		self::create_temp_db();
+		$this->resetDBSchema(true);
 		parent::setUpOnce();
 	}
 	

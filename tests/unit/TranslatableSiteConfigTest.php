@@ -35,7 +35,7 @@ class TranslatableSiteConfigTest extends SapphireTest {
 		$configEn = SiteConfig::current_site_config();
 		$configFr = SiteConfig::current_site_config('fr_FR');
 		
-		$this->assertType('SiteConfig', $configFr);
+		$this->assertInstanceOf('SiteConfig', $configFr);
 		$this->assertEquals($configFr->Locale, 'fr_FR');
 		$this->assertEquals($configFr->Title, $configEn->Title, 'Copies title from existing config');
 	}

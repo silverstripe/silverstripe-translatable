@@ -14,10 +14,14 @@ class TranslatableCMSMainExtension extends Extension {
 		// $Lang serves as a "context" which can be inspected by Translatable - hence it
 		// has the same name as the database property on Translatable.
 		$req = $this->owner->getRequest();
+		$id = $req->param('ID');
 		if($req->requestVar("Locale")) {
 			$this->owner->Locale = $req->requestVar("Locale");
 		} elseif($req->requestVar("locale")) {
 			$this->owner->Locale = $req->requestVar("locale");
+		} else if($id && is_numeric($id)) {
+			$record = DataObject::get_by_id($this->owner->stat('tree_class'), $id);
+			if($record && $record->Locale) $this->owner->Locale = $record->Locale;
 		} else {
 			$this->owner->Locale = Translatable::default_locale();
 		}
@@ -46,14 +50,15 @@ class TranslatableCMSMainExtension extends Extension {
 	/**
 	 * Create a new translation from an existing item, switch to this language and reload the tree.
 	 */
-	function createtranslation($request) {
+	function createtranslation($data, $form) {
+		$request = $this->owner->getRequest();
+
 		// Protect against CSRF on destructive action
 		if(!SecurityToken::inst()->checkRequest($request)) return $this->owner->httpError(400);
 		
-		$langCode = Convert::raw2sql($request->getVar('newlang'));
-		$originalLangID = (int)$request->getVar('ID');
-
-		$record = $this->owner->getRecord($originalLangID);
+		$langCode = Convert::raw2sql($request->postVar('NewTransLang'));
+		$record = $this->owner->getRecord($request->postVar('ID'));
+		if(!$record) return $this->httpError(404);
 		
 		$this->owner->Locale = $langCode;
 		Translatable::set_current_locale($langCode);
@@ -67,12 +72,24 @@ class TranslatableCMSMainExtension extends Extension {
 
 		$url = sprintf(
 			"%s/%d/?locale=%s", 
-			$this->owner->Link('show'),
+			singleton('CMSPageEditController')->Link('show'),
 			$translatedRecord->ID,
 			$langCode
 		);
 
 		return Director::redirect($url);
+	}
+
+	function updateLink(&$link) {
+		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);
+	}
+
+	function updateLinkWithSearch(&$link) {
+		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);	
+	}
+
+	function updateExtraTreeTools(&$html) {
+		$html = $this->LangForm()->forTemplate() . $html;
 	}
 	
 	/**
@@ -104,14 +121,15 @@ class TranslatableCMSMainExtension extends Extension {
 		$form = new Form(
 			$this->owner,
 			'LangForm',
-			new FieldSet(
+			new FieldList(
 				$field
 			),
-			new FieldSet(
+			new FieldList(
 				new FormAction('selectlang', _t('CMSMain_left.ss.GO','Go'))
 			)
 		);
 		$form->unsetValidator();
+		$form->addExtraClass('nostyle');
 		
 		return $form;
 	}

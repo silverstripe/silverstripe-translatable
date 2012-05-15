@@ -22,17 +22,21 @@
 					if(newLocale) self.val(newLocale);
 				});
 			
-				// whenever a new value is selected, reload the whole CMS in the new locale
-				this.find(':input[name=Locale]').bind('change', function(e) {
-					var url = document.location.href;
-					url += (url.indexOf('?') != -1) ? '&' : '?';
-					// TODO Replace existing locale GET params
-					url += 'locale=' + $(e.target).val();
-					document.location = url;
-					return false;
-				});
-			
 				this._super();
+			}
+		});
+
+		/**
+		 * whenever a new value is selected, reload the whole CMS in the new locale
+		 */
+		$('.CMSMain #Form_LangForm :input[name=Locale]').entwine({
+			onchange: function(e) {
+				var url = $.path.addSearchParams(
+					document.location.href.replace(/locale=[^&]*/, ''),
+					{locale: $(e.target).val()}
+				);
+				$('.cms-container').loadPanel(url);
+				return false;
 			}
 		});
 	
@@ -51,18 +55,8 @@
 		$('.CMSMain :input[name=action_createtranslation]').entwine({
 			
 			onclick: function() {
-				var form = this.parents('form'), locale = form.find(':input[name=NewTransLang]').val();
-				var params = {
-					'ID': form.find(':input[name=ID]').val(), 
-					'newlang': locale,
-					'locale': locale,
-					'SecurityID': form.find(':input[name=SecurityID]').val()
-				};
-				// redirect to new URL
-				// TODO This should really be a POST request
-				// TODO Fix hardcode URL
-				document.location.href = $('base').attr('href') + 'admin/createtranslation?' + $.param(params);
-
+				this.parents('form').trigger('submit', [this]);
+				e.preventDefault();
 				return false;
 			}
 		});

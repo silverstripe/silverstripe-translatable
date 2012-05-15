@@ -516,7 +516,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		}
 	}
 	
-	function extraStatics() {
+	function extraStatics($class = null, $extension = null) {
 		return array(
 			"db" => array(
 				"Locale" => "DBLocale",
@@ -542,7 +542,6 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// with other extensions like Versioned
 		$locale = ($this->owner->ID && $this->owner->Locale) ? $this->owner->Locale : Translatable::get_current_locale();
 		$baseTable = ClassInfo::baseDataClass($this->owner->class);
-		$where = $query->where;
 		if(
 			$locale
 			// unless the filter has been temporarily disabled
@@ -551,13 +550,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 			&& !$query->filtersOnID() 
 			// the query contains this table
 			// @todo Isn't this always the case?!
-			&& array_search($baseTable, array_keys($query->from)) !== false 
+			&& array_search($baseTable, array_keys($query->getFrom())) !== false 
 			// or we're already filtering by Lang (either from an earlier augmentSQL() call or through custom SQL filters)
-			&& !preg_match('/("|\'|`)Locale("|\'|`)/', $query->getFilter())
+			&& !preg_match('/("|\'|`)Locale("|\'|`)/', implode(' ', $query->getWhere()))
 			//&& !$query->filtersOnFK()
 		)  {
 			$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
-			$query->where[] = $qry; 
+			$query->addWhere($qry); 
 		}
 	}
 	
@@ -900,92 +899,15 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * readonly fields, so you can translation INTO the "default language" while
 	 * seeing readonly fields as well.
 	 */
-	function updateCMSFields(FieldSet &$fields) {
-		if(!class_exists('SiteTree')) return;
-		// Don't apply these modifications for normal DataObjects - they rely on CMSMain logic
-		if(!($this->owner instanceof SiteTree)) return;
-		
-		// used in CMSMain->init() to set language state when reading/writing record
-		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale) );
-		
-			// Don't allow translation of virtual pages because of data inconsistencies (see #5000)
-		if(class_exists('VirtualPage')){
-			$excludedPageTypes = array('VirtualPage');
-			foreach($excludedPageTypes as $excludedPageType) {
-				if(is_a($this->owner, $excludedPageType)) return;
-			}
-		}
-		
-		$excludeFields = array(
-			'ViewerGroups',
-			'EditorGroups',
-			'CanViewType',
-			'CanEditType'
-		);
+	function updateCMSFields(FieldList $fields) {
+		$this->addTranslatableFields($fields);
 
-		// if a language other than default language is used, we're in "translation mode",
-		// hence have to modify the original fields
-		$creating = false;
-		$baseClass = $this->owner->class;
-		$allFields = $fields->toArray();
-		while( ($p = get_parent_class($baseClass)) != "DataObject") $baseClass = $p;
-
-		// try to get the record in "default language"
-		$originalRecord = $this->owner->getTranslation(Translatable::default_locale());
-		// if no translation in "default language", fall back to first translation
-		if(!$originalRecord) {
-			$translations = $this->owner->getTranslations();
-			$originalRecord = ($translations) ? $translations->First() : null;
-		}
-		
-		$isTranslationMode = $this->owner->Locale != Translatable::default_locale();
-		
 		// Show a dropdown to create a new translation.
 		// This action is possible both when showing the "default language"
 		// and a translation. Include the current locale (record might not be saved yet).
 		$alreadyTranslatedLocales = $this->getTranslatedLocales();
 		$alreadyTranslatedLocales[$this->owner->Locale] = $this->owner->Locale;
 		$alreadyTranslatedLocales = array_combine($alreadyTranslatedLocales, $alreadyTranslatedLocales);
-
-		if($originalRecord && $isTranslationMode) {
-			$originalLangID = Session::get($this->owner->ID . '_originalLangID');
-			
-			// Remove parent page dropdown
-			$fields->removeByName("ParentType");
-			$fields->removeByName("ParentID");
-			
-			$translatableFieldNames = $this->getTranslatableFields();
-			$allDataFields = $fields->dataFields();
-			
-			$transformation = new Translatable_Transformation($originalRecord);
-			
-			// iterate through sequential list of all datafields in fieldset
-			// (fields are object references, so we can replace them with the translatable CompositeField)
-			foreach($allDataFields as $dataField) {
-				if($dataField instanceof HiddenField) continue;
-				if(in_array($dataField->Name(), $excludeFields)) continue;
-				
-				if(in_array($dataField->Name(), $translatableFieldNames)) {
-					// if the field is translatable, perform transformation
-					$fields->replaceField($dataField->Name(), $transformation->transformFormField($dataField));
-				} else {
-					// else field shouldn't be editable in translation-mode, make readonly
-					$fields->replaceField($dataField->Name(), $dataField->performReadonlyTransformation());
-				}
-			}
-			
-		} elseif($this->owner->isNew()) {
-			$fields->addFieldsToTab(
-				'Root',
-				new Tab(_t('Translatable.TRANSLATIONS', 'Translations'),
-					new LiteralField('SaveBeforeCreatingTranslationNote',
-						sprintf('<p class="message">%s</p>',
-							_t('Translatable.NOTICENEWPAGE', 'Please save this page before creating a translation')
-						)
-					)
-				)
-			);
-		} 
 		
 		$fields->addFieldsToTab(
 			'Root',
@@ -1012,9 +934,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$existingTransHTML = '<ul>';
 			foreach($alreadyTranslatedLocales as $langCode) {		
 				$existingTranslation = $this->owner->getTranslation($langCode);
-				if($existingTranslation) {
+				if($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
 					$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
-						sprintf('admin/show/%d/?locale=%s', $existingTranslation->ID, $langCode),
+						sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $langCode),
 						i18n::get_locale_name($langCode)
 					);
 				}
@@ -1026,12 +948,94 @@ class Translatable extends DataExtension implements PermissionProvider {
 			);
 		}
 	
-		$langDropdown->addExtraClass('languageDropdown');
+		$langDropdown->addExtraClass('languageDropdown no-change-track');
 		$createButton->addExtraClass('createTranslationButton');
 	}
 	
 	function updateSettingsFields(&$fields) {
-		return $this->updateCMSFields();
+		$this->addTranslatableFields($fields);
+	}
+
+	protected function addTranslatableFields(&$fields) {
+		if(!class_exists('SiteTree')) return;
+		// Don't apply these modifications for normal DataObjects - they rely on CMSMain logic
+		if(!($this->owner instanceof SiteTree)) return;
+		
+		// used in CMSMain->init() to set language state when reading/writing record
+		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale) );
+		
+			// Don't allow translation of virtual pages because of data inconsistencies (see #5000)
+		if(class_exists('VirtualPage')){
+			$excludedPageTypes = array('VirtualPage');
+			foreach($excludedPageTypes as $excludedPageType) {
+				if(is_a($this->owner, $excludedPageType)) return;
+			}
+		}
+		
+		// TODO Remove hardcoding for SiteTree properties
+		$excludeFields = array(
+			'ViewerGroups',
+			'EditorGroups',
+			'CanViewType',
+			'CanEditType'
+		);
+
+		// if a language other than default language is used, we're in "translation mode",
+		// hence have to modify the original fields
+		$creating = false;
+		$baseClass = $this->owner->class;
+		$allFields = $fields->toArray();
+		while( ($p = get_parent_class($baseClass)) != "DataObject") $baseClass = $p;
+
+		// try to get the record in "default language"
+		$originalRecord = $this->owner->getTranslation(Translatable::default_locale());
+		// if no translation in "default language", fall back to first translation
+		if(!$originalRecord) {
+			$translations = $this->owner->getTranslations();
+			$originalRecord = ($translations) ? $translations->First() : null;
+		}
+		
+		$isTranslationMode = $this->owner->Locale != Translatable::default_locale();
+		
+		if($originalRecord && $isTranslationMode) {
+			$originalLangID = Session::get($this->owner->ID . '_originalLangID');
+			
+			// Remove parent page dropdown
+			$fields->removeByName("ParentType");
+			$fields->removeByName("ParentID");
+			
+			$translatableFieldNames = $this->getTranslatableFields();
+			$allDataFields = $fields->dataFields();
+			
+			$transformation = new Translatable_Transformation($originalRecord);
+			
+			// iterate through sequential list of all datafields in fieldset
+			// (fields are object references, so we can replace them with the translatable CompositeField)
+			foreach($allDataFields as $dataField) {
+				if($dataField instanceof HiddenField) continue;
+				if(in_array($dataField->getName(), $excludeFields)) continue;
+				
+				if(in_array($dataField->getName(), $translatableFieldNames)) {
+					// if the field is translatable, perform transformation
+					$fields->replaceField($dataField->getName(), $transformation->transformFormField($dataField));
+				} else {
+					// else field shouldn't be editable in translation-mode, make readonly
+					$fields->replaceField($dataField->getName(), $dataField->performReadonlyTransformation());
+				}
+			}
+			
+		} elseif($this->owner->isNew()) {
+			$fields->addFieldsToTab(
+				'Root',
+				new Tab(_t('Translatable.TRANSLATIONS', 'Translations'),
+					new LiteralField('SaveBeforeCreatingTranslationNote',
+						sprintf('<p class="message">%s</p>',
+							_t('Translatable.NOTICENEWPAGE', 'Please save this page before creating a translation')
+						)
+					)
+				)
+			);
+		} 
 	}
 		
 	/**
@@ -1089,24 +1093,20 @@ class Translatable extends DataExtension implements PermissionProvider {
 				// exclude the language of the current owner
 				$filter .= sprintf(' AND "%s"."Locale" != \'%s\'', $baseDataClass, $this->owner->Locale);
 			}
-			$join = sprintf('LEFT JOIN "%s_translationgroups" ON "%s_translationgroups"."OriginalID" = "%s"."ID"',
-				$baseDataClass,
-				$baseDataClass,
-				$baseDataClass
-			);
 			$currentStage = Versioned::current_stage();
+			$joinOnClause = sprintf('"%s_translationgroups"."OriginalID" = "%s"."ID"', $baseDataClass, $baseDataClass);
 			if($this->owner->hasExtension("Versioned")) {
 				if($stage) Versioned::reading_stage($stage);
 				$translations = Versioned::get_by_stage(
 					$this->owner->class, 
 					Versioned::current_stage(), 
 					$filter, 
-					null, 
-					$join
-				);
+					null
+				)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 				if($stage) Versioned::reading_stage($currentStage);
 			} else {
-				$translations = DataObject::get($this->owner->class, $filter, null, $join);
+				$translations = DataObject::get($this->owner->class, $filter)
+					->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 			}
 
 			self::enable_locale_filter();
@@ -1577,7 +1577,7 @@ class Translatable_Transformation extends FormTransformation {
 	}
 	
 	protected function baseTransform($nonEditableField, $originalField) {
-		$fieldname = $originalField->Name();
+		$fieldname = $originalField->getName();
 		
 		$nonEditableField_holder = new CompositeField($nonEditableField);
 		$nonEditableField_holder->setName($fieldname.'_holder');
