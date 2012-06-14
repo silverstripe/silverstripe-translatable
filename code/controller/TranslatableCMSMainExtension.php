@@ -38,7 +38,7 @@ class TranslatableCMSMainExtension extends Extension {
 	
 	function updateEditForm(&$form) {
 		$siteConfig = SiteConfig::current_site_config();
-		if($form->Name() == 'RootForm' && Object::has_extension('SiteConfig',"Translatable")) {
+		if($form->getName() == 'RootForm' && Object::has_extension('SiteConfig',"Translatable")) {
 			$form->Fields()->push(new HiddenField('Locale','', $siteConfig->Locale));
 		}
 	}
