@@ -515,17 +515,16 @@ class Translatable extends DataExtension implements PermissionProvider {
 			);
 		}
 	}
-	
-	function extraStatics($class = null, $extension = null) {
-		return array(
-			"db" => array(
-				"Locale" => "DBLocale",
-				//"TranslationMasterID" => "Int" // optional relation to a "translation master"
-			),
-			"defaults" => array(
-				"Locale" => Translatable::default_locale() // as an overloaded getter as well: getLang()
-			)
-		);
+
+	static function add_to_class($class, $extensionClass, $args = null) {
+		Config::inst()->update($class, 'defaults', array(
+			"Locale" => Translatable::default_locale() // as an overloaded getter as well: getLang()
+		));
+		Config::inst()->update($class, 'db', array(
+			"Locale" => "DBLocale",
+			//"TranslationMasterID" => "Int" // optional relation to a "translation master"
+		));
+		parent::add_to_class($class, $extensionClass, $args);
 	}
 
 	/**
