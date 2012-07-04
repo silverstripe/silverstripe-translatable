@@ -43,7 +43,7 @@ class TranslatableCMSMainExtension extends Extension {
 		}
 	}
 	
-	function updatePageOption(&$fields) {
+	function updatePageOptions(&$fields) {
 		$fields->push(new HiddenField("Locale", 'Locale', Translatable::get_current_locale()));
 	}
 	
