@@ -77,7 +77,7 @@ class TranslatableCMSMainExtension extends Extension {
 			$langCode
 		);
 
-		return Director::redirect($url);
+		return $this->owner->redirect($url);
 	}
 
 	function updateLink(&$link) {
