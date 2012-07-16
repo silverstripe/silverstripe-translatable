@@ -26,6 +26,27 @@ class TranslatableCMSMainExtension extends Extension {
 			$this->owner->Locale = Translatable::default_locale();
 		}
 		Translatable::set_current_locale($this->owner->Locale);
+
+		// if a locale is set, it needs to match to the current record
+		$requestLocale = $req->requestVar("Locale") ? $req->requestVar("Locale") : $req->requestVar("locale");
+		$page = $this->owner->currentPage();
+		if($requestLocale && $page && $page->Locale != $requestLocale) {
+			$transPage = $page->getTranslation($requestLocale);
+			if($transPage) {
+				Translatable::set_current_locale($transPage->Locale);
+				return $this->owner->redirect(Controller::join_links(
+					$this->owner->Link('show'),
+					$transPage->ID
+					// ?locale will automatically be added
+				));
+			} else {
+				// If the record is not translated, redirect to pages overview
+				return $this->owner->redirect(Controller::join_links(
+					singleton('CMSPagesController')->Link(),
+					'?locale=' . $requestLocale
+				));
+			}
+		}
 		
 		// collect languages for TinyMCE spellchecker plugin.
 		// see http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
