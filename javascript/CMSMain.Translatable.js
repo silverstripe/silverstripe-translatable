@@ -54,7 +54,7 @@
 		 */
 		$('.CMSMain :input[name=action_createtranslation]').entwine({
 			
-			onclick: function() {
+			onclick: function(e) {
 				this.parents('form').trigger('submit', [this]);
 				e.preventDefault();
 				return false;
