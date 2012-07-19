@@ -1297,7 +1297,6 @@ class Translatable extends DataExtension implements PermissionProvider {
 				_t(
 					'Translatable.TRANSLATEPERMISSION', 
 					'Translate %s', 
-					PR_MEDIUM, 
 					'Translate pages into a language'
 				),
 				$localeName
