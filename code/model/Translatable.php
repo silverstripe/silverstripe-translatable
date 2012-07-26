@@ -238,9 +238,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 			return self::$current_locale;
 		}
 
-		if((isset($_GET['locale']) && !$langsAvailable) || (isset($_GET['locale']) && in_array($_GET['locale'], $langsAvailable))) {
-			// get from GET parameter
-			self::set_current_locale($_GET['locale']);
+		if((isset($_REQUEST['locale']) && !$langsAvailable) || (isset($_REQUEST['locale']) && in_array($_REQUEST['locale'], $langsAvailable))) {
+			// get from request parameter
+			self::set_current_locale($_REQUEST['locale']);
 		} else {
 			self::set_current_locale(self::default_locale());
 		}

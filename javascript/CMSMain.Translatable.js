@@ -52,7 +52,7 @@
 		 * Requires:
 		 *  jquery.metadata
 		 */
-		$('.CMSMain :input[name=action_createtranslation]').entwine({
+		$('.LeftAndMain :input[name=action_createtranslation]').entwine({
 			
 			onclick: function(e) {
 				this.parents('form').trigger('submit', [this]);

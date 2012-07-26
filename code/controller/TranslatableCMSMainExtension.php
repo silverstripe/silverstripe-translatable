@@ -52,7 +52,7 @@ class TranslatableCMSMainExtension extends Extension {
 		// see http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
 		$langName = i18n::get_locale_name($this->owner->Locale);
 		HtmlEditorConfig::get('cms')->setOption('spellchecker_languages', "+{$langName}={$this->owner->Locale}");
-		
+
 		Requirements::javascript('translatable/javascript/CMSMain.Translatable.js');
 		Requirements::css('translatable/css/CMSMain.Translatable.css');
 	}
@@ -76,10 +76,10 @@ class TranslatableCMSMainExtension extends Extension {
 
 		// Protect against CSRF on destructive action
 		if(!SecurityToken::inst()->checkRequest($request)) return $this->owner->httpError(400);
-		
+
 		$langCode = Convert::raw2sql($request->postVar('NewTransLang'));
 		$record = $this->owner->getRecord($request->postVar('ID'));
-		if(!$record) return $this->httpError(404);
+		if(!$record) return $this->owner->httpError(404);
 		
 		$this->owner->Locale = $langCode;
 		Translatable::set_current_locale($langCode);
@@ -91,11 +91,10 @@ class TranslatableCMSMainExtension extends Extension {
 		// @todo Allow in-memory creation of translations that don't persist in the database before the user requests it
 		$translatedRecord = $record->createTranslation($langCode);
 
-		$url = sprintf(
-			"%s/%d/?locale=%s", 
-			singleton('CMSPageEditController')->Link('show'),
+		$url = Controller::join_links(
+			$this->owner->Link('show'),
 			$translatedRecord->ID,
-			$langCode
+			'?locale=' . $langCode
 		);
 
 		return $this->owner->redirect($url);
