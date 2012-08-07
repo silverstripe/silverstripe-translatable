@@ -93,8 +93,7 @@ class TranslatableCMSMainExtension extends Extension {
 
 		$url = Controller::join_links(
 			$this->owner->Link('show'),
-			$translatedRecord->ID,
-			'?locale=' . $langCode
+			$translatedRecord->ID
 		);
 
 		// set the X-Pjax header to Content, so that the whole admin panel will be refreshed
