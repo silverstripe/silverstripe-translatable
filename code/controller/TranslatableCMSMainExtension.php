@@ -97,6 +97,9 @@ class TranslatableCMSMainExtension extends Extension {
 			'?locale=' . $langCode
 		);
 
+		// set the X-Pjax header to Content, so that the whole admin panel will be refreshed
+		$this->owner->getResponse()->addHeader('X-Pjax', 'Content');
+		
 		return $this->owner->redirect($url);
 	}
 
