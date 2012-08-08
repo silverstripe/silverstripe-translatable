@@ -12,10 +12,6 @@ with minimal interference.
 Warning: If you're upgrading from a SilverStripe version prior to 2.3.2, please migrate your datamodel before using the
 extension (see below).
 
-## Requirements
-
-*SilverStripe 2.3.2*
-
 ## Screenshots
 
 ![](_images/translatable4_small.png)
@@ -141,9 +137,12 @@ through set_reading_locale(). Get the translated parent first.
 	$germanParent = $englishParent->getTranslation('de_DE');
 	$germanParent->Children();
 
+By default, the URLs generated for a page can only contain western characters ("ASCII").
+You can configure this to accept the whole range of UTF8 characters as well.
+This is a SilverStripe core feature, rather than anything specific to this module.
+Add the following to your `mysite/_config.php`:
 
-
-
+	URLSegmentFilter::$default_allow_multibyte = true;
 
 ### Translating custom properties
 
