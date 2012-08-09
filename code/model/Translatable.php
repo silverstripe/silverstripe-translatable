@@ -539,7 +539,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
-		$locale = ($this->owner->ID && $this->owner->Locale) ? $this->owner->Locale : Translatable::get_current_locale();
+		$locale = ($this->owner->ID && !empty($this->owner->Locale)) ? $this->owner->Locale : Translatable::get_current_locale();
 		$baseTable = ClassInfo::baseDataClass($this->owner->class);
 		if(
 			$locale
