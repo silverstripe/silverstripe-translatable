@@ -333,7 +333,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @param string $having A filter to be inserted into the HAVING clause.
 	 * @return mixed The objects matching the conditions.
 	 */
-	static function get_by_locale($class, $locale, $filter = '', $sort = '', $join = "", $limit = "", $containerClass = "DataObjectSet", $having = "") {
+	static function get_by_locale($class, $locale, $filter = '', $sort = '', $join = "", $limit = "", $containerClass = "DataList", $having = "") {
 		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
 		
 		$oldLang = self::get_current_locale();
