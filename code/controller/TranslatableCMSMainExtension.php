@@ -124,7 +124,7 @@ class TranslatableCMSMainExtension extends Extension {
 		if(Permission::checkMember($member, 'VIEW_LANGS')) {
 			$field = new LanguageDropdownField(
 				'Locale', 
-				_t('CMSMAIN.LanguageDropdownLabel', 'Language'), 
+				_t('CMSMain.LANGUAGEDROPDOWNLABEL', 'Language'), 
 				array(), 
 				'SiteTree', 
 				'Locale-English',
