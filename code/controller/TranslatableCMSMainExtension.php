@@ -30,7 +30,7 @@ class TranslatableCMSMainExtension extends Extension {
 		// if a locale is set, it needs to match to the current record
 		$requestLocale = $req->requestVar("Locale") ? $req->requestVar("Locale") : $req->requestVar("locale");
 		$page = $this->owner->currentPage();
-		if($requestLocale && $page && $page->Locale != $requestLocale) {
+		if($requestLocale && $page && $page->hasExtension('Translatable') && $page->Locale != $requestLocale) {
 			$transPage = $page->getTranslation($requestLocale);
 			if($transPage) {
 				Translatable::set_current_locale($transPage->Locale);
