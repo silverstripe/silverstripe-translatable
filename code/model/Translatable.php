@@ -315,7 +315,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$orig = Translatable::get_current_locale();
 		Translatable::set_current_locale($locale);
-		$do = DataObject::get_one($class, $filter, $cache, $orderby);
+		$do = $class::get()->where($filter)->sort($orderby)->First();
 		Translatable::set_current_locale($orig);
 		return $do;
 	}
@@ -333,13 +333,18 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @param string $having A filter to be inserted into the HAVING clause.
 	 * @return mixed The objects matching the conditions.
 	 */
-	static function get_by_locale($class, $locale, $filter = '', $sort = '', $join = "", $limit = "", $containerClass = "DataList", $having = "") {
+	static function get_by_locale($class, $locale, $filter = '', $sort = '', $join = "", $limit = "") {
 		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
 		
 		$oldLang = self::get_current_locale();
 		self::set_current_locale($locale);
-		$result = DataObject::get($class, $filter, $sort, $join, $limit, $containerClass, $having);
+		$result = $class::get();
+		if($filter) $result = $result->where($filter);
+		if($sort) $result = $result->sort($sort);
+		if($join) $result = $result->leftJoin($join);
+		if($limit) $result = $result->limit($limit);
 		self::set_current_locale($oldLang);
+
 		return $result;
 	}
 	
@@ -867,15 +872,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		// Find the locale language-independent of the page
 		self::disable_locale_filter();
-		$default = DataObject::get_one (
-			'SiteTree',
-			sprintf (
-				'"URLSegment" = \'%s\'%s',
-				Convert::raw2sql($URLSegment),
-				(is_int($parentID) ? " AND \"ParentID\" = $parentID" : null)
-			),
-			false
-		);
+		$default = SiteTree::get()->where(sprintf (
+			'"URLSegment" = \'%s\'%s',
+			Convert::raw2sql($URLSegment),
+			(is_int($parentID) ? " AND \"ParentID\" = $parentID" : null)
+		))->First();
 		self::enable_locale_filter();
 		
 		return $default;
@@ -1104,7 +1105,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 				)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 				if($stage) Versioned::reading_stage($currentStage);
 			} else {
-				$translations = DataObject::get($this->owner->class, $filter)
+				$class = $this->owner->class;
+				$translations = $class::get()
+					->where($filter)
 					->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 			}
 
@@ -1498,7 +1501,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return bool
      */
 	public function augmentValidURLSegment() {
-		if (self::locale_filter_enabled()) {
+		if(self::locale_filter_enabled()) {
 			self::disable_locale_filter();
 			$reEnableFilter = true;
 		}
@@ -1513,14 +1516,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 			}
 		}
 
-		$existingPage = DataObject::get_one(
-			'SiteTree',
-			"\"URLSegment\" = '{$this->owner->URLSegment}' $IDFilter $parentFilter",
-			false // disable get_one cache, as this otherwise may pick up results from when locale_filter was on
-		);
-		if ($reEnableFilter) {
-			self::enable_locale_filter();
-		}
+		$existingPage = SiteTree::get()
+			// disable get_one cache, as this otherwise may pick up results from when locale_filter was on
+			->where("\"URLSegment\" = '{$this->owner->URLSegment}' $IDFilter $parentFilter")->First();
+		
+		if($reEnableFilter) self::enable_locale_filter();
+		
 		return !$existingPage;
 	}
 		
