@@ -1,0 +1,29 @@
+{
+	"name":"silverstripe/translatable",
+	"type": "silverstripe-module",
+	"description": "Allows translation of DataObject and SiteTree records into multiple languages ",
+	"keywords": ["silverstripe", "cms", "i18n", "localization", "globalization"],
+	"license": "BSD-3-Clause",
+	"homepage": "https://github.com/silverstripe/silverstripe-translatable/",
+	"authors":[
+		{
+			"name": "Ingo Schommer",
+			"homepage": "http://chillu.com",
+			"email" : "ingo@silverstripe.com",
+			"role" : "tech-lead"
+		}
+	],
+	"require": 
+		{
+			"php": ">=5.3.2",
+			"silverstripe/framework": "3.0.1",
+			"silverstripe/cms": "3.0.1"
+		},
+	"extra":
+		{
+			"snapshot" : "http://www.silverstripe.org/assets/Uploads/translatable4-small.png"
+		},
+	"support": {
+		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
+	}
+}
