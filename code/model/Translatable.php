@@ -1133,6 +1133,72 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 	
 	/**
+	 * Enables automatic population of SiteConfig fields using createTranslation if
+	 * created outside of the Translatable module
+	 * @var boolean
+	 */
+	public static $enable_siteconfig_generation = true;
+
+	/**
+	 * When the SiteConfig object is automatically instantiated, we should ensure that
+	 * 1. All SiteConfig objects belong to the same group
+	 * 2. Defaults are correctly initiated from the base object
+	 * 3. The creation mechanism uses the createTranslation function in order to be consistent
+	 * This function ensures that any already created "vanilla" SiteConfig object is populated 
+	 * correctly with translated values.
+	 * This function DOES populate the ID field with the newly created object ID
+	 * @see SiteConfig
+	 */
+	protected function populateSiteConfig()
+	{
+		// This is required to prevent infinite loop during createTranslation
+		// If createTranslation is called directly on SiteConfig then this function could
+		// be called twice, but it will not cause harm for this to happen.
+		if(!self::$enable_siteconfig_generation)
+			return;
+		self::$enable_siteconfig_generation = false;
+		
+		// Find the best base translation for site config
+		Translatable::disable_locale_filter();
+		$existingConfig = SiteConfig::get()->filter(array('Locale' => Translatable::default_locale()))->first();
+		if(!$existingConfig)
+			$existingConfig = SiteConfig::get()->first();
+		Translatable::enable_locale_filter();
+		
+		// Base case; creation of the first site config
+		if(!$existingConfig)
+		{
+			$this->owner->Locale = Translatable::get_current_locale();
+			return;
+		}
+		
+		// Edge case: creating new translation in same locale as an existing object probably
+		// should not have the same translation group (@todo find examples)
+		if(Translatable::get_current_locale() == $existingConfig->Locale)
+			return;
+
+		// Create a third "staging" translated object using the correct createTranslation mechanism
+		$stagingConfig = $existingConfig->createTranslation(Translatable::get_current_locale());
+
+		// Copy fields from translated object (including ID) to the generated object
+		// This is similar to the creation of objects via createTranslation, but we need to
+		// preserve the ID in order to prevent 
+		$this->owner->update($stagingConfig->toMap());
+		
+		// Re-enable config generation
+		self::$enable_siteconfig_generation = true;
+	}
+
+	/**
+	 * Hooks into the DataObject::populateDefaults() method 
+	 */
+	public function populateDefaults()
+	{
+		if (empty($this->owner->ID) && $this->owner instanceof SiteConfig)
+			$this->populateSiteConfig();
+	}
+	
+	/**
 	 * Creates a new translation for the owner object of this decorator.
 	 * Checks {@link getTranslation()} to return an existing translation
 	 * instead of creating a duplicate. Writes the record to the database before

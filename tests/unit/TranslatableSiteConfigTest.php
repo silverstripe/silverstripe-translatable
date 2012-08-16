@@ -32,8 +32,11 @@ class TranslatableSiteConfigTest extends SapphireTest {
 	}
 	
 	function testCurrentCreatesDefaultForLocale() {
+		Translatable::set_current_locale(Translatable::default_locale());
 		$configEn = SiteConfig::current_site_config();
-		$configFr = SiteConfig::current_site_config('fr_FR');
+		Translatable::set_current_locale('fr_FR');
+		$configFr = SiteConfig::current_site_config();
+		Translatable::set_current_locale(Translatable::default_locale());
 		
 		$this->assertInstanceOf('SiteConfig', $configFr);
 		$this->assertEquals($configFr->Locale, 'fr_FR');
