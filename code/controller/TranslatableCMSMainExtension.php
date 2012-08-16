@@ -118,6 +118,10 @@ class TranslatableCMSMainExtension extends Extension {
 	function updateExtraTreeTools(&$html) {
 		$html = $this->LangForm()->forTemplate() . $html;
 	}
+
+	function updateLinkPageAdd(&$link) {
+		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);
+	}
 	
 	/**
 	 * Returns a form with all languages with languages already used appearing first.
