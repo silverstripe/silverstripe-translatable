@@ -957,14 +957,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 
 	protected function addTranslatableFields(&$fields) {
-		if(!class_exists('SiteTree')) return;
+		// used in LeftAndMain->init() to set language state when reading/writing record
+		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale));
+		
 		// Don't apply these modifications for normal DataObjects - they rely on CMSMain logic
+		if(!class_exists('SiteTree')) return;
 		if(!($this->owner instanceof SiteTree)) return;
 		
-		// used in CMSMain->init() to set language state when reading/writing record
-		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale) );
-		
-			// Don't allow translation of virtual pages because of data inconsistencies (see #5000)
+		// Don't allow translation of virtual pages because of data inconsistencies (see #5000)
 		if(class_exists('VirtualPage')){
 			$excludedPageTypes = array('VirtualPage');
 			foreach($excludedPageTypes as $excludedPageType) {
@@ -1149,8 +1149,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * This function DOES populate the ID field with the newly created object ID
 	 * @see SiteConfig
 	 */
-	protected function populateSiteConfig()
-	{
+	protected function populateSiteConfig() {
 		// This is required to prevent infinite loop during createTranslation
 		// If createTranslation is called directly on SiteConfig then this function could
 		// be called twice, but it will not cause harm for this to happen.
@@ -1192,8 +1191,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * Hooks into the DataObject::populateDefaults() method 
 	 */
-	public function populateDefaults()
-	{
+	public function populateDefaults() {
 		if (empty($this->owner->ID) && $this->owner instanceof SiteConfig)
 			$this->populateSiteConfig();
 	}
