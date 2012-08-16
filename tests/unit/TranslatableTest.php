@@ -260,7 +260,8 @@ class TranslatableTest extends FunctionalTest {
 			sprintf("\"SiteTree\".\"MenuTitle\" = '%s'", 'A Testpage')
 		);
 		$resultPagesDefaultLangIDs = $resultPagesDefaultLang->column('ID');
-		array_walk($resultPagesDefaultLangIDs, 'intval');
+		foreach($resultPagesDefaultLangIDs as $key => $val)
+			$resultPagesDefaultLangIDs[$key] = intval($val);
 		$this->assertEquals($resultPagesDefaultLang->Count(), 2);
 		$this->assertContains((int)$origTestPage->ID, $resultPagesDefaultLangIDs);
 		$this->assertContains((int)$otherTestPage->ID, $resultPagesDefaultLangIDs);
@@ -273,7 +274,8 @@ class TranslatableTest extends FunctionalTest {
 			sprintf("\"SiteTree\".\"MenuTitle\" = '%s'", 'A Testpage')
 		);
 		$resultPagesCustomLangIDs = $resultPagesCustomLang->column('ID');
-		array_walk($resultPagesCustomLangIDs, 'intval');
+		foreach($resultPagesCustomLangIDs as $key => $val)
+			$resultPagesCustomLangIDs[$key] = intval($val);
 		$this->assertEquals($resultPagesCustomLang->Count(), 1);
 		$this->assertNotContains((int)$origTestPage->ID, $resultPagesCustomLangIDs);
 		$this->assertNotContains((int)$otherTestPage->ID, $resultPagesCustomLangIDs);
