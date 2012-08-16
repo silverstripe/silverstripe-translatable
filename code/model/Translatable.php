@@ -1131,13 +1131,6 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$translations = $this->getTranslations($locale, $stage);
 		return ($translations) ? $translations->First() : null;
 	}
-	
-	/**
-	 * Enables automatic population of SiteConfig fields using createTranslation if
-	 * created outside of the Translatable module
-	 * @var boolean
-	 */
-	public static $enable_siteconfig_generation = true;
 
 	/**
 	 * When the SiteConfig object is automatically instantiated, we should ensure that
@@ -1150,12 +1143,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @see SiteConfig
 	 */
 	protected function populateSiteConfig() {
-		// This is required to prevent infinite loop during createTranslation
-		// If createTranslation is called directly on SiteConfig then this function could
-		// be called twice, but it will not cause harm for this to happen.
-		if(!self::$enable_siteconfig_generation)
+		
+		// Work-around for population of defaults during test setup (when tables are not created).
+		// When the database is being setup during testing, singleton('SiteConfig') is called.
+		// Singleton objects should not call populateDefault() but a bug seems to be allowing it
+		// to happen anyway. Looking up existing SiteConfig objects without a database crashes horribly
+		// @todo Remove this hack once this bug is fixed
+		if(SapphireTest::using_temp_db() && !DB::getConn()->hasTable($this->owner->class))
 			return;
-		self::$enable_siteconfig_generation = false;
 		
 		// Find the best base translation for site config
 		Translatable::disable_locale_filter();
@@ -1181,19 +1176,28 @@ class Translatable extends DataExtension implements PermissionProvider {
 
 		// Copy fields from translated object (including ID) to the generated object
 		// This is similar to the creation of objects via createTranslation, but we need to
-		// preserve the ID in order to prevent 
+		// preserve the ID in order to prevent unnecessary object creation
 		$this->owner->update($stagingConfig->toMap());
-		
-		// Re-enable config generation
-		self::$enable_siteconfig_generation = true;
 	}
+	
+	/**
+	 * Enables automatic population of SiteConfig fields using createTranslation if
+	 * created outside of the Translatable module
+	 * @var boolean
+	 */
+	public static $enable_siteconfig_generation = true;
 
 	/**
 	 * Hooks into the DataObject::populateDefaults() method 
 	 */
 	public function populateDefaults() {
-		if (empty($this->owner->ID) && $this->owner instanceof SiteConfig)
+		if (empty($this->owner->ID) && ($this->owner instanceof SiteConfig) && self::$enable_siteconfig_generation)
+		{
+			// Use enable_siteconfig_generation to prevent infinite loop during 
+			self::$enable_siteconfig_generation = false;
 			$this->populateSiteConfig();
+			self::$enable_siteconfig_generation = true;
+		}
 	}
 	
 	/**
