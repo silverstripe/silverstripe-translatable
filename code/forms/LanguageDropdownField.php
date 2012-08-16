@@ -66,6 +66,8 @@ class LanguageDropdownField extends GroupedDropdownField {
 
 		parent::__construct($name, $title, $source);
 	}
-}
 
-?>
+	function Type() {
+		return 'languagedropdown dropdown';
+	}
+}
