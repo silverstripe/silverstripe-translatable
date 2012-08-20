@@ -1144,12 +1144,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	protected function populateSiteConfig() {
 		
-		// Work-around for population of defaults during test setup (when tables are not created).
-		// When the database is being setup during testing, singleton('SiteConfig') is called.
+		// Work-around for population of defaults during database initialisation
+		// When the database is being setup  singleton('SiteConfig') is called.
 		// Singleton objects should not call populateDefault() but a bug seems to be allowing it
 		// to happen anyway. Looking up existing SiteConfig objects without a database crashes horribly
 		// @todo Remove this hack once this bug is fixed
-		if(SapphireTest::using_temp_db() && !DB::getConn()->hasTable($this->owner->class))
+		if(!DB::getConn()->hasTable($this->owner->class))
 			return;
 		
 		// Find the best base translation for site config
