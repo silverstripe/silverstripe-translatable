@@ -120,7 +120,7 @@ class TranslatableCMSMainExtension extends Extension {
 	}
 
 	function updateLinkPageAdd(&$link) {
-		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);
+		if($this->owner->Locale) $link = Controller::join_links($link, '?Locale=' . $this->owner->Locale);
 	}
 	
 	/**
