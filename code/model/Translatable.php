@@ -1149,35 +1149,42 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// Singleton objects should not call populateDefault() but a bug seems to be allowing it
 		// to happen anyway. Looking up existing SiteConfig objects without a database crashes horribly
 		// @todo Remove this hack once this bug is fixed
-		if(!DB::getConn()->hasTable($this->owner->class))
-			return;
+		if(!DB::getConn()->hasTable($this->owner->class)) return;
 		
 		// Find the best base translation for site config
 		Translatable::disable_locale_filter();
 		$existingConfig = SiteConfig::get()->filter(array('Locale' => Translatable::default_locale()))->first();
-		if(!$existingConfig)
-			$existingConfig = SiteConfig::get()->first();
+		if(!$existingConfig) $existingConfig = SiteConfig::get()->first();
 		Translatable::enable_locale_filter();
 		
 		// Base case; creation of the first site config
-		if(!$existingConfig)
-		{
+		if(!$existingConfig) {
 			$this->owner->Locale = Translatable::get_current_locale();
 			return;
 		}
 		
 		// Edge case: creating new translation in same locale as an existing object probably
 		// should not have the same translation group (@todo find examples)
-		if(Translatable::get_current_locale() == $existingConfig->Locale)
-			return;
+		if(Translatable::get_current_locale() == $existingConfig->Locale) return;
 
-		// Create a third "staging" translated object using the correct createTranslation mechanism
-		$stagingConfig = $existingConfig->createTranslation(Translatable::get_current_locale());
-
-		// Copy fields from translated object (including ID) to the generated object
-		// This is similar to the creation of objects via createTranslation, but we need to
-		// preserve the ID in order to prevent unnecessary object creation
+		// Create a third unsaved "staging" translated object using the correct createTranslation mechanism
+		$stagingConfig = $existingConfig->createTranslation(Translatable::get_current_locale(), false);
+		
+		// Copy fields from translated object to the generated object.
+		// This is similar to the creation of objects via createTranslation,
+		// although by default this object should not be saved
 		$this->owner->update($stagingConfig->toMap());
+		
+		// Copy translation group
+		// @todo Candidate for a refactor, along with other parts of this code
+		// that reference _TranslationGroupID / getTranslationGroup
+		if($group = $stagingConfig->getTranslationGroup()) {
+			$this->owner->_TranslationGroupID = $group;
+		} elseif(!empty($stagingConfig->_TranslationGroupID)) {
+			$this->owner->_TranslationGroupID = $stagingConfig->_TranslationGroupID;
+		} else {
+			$this->owner->_TranslationGroupID = $stagingConfig->ID;
+		}
 	}
 	
 	/**
@@ -1193,7 +1200,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	public function populateDefaults() {
 		if (empty($this->owner->ID) && ($this->owner instanceof SiteConfig) && self::$enable_siteconfig_generation)
 		{
-			// Use enable_siteconfig_generation to prevent infinite loop during 
+			// Use enable_siteconfig_generation to prevent infinite loop during object creation
 			self::$enable_siteconfig_generation = false;
 			$this->populateSiteConfig();
 			self::$enable_siteconfig_generation = true;
@@ -1209,10 +1216,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * it belongs to. For "original records" which are not created through this
 	 * method, the "translation group" is set in {@link onAfterWrite()}.
 	 * 
-	 * @param string $locale
+	 * @param string $locale Target locale to translate this object into
+	 * @param boolean $saveTranslation Flag indicating whether the new record 
+	 * should be saved to the database.
 	 * @return DataObject The translated object
 	 */
-	function createTranslation($locale) {
+	function createTranslation($locale, $saveTranslation = true) {
 		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
 		
 		if(!$this->owner->exists()) {
@@ -1261,7 +1270,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// hacky way to set an existing translation group in onAfterWrite()
 		$translationGroupID = $this->getTranslationGroup();
 		$newTranslation->_TranslationGroupID = $translationGroupID ? $translationGroupID : $this->owner->ID;
-		$newTranslation->write();
+		if($saveTranslation) $newTranslation->write();
 		
 		return $newTranslation;
 	}

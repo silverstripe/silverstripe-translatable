@@ -41,6 +41,7 @@ class TranslatableSiteConfigTest extends SapphireTest {
 		$this->assertInstanceOf('SiteConfig', $configFr);
 		$this->assertEquals($configFr->Locale, 'fr_FR');
 		$this->assertEquals($configFr->Title, $configEn->Title, 'Copies title from existing config');
+		$this->assertEquals($configFr->getTranslationGroup(), $configEn->getTranslationGroup(), 'Created in the same translation group');
 	}
 	
 	function testCanEditTranslatedRootPages() {
