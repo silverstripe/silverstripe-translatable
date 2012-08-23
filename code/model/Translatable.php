@@ -1174,17 +1174,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// This is similar to the creation of objects via createTranslation,
 		// although by default this object should not be saved
 		$this->owner->update($stagingConfig->toMap());
-		
-		// Copy translation group
-		// @todo Candidate for a refactor, along with other parts of this code
-		// that reference _TranslationGroupID / getTranslationGroup
-		if($group = $stagingConfig->getTranslationGroup()) {
-			$this->owner->_TranslationGroupID = $group;
-		} elseif(!empty($stagingConfig->_TranslationGroupID)) {
-			$this->owner->_TranslationGroupID = $stagingConfig->_TranslationGroupID;
-		} else {
-			$this->owner->_TranslationGroupID = $stagingConfig->ID;
-		}
+		$this->owner->_TranslationGroupID = $existingConfig->getTranslationGroup();
 	}
 	
 	/**
