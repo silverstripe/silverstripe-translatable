@@ -30,6 +30,11 @@
 		 * whenever a new value is selected, reload the whole CMS in the new locale
 		 */
 		$('.CMSMain #Form_LangForm :input[name=Locale]').entwine({
+			onmatch: function() {
+				// make sure this element is shown, since it might be hidden by chosen before the panel is cached
+				$(this).show();
+				this._super();
+			},
 			onchange: function(e) {
 				var url = $.path.addSearchParams(
 					document.location.href.replace(/locale=[^&]*/, ''),
