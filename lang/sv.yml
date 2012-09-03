@@ -1,0 +1,17 @@
+sv:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: "Språk"
+  CMSMain_left.ss:
+    GO: "Ok"
+  Form:
+    LANGAVAIL: "Tillgängliga språk"
+    LANGAOTHER: "Andra språk"
+  Translatable:
+    TRANSLATIONS: "Översättningar"
+    CREATE: "Skapa ny översättning"
+    NEWLANGUAGE: "Nytt språk"
+    CREATEBUTTON: "Skapa"
+    EXISTING: "Existerande översättningar:"
+    NOTICENEWPAGE: "Vänligen spara sidan innan du översätter"
+    TRANSLATEPERMISSION: "Översätt %s"
+    TRANSLATEALLPERMISSION: "Översätt till alla språk"
