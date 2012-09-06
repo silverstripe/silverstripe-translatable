@@ -29,6 +29,11 @@ class TranslatableCMSMainExtension extends Extension {
 			if($record && $record->Locale) $this->owner->Locale = $record->Locale;
 		} else {
 			$this->owner->Locale = Translatable::default_locale();
+			if ($this->owner->class == 'CMSPagesController') {
+				// the CMSPagesController always needs to have the locale set, otherwise page editing will cause an extra
+				// ajax request which looks weird due to multiple "loading"-flashes
+				return $this->owner->redirect($this->owner->Link());
+			}
 		}
 		Translatable::set_current_locale($this->owner->Locale);
 
