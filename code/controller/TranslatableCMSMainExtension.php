@@ -49,7 +49,7 @@ class TranslatableCMSMainExtension extends Extension {
 					$transPage->ID
 					// ?locale will automatically be added
 				));
-			} else {
+			} else if ($this->owner->class != 'CMSPagesController') {
 				// If the record is not translated, redirect to pages overview
 				return $this->owner->redirect(Controller::join_links(
 					singleton('CMSPagesController')->Link(),
