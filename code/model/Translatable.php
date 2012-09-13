@@ -1131,7 +1131,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$translations = $this->getTranslations($locale, $stage);
 		return ($translations) ? $translations->First() : null;
 	}
-
+	
 	/**
 	 * When the SiteConfig object is automatically instantiated, we should ensure that
 	 * 1. All SiteConfig objects belong to the same group
@@ -1142,39 +1142,38 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * This function DOES populate the ID field with the newly created object ID
 	 * @see SiteConfig
 	 */
-	protected function populateSiteConfig() {
+	protected function populateSiteConfigDefaults() {
 		
-		// Work-around for population of defaults during database initialisation
-		// When the database is being setup  singleton('SiteConfig') is called.
-		// Singleton objects should not call populateDefault() but a bug seems to be allowing it
-		// to happen anyway. Looking up existing SiteConfig objects without a database crashes horribly
-		// @todo Remove this hack once this bug is fixed
+		// Work-around for population of defaults during database initialisation.
+		// When the database is being setup singleton('SiteConfig') is called.
 		if(!DB::getConn()->hasTable($this->owner->class)) return;
 		
-		// Find the best base translation for site config
+		// Find the best base translation for SiteConfig
 		Translatable::disable_locale_filter();
 		$existingConfig = SiteConfig::get()->filter(array('Locale' => Translatable::default_locale()))->first();
 		if(!$existingConfig) $existingConfig = SiteConfig::get()->first();
 		Translatable::enable_locale_filter();
-		
-		// Base case; creation of the first site config
-		if(!$existingConfig) {
-			$this->owner->Locale = Translatable::get_current_locale();
-			return;
+
+		// Stage this SiteConfig and copy into the current object
+		if(
+			$existingConfig
+			// Double-up of SiteConfig in the same locale can be ignored. Often caused by singleton(SiteConfig)	
+			&& !$existingConfig->getTranslation(Translatable::get_current_locale())
+			// If translation is not allowed by the current user then do not 
+			// allow this code to attempt any behind the scenes translation.
+			&& $existingConfig->canTranslate(null, Translatable::get_current_locale())
+		) {
+			// Create an unsaved "staging" translated object using the correct createTranslation mechanism
+			$stagingConfig = $existingConfig->createTranslation(Translatable::get_current_locale(), false);
+			$this->owner->update($stagingConfig->toMap());
 		}
 		
-		// Edge case: creating new translation in same locale as an existing object probably
-		// should not have the same translation group (@todo find examples)
-		if(Translatable::get_current_locale() == $existingConfig->Locale) return;
-
-		// Create a third unsaved "staging" translated object using the correct createTranslation mechanism
-		$stagingConfig = $existingConfig->createTranslation(Translatable::get_current_locale(), false);
+		// Maintain single translation group for SiteConfig
+		if($existingConfig) {
+			$this->owner->_TranslationGroupID = $existingConfig->getTranslationGroup();
+		}
 		
-		// Copy fields from translated object to the generated object.
-		// This is similar to the creation of objects via createTranslation,
-		// although by default this object should not be saved
-		$this->owner->update($stagingConfig->toMap());
-		$this->owner->_TranslationGroupID = $existingConfig->getTranslationGroup();
+		$this->owner->Locale = Translatable::get_current_locale();
 	}
 	
 	/**
@@ -1192,7 +1191,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		{
 			// Use enable_siteconfig_generation to prevent infinite loop during object creation
 			self::$enable_siteconfig_generation = false;
-			$this->populateSiteConfig();
+			$this->populateSiteConfigDefaults();
 			self::$enable_siteconfig_generation = true;
 		}
 	}
