@@ -12,10 +12,14 @@ class LanguageDropdownField extends GroupedDropdownField {
 	 * @param string $name
 	 * @param string $title
 	 * @param array $excludeLocales List of locales that won't be included
-	 * @param string $translatingClass Name of the class with translated instances where to look for used languages
-	 * @param string $list Indicates the source language list. Can be either Common-English, Common-Native, Locale-English, Locale-Native
+	 * @param string $translatingClass Name of the class with translated instances 
+	 *               where to look for used languages
+	 * @param string $list Indicates the source language list. 
+	 *               Can be either Common-English, Common-Native, Locale-English, Locale-Native
 	 */
-	function __construct($name, $title, $excludeLocales = array(), $translatingClass = 'SiteTree', $list = 'Common-English', $instance = null) {
+	function __construct($name, $title, $excludeLocales = array(), 
+		$translatingClass = 'SiteTree', $list = 'Common-English', $instance = null
+	) {
 		$usedLocalesWithTitle = Translatable::get_existing_content_languages($translatingClass);
 		$usedLocalesWithTitle = array_diff_key($usedLocalesWithTitle, $excludeLocales);
 
@@ -25,7 +29,9 @@ class LanguageDropdownField extends GroupedDropdownField {
 		else if('Locale-Native' == $list) $allLocalesWithTitle = i18n::get_common_locales(true);
 		else $allLocalesWithTitle = i18n::get_locale_list();
 
-		if(isset($allLocales[Translatable::default_locale()])) unset($allLocales[Translatable::default_locale()]);
+		if(isset($allLocales[Translatable::default_locale()])) {
+			unset($allLocales[Translatable::default_locale()]);
+		}
 		
 		// Limit to allowed locales if defined
 		// Check for canTranslate() if an $instance is given

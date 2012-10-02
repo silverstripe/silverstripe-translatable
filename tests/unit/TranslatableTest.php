@@ -60,7 +60,9 @@ class TranslatableTest extends FunctionalTest {
 		$this->assertContains($translatedPage->URLSegment, $response->getHeader('Location'));
 		
 		$response = $this->get(Controller::join_links($origPage->URLSegment, '?locale=fr_FR'));
-		$this->assertEquals(200, $response->getStatusCode(), 'Locale GET param without existing translation shows original page');
+		$this->assertEquals(200, $response->getStatusCode(), 
+			'Locale GET param without existing translation shows original page'
+		);
 	}
 	
 	function testTranslationGroups() {
@@ -657,9 +659,11 @@ class TranslatableTest extends FunctionalTest {
 			$translatedParentPage->AllChildrenIncludingDeleted()->column('ID'),
 			array(
 				$child2PageTranslatedID,
-				$child1PageTranslatedID // $child1PageTranslated was deleted from stage, so the original record doesn't have the ID set
+				// $child1PageTranslated was deleted from stage, so the original record doesn't have the ID set
+				$child1PageTranslatedID 
 			),
-			"Showing AllChildrenIncludingDeleted() in translation mode with parent page in translated language shows children in translated language"
+			"Showing AllChildrenIncludingDeleted() in translation mode with parent page in " .
+			"translated language shows children in translated language"
 		);
 		
 		Translatable::set_current_locale('de_DE');
@@ -668,7 +672,8 @@ class TranslatableTest extends FunctionalTest {
 		$this->assertEquals(
 			$parentPage->AllChildrenIncludingDeleted()->column('ID'),
 			array(),
-			"Showing AllChildrenIncludingDeleted() in translation mode with parent page in translated language shows children in default language"
+			"Showing AllChildrenIncludingDeleted() in translation mode with parent page in " .
+			"translated language shows children in default language"
 		);
 		
 		// reset language
@@ -790,11 +795,13 @@ class TranslatableTest extends FunctionalTest {
 		Translatable::set_allowed_locales(array('ja_JP'));
 		$this->assertTrue(
 			$testPage->canTranslate($cmseditor, 'ja_JP'),
-			"Users with canEdit() and TRANSLATE_ALL permission can create a new translation if locale is in Translatable::get_allowed_locales()"
+			"Users with canEdit() and TRANSLATE_ALL permission can create a new translation " .
+			"if locale is in Translatable::get_allowed_locales()"
 		);
 		$this->assertFalse(
 			$testPage->canTranslate($cmseditor, 'de_DE'),
-			"Users with canEdit() and TRANSLATE_ALL permission can't create a new translation if locale is not in Translatable::get_allowed_locales()"
+			"Users with canEdit() and TRANSLATE_ALL permission can't create a new translation if " .
+			"locale is not in Translatable::get_allowed_locales()"
 		);
 		
 		$this->assertInstanceOf(

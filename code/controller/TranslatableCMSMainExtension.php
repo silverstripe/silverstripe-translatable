@@ -30,7 +30,8 @@ class TranslatableCMSMainExtension extends Extension {
 		} else {
 			$this->owner->Locale = Translatable::default_locale();
 			if ($this->owner->class == 'CMSPagesController') {
-				// the CMSPagesController always needs to have the locale set, otherwise page editing will cause an extra
+				// the CMSPagesController always needs to have the locale set, 
+				// otherwise page editing will cause an extra
 				// ajax request which looks weird due to multiple "loading"-flashes
 				return $this->owner->redirect($this->owner->Link());
 			}
@@ -38,9 +39,17 @@ class TranslatableCMSMainExtension extends Extension {
 		Translatable::set_current_locale($this->owner->Locale);
 
 		// if a locale is set, it needs to match to the current record
-		$requestLocale = $req->requestVar("Locale") ? $req->requestVar("Locale") : $req->requestVar("locale");
+		if($req->requestVar("Locale")) {
+			$requestLocale = $req->requestVar("Locale");
+		} else {
+			$requestLocale = $req->requestVar("locale");
+		}
+		
 		$page = $this->owner->currentPage();
-		if($requestLocale && $page && $page->hasExtension('Translatable') && $page->Locale != $requestLocale) {
+		if(
+			$requestLocale && $page && $page->hasExtension('Translatable') 
+			&& $page->Locale != $requestLocale
+		) {
 			$transPage = $page->getTranslation($requestLocale);
 			if($transPage) {
 				Translatable::set_current_locale($transPage->Locale);
@@ -61,7 +70,10 @@ class TranslatableCMSMainExtension extends Extension {
 		// collect languages for TinyMCE spellchecker plugin.
 		// see http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
 		$langName = i18n::get_locale_name($this->owner->Locale);
-		HtmlEditorConfig::get('cms')->setOption('spellchecker_languages', "+{$langName}={$this->owner->Locale}");
+		HtmlEditorConfig::get('cms')->setOption(
+			'spellchecker_languages', 
+			"+{$langName}={$this->owner->Locale}"
+		);
 
 		Requirements::javascript('translatable/javascript/CMSMain.Translatable.js');
 		Requirements::css('translatable/css/CMSMain.Translatable.css');
@@ -98,7 +110,8 @@ class TranslatableCMSMainExtension extends Extension {
 		// to the usual "create page" pattern of storing the record
 		// in-memory until a "save" is performed by the user, mainly
 		// to simplify things a bit.
-		// @todo Allow in-memory creation of translations that don't persist in the database before the user requests it
+		// @todo Allow in-memory creation of translations that don't 
+		// persist in the database before the user requests it
 		$translatedRecord = $record->createTranslation($langCode);
 
 		$url = Controller::join_links(

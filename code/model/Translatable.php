@@ -41,7 +41,8 @@
  * Translatable::set_default_locale(<locale>); // e.g. 'de_DE' or 'fr_FR'
  * </code>
  * 
- * For the Translatable class, a "locale" consists of a language code plus a region code separated by an underscore, 
+ * For the Translatable class, a "locale" consists of a language code plus a region 
+ * code separated by an underscore, 
  * for example "de_AT" for German language ("de") in the region Austria ("AT").
  * See http://www.w3.org/International/articles/language-tags/ for a detailed description.
  * 
@@ -225,7 +226,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * Choose the language the site is currently on.
 	 *
-	 * If $_GET['locale'] is currently set, then that locale will be used. Otherwise the member preference (if logged
+	 * If $_GET['locale'] is currently set, then that locale will be used. 
+	 * Otherwise the member preference (if logged
 	 * in) or default locale will be used.
 	 * 
 	 * @todo Re-implement cookie and member option
@@ -238,7 +240,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			return self::$current_locale;
 		}
 
-		if((isset($_REQUEST['locale']) && !$langsAvailable) || (isset($_REQUEST['locale']) && in_array($_REQUEST['locale'], $langsAvailable))) {
+		if(
+			(isset($_REQUEST['locale']) && !$langsAvailable) 
+			|| (isset($_REQUEST['locale']) 
+			&& in_array($_REQUEST['locale'], $langsAvailable))
+		) {
 			// get from request parameter
 			self::set_current_locale($_REQUEST['locale']);
 		} else {
@@ -267,13 +273,18 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @param $locale String
 	 */
 	static function set_default_locale($locale) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		$localeList = i18n::get_locale_list();
 		if(isset($localeList[$locale])) {
 			self::$default_locale = $locale;
 		} else {
-			user_error("Translatable::set_default_locale(): '$locale' is not a valid locale.", E_USER_WARNING);
+			user_error(
+				"Translatable::set_default_locale(): '$locale' is not a valid locale.", 
+				E_USER_WARNING
+			);
 		}
 	}
 
@@ -296,7 +307,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @param string $lang New reading language.
 	 */
 	static function set_current_locale($locale) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		self::$current_locale = $locale;
 	}	
@@ -311,7 +324,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return DataObject
 	 */
 	static function get_one_by_locale($class, $locale, $filter = '', $cache = false, $orderby = "") {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		$orig = Translatable::get_current_locale();
 		Translatable::set_current_locale($locale);
@@ -327,14 +342,17 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @param string $locale  The name of the language
 	 * @param string $filter A filter to be inserted into the WHERE clause.
 	 * @param string $sort A sort expression to be inserted into the ORDER BY clause.
-	 * @param string $join A single join clause.  This can be used for filtering, only 1 instance of each DataObject will be returned.
+	 * @param string $join A single join clause.  This can be used for filtering, only 1 
+	 *               instance of each DataObject will be returned.
 	 * @param string $limit A limit expression to be inserted into the LIMIT clause.
 	 * @param string $containerClass The container class to return the results in.
 	 * @param string $having A filter to be inserted into the HAVING clause.
 	 * @return mixed The objects matching the conditions.
 	 */
 	static function get_by_locale($class, $locale, $filter = '', $sort = '', $join = "", $limit = "") {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		$oldLang = self::get_current_locale();
 		self::set_current_locale($locale);
@@ -492,7 +510,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 	function __construct($translatableFields = null) {
 		parent::__construct();
 
-		// @todo Disabled selection of translatable fields - we're setting all fields as translatable in setOwner()
+		// @todo Disabled selection of translatable fields - we're setting all fields as 
+		// translatable in setOwner()
 		/*
 		if(!is_array($translatableFields)) {
 			$translatableFields = func_get_args();
@@ -544,7 +563,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
-		$locale = ($this->owner->ID && !empty($this->owner->Locale)) ? $this->owner->Locale : Translatable::get_current_locale();
+		if($this->owner->ID && !empty($this->owner->Locale)) {
+			$locale = $this->owner->Locale;
+		} else {
+			$locale = Translatable::get_current_locale();
+		}
+		
 		$baseTable = ClassInfo::baseDataClass($this->owner->class);
 		if(
 			$locale
@@ -555,7 +579,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// the query contains this table
 			// @todo Isn't this always the case?!
 			&& array_search($baseTable, array_keys($query->getFrom())) !== false 
-			// or we're already filtering by Lang (either from an earlier augmentSQL() call or through custom SQL filters)
+			// or we're already filtering by Lang (either from an earlier augmentSQL() 
+			// call or through custom SQL filters)
 			&& !preg_match('/("|\'|`)Locale("|\'|`)/', implode(' ', $query->getWhere()))
 			//&& !$query->filtersOnFK()
 		)  {
@@ -606,7 +631,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// Auto-setting permissions based on these intransparent criteria is a bit hacky,
 		// but unavoidable until we can determine when a certain permission code was made available first 
 		// (see http://open.silverstripe.org/ticket/4940)
-		$groups = Permission::get_groups_by_permission(array('CMS_ACCESS_CMSMain','CMS_ACCESS_LeftAndMain','ADMIN'));
+		$groups = Permission::get_groups_by_permission(array(
+			'CMS_ACCESS_CMSMain',
+			'CMS_ACCESS_LeftAndMain',
+			'ADMIN'
+		));
 		if($groups) foreach($groups as $group) {
 			$codes = $group->Permissions()->column('Code');
 			$hasTranslationCode = false;
@@ -714,7 +743,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
 		return DB::query(
-			sprintf('SELECT "TranslationGroupID" FROM "%s_translationgroups" WHERE "OriginalID" = %d', $baseDataClass, $this->owner->ID)
+			sprintf(
+				'SELECT "TranslationGroupID" FROM "%s_translationgroups" WHERE "OriginalID" = %d', 
+				$baseDataClass, 
+				$this->owner->ID
+			)
 		)->value();
 	}
 	
@@ -785,7 +818,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// Caution: This logic is very sensitve to infinite loops when translation status isn't determined properly
 		// If a parent for the newly written translation was existing before this
 		// onBeforeWrite() call, it will already have been linked correctly through createTranslation()
-		if(class_exists('SiteTree') && $this->owner->hasField('ParentID') && $this->owner instanceof SiteTree) {
+		if(
+			class_exists('SiteTree') 
+			&& $this->owner->hasField('ParentID') 
+			&& $this->owner instanceof SiteTree
+		) {
 			if(
 				!$this->owner->ID 
 				&& $this->owner->ParentID 
@@ -828,7 +865,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// created through createTranslation(), meaning they don't
 			// have the translation group automatically set.
 			$translationGroupID = $this->getTranslationGroup();
-			if(!$translationGroupID) $this->addTranslationGroup($this->owner->_TranslationGroupID ? $this->owner->_TranslationGroupID : $this->owner->ID);
+			if(!$translationGroupID) {
+				$this->addTranslationGroup(
+					$this->owner->_TranslationGroupID ? $this->owner->_TranslationGroupID : $this->owner->ID
+				);
+			}
 			unset($this->owner->_TranslatableIsNewRecord);
 			unset($this->owner->_TranslationGroupID);
 		}
@@ -859,7 +900,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return SiteTree
 	 */
 	public function alternateGetByLink($URLSegment, $parentID) {
-		// If the parentID value has come from a translated page, then we need to find the corresponding parentID value
+		// If the parentID value has come from a translated page, 
+		// then we need to find the corresponding parentID value
 		// in the default Locale.
 		if (
 			is_int($parentID)
@@ -921,7 +963,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 					'Locale-English',
 					$this->owner
 				),
-				$createButton = new InlineFormAction('createtranslation',_t('Translatable.CREATEBUTTON', 'Create'))
+				$createButton = new InlineFormAction(
+					'createtranslation',
+					_t('Translatable.CREATEBUTTON', 'Create')
+				)
 			)
 		);
 		$createButton->includeDefaultJS(false);
@@ -1076,7 +1121,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return DataObjectSet
 	 */
 	function getTranslations($locale = null, $stage = null) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		if($this->owner->exists()) {
 			// HACK need to disable language filtering in augmentSQL(), 
@@ -1126,7 +1173,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return DataObject Translated object
 	 */
 	function getTranslation($locale, $stage = null) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		$translations = $this->getTranslations($locale, $stage);
 		return ($translations) ? $translations->First() : null;
@@ -1151,7 +1200,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		// Find the best base translation for SiteConfig
 		Translatable::disable_locale_filter();
-		$existingConfig = SiteConfig::get()->filter(array('Locale' => Translatable::default_locale()))->first();
+		$existingConfig = SiteConfig::get()->filter(array(
+			'Locale' => Translatable::default_locale()
+		))->first();
 		if(!$existingConfig) $existingConfig = SiteConfig::get()->first();
 		Translatable::enable_locale_filter();
 
@@ -1188,8 +1239,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * Hooks into the DataObject::populateDefaults() method 
 	 */
 	public function populateDefaults() {
-		if (empty($this->owner->ID) && ($this->owner instanceof SiteConfig) && self::$enable_siteconfig_generation)
-		{
+		if (
+			empty($this->owner->ID) 
+			&& ($this->owner instanceof SiteConfig) 
+			&& self::$enable_siteconfig_generation
+		) {
 			// Use enable_siteconfig_generation to prevent infinite loop during object creation
 			self::$enable_siteconfig_generation = false;
 			$this->populateSiteConfigDefaults();
@@ -1212,10 +1266,15 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return DataObject The translated object
 	 */
 	function createTranslation($locale, $saveTranslation = true) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		if(!$this->owner->exists()) {
-			user_error('Translatable::createTranslation(): Please save your record before creating a translation', E_USER_ERROR);
+			user_error(
+				'Translatable::createTranslation(): Please save your record before creating a translation', 
+				E_USER_ERROR
+			);
 		}
 		
 		// permission check
@@ -1273,7 +1332,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return boolean
 	 */
 	function canTranslate($member = null, $locale) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		if(!$member || !(is_a($member, 'Member')) || is_numeric($member)) $member = Member::currentUser();
 
@@ -1314,7 +1375,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @return boolean
 	 */
 	function hasTranslation($locale) {
-		if($locale && !i18n::validate_locale($locale)) throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		if($locale && !i18n::validate_locale($locale)) {
+			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
+		}
 		
 		return (
 			$this->owner->Locale == $locale
@@ -1397,7 +1460,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$allCodes = array_merge(i18n::$all_locales, i18n::$common_locales);
 		foreach ($langlist as $langCode) {
 			if($langCode && isset($allCodes[$langCode])) {
-				$returnMap[$langCode] = (is_array($allCodes[$langCode])) ? $allCodes[$langCode][0] : $allCodes[$langCode];
+				if(is_array($allCodes[$langCode])) {
+					$returnMap[$langCode] = $allCodes[$langCode][0];
+				} else {
+					$returnMap[$langCode] = $allCodes[$langCode];
+				}
 			}
 		}
 		return $returnMap;
@@ -1515,8 +1582,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * @deprecated 2.4 Use get_by_locale()
 	 */
-	static function get_by_lang($class, $lang, $filter = '', $sort = '', $join = "", $limit = "", $containerClass = "DataObjectSet", $having = "") {
-		return self::get_by_locale($class, i18n::get_locale_from_lang($lang), $filter, $sort, $join, $limit, $containerClass, $having);
+	static function get_by_lang($class, $lang, $filter = '', $sort = '', 
+		$join = "", $limit = "", $containerClass = "DataObjectSet", $having = ""
+	) {
+		return self::get_by_locale(
+			$class, i18n::get_locale_from_lang($lang), $filter, 
+			$sort, $join, $limit, $containerClass, $having
+		);
 	}
 	
 	/**
@@ -1599,7 +1671,8 @@ class Translatable extends DataExtension implements PermissionProvider {
  * consisting of the original formfield plus a readonly-version
  * of the original value, wrapped in a CompositeField.
  * 
- * @param DataObject $original Needs the original record as we populate the readonly formfield with the original value
+ * @param DataObject $original Needs the original record as we populate 
+ *                   the readonly formfield with the original value
  * 
  * @package sapphire
  * @subpackage misc
@@ -1656,8 +1729,5 @@ class Translatable_Transformation extends FormTransformation {
 		$nonEditableField_holder->insertBefore($originalField, $fieldname.'_original');
 		return $nonEditableField_holder;
 	}
-	
-	
+		
 }
-
-?>

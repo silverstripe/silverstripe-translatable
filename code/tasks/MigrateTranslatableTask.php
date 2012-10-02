@@ -111,7 +111,10 @@ class MigrateTranslatableTask extends BuildTask {
 				$existingTrans = $original->getTranslation($newLocale, $stage);
 				
 				if($existingTrans) {
-					echo sprintf("Found existing new-style translation for #%d. Already merged? Skipping.\n", $oldtrans['OriginalLangID']);
+					echo sprintf(
+						"Found existing new-style translation for #%d. Already merged? Skipping.\n", 
+						$oldtrans['OriginalLangID']
+					);
 					continue;
 				}
 				
@@ -130,7 +133,8 @@ class MigrateTranslatableTask extends BuildTask {
 				foreach(ClassInfo::ancestry($oldtrans['ClassName']) as $classname) {
 					$oldtransitem = false;
 				
-					// If the class is SiteTree, we already have the DB record, else check for the table and get the record
+					// If the class is SiteTree, we already have the DB record, 
+					// else check for the table and get the record
 					if($classname == 'SiteTree') {
 						$oldtransitem = $oldtrans;
 					} elseif(in_array(strtolower($classname) . '_lang', DB::tableList())) {
