@@ -11,7 +11,7 @@ class TranslatableSearchFormTest extends FunctionalTest {
 	protected $requiredExtensions = array(
 		'SiteTree' => array(
 			'Translatable',
-			"FulltextSearchable('Title,MenuTitle,Content,MetaTitle,MetaDescription,MetaKeywords')",
+			"FulltextSearchable('Title,MenuTitle,Content,MetaDescription')",
 		),
 		"File" => array(
 			"FulltextSearchable('Filename,Title,Content')",
