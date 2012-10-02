@@ -1,5 +1,7 @@
 # Translatable module for SilverStripe CMS #
 
+[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png)](http://travis-ci.org/silverstripe/silverstripe-translatable)
+
 ## Introduction ##
 
 Allows translation of DataObject and SiteTree records into multiple languages.
