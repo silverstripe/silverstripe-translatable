@@ -4,13 +4,12 @@
 
 This page introduces developers to using the CMS for creating content in multiple languages.
 
-Please refer to the `i18n` class in `sapphire` for a internationalization, globalization and localization support of built-in datatypes as well as translating templates and PHP code.
+Please refer to the [`i18n` class](http://doc.silverstripe.org/framework/en/topics/i18n) 
+in SilverStripe framework for a internationalization, globalization and 
+localization support of built-in datatypes as well as translating templates and PHP code.
 
-Translations can be enabled for all subclasses of `[api:DataObject]`, so it can easily be implemented into existing code
-with minimal interference.
-
-Warning: If you're upgrading from a SilverStripe version prior to 2.3.2, please migrate your datamodel before using the
-extension (see below).
+Translations can be enabled for all subclasses of [`DataObject`](http://doc.silverstripe.org/framework/en/topics/datamodel), 
+so it can easily be implemented into existing code with minimal interference.
 
 ## Screenshots
 
@@ -31,6 +30,35 @@ extension (see below).
 
 *CMS: Create a new translation*
 
+
+## Caveats
+
+There are several ways to model multilingual content in a relational database.
+It is important to understand these differences in order to make an informed
+decision about which one fits your content model best. 
+
+ * **Storage in language columns**: Each translated value is stored in a new database column
+ alongside its original record, e.g. a `Content` column gets extended to `Content_de` and `Content_fr`.
+   
+    * Advantages: Translation can be limited to certain columns.
+    * Disadvantages: If applied to complex data like hierarchical pages, it only works if the content structure
+ is very similar between languages. It would be difficult to e.g. have a new page section just in one language,
+ and still retain all the framework's features (e.g. permission checks).
+ * **Storage in language rows**: Each translated record gets copied to a new row in the same table,
+ retaining the original database column layout.
+   
+    * Advantages: Allows for flexible structures like page trees per language,
+ and permission checks per language. Works transparently with most other modules which modify queries
+ (e.g. the "subsites" module). 
+    * Disadvantages: All-or-nothing approach to column translation (including columns where translation
+  doesn't make much sense, like numeric values). More complex data model with relational tables.
+
+The Translatable module uses the "Storage in language rows" approach.
+
+Alternatives:
+
+ * UncleCheese's [TranslatableDataObject](http://www.leftandmain.com/silverstripe-tips/2012/04/03/translatabledataobject-insanely-simple-translation/) (open source)
+ * Kreationsbyran's [Multilingual Module 2.0](http://www.kreationsbyran.se/blogg/multilingual-module-2-0-for-silverstripe-cms-3-0/) (commercial)
 
 ## Usage
 
@@ -187,7 +215,7 @@ attach this behaviour to custom fields by using Translatable_Transformation as s
 
 
 
-### Translating theHomepage
+### Translating the Homepage
 
 Every homepage has a distinct URL, the default language is /home, a German translation by default would be /home-de_DE.
 They can be accessed like any other translated page. If you want to access different homepages from the "root" without a
@@ -362,12 +390,6 @@ Example:
 	<% end_control %>
 
 
-### Language Chooser Widget
-
-You can use a widget on your website to provide a list of links for switching languages:
-[download](http://silverstripe.org/Language-Chooser-Widget-2/)
-
-
 ### Enabling the _t() function in templates 
 
 If you're looking to use [the _t() function](http://doc.silverstripe.com/doku.php?id=i18n#the_t_function) in template
@@ -375,29 +397,11 @@ files, you'll need to [set the i18n locale](/topics/translation#setting_the_i18n
 
 (The reasoning is as follows: Translatable doesn't set the i18n locale. Historically these were two separate systems,
 but they're reasonably interchangeable for a front-end website. The distinction is mainly valid for the CMS, because you
-want the CMS to be in English (`[api:i18n]`), but edit pages in different languages (`[api:Translatable]`).)
-
-### Migrating from 2.1 datamodel
-
-The datamodel of `[api:Translatable]` changed significantly between its original release in SilverStripe 2.1 and SilverStripe
-2.3.2. See our [discussion on the
-mailinglist](http://groups.google.com/group/silverstripe-dev/browse_thread/thread/91e26e1f78d3c1b4/bd276dd5bbc56283?lnk=gst&q=translatable#bd276dd5bbc56283).
-
-To migrate a database that was built with SilverStripe 2.1.x or 2.2.x, follow these steps:
-
-*  Upgrade your SilverStripe installation to at least 2.3.2 (see [upgrading](/installation/upgrading))
-*  Backup your database content
-*  Login as an administrator
-*  Run `http://mysite.com/dev/build`
-*  Run `http://mysite.com/dev/tasks/MigrateTranslatableTask`
-
-Please see the `[api:MigrateTranslatableTask]` for
-limitations of this migration task - not all your data will be preserved.
-
+want the CMS to be in English (`i18n`), but edit pages in different languages (`Translatable`).)
 
 ### Setting the i18n locale
 
-You can set the `[api:i18n]` locale value which is used to format dates, currencies and other regionally different values to
+You can set the `i18n` locale value which is used to format dates, currencies and other regionally different values to
 the same as your current page locale. 
 
 	:::php
@@ -414,7 +418,7 @@ the same as your current page locale.
 
 ### Adding a new locale
 
-The `[api:i18n]` logic has lookup tables for common locales in i18n::$common_locales, which is a subset of i18n::$all_locales.
+The `i18n` logic has lookup tables for common locales in i18n::$common_locales, which is a subset of i18n::$all_locales.
 If your locale is not present here, you can simply add it through `mysite/_config.php`:
 
 	:::php
