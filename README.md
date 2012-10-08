@@ -5,37 +5,17 @@
 ## Introduction ##
 
 Allows translation of DataObject and SiteTree records into multiple languages.
-See `/docs/en/index.md` for details.
+Note: This module was originally part of the SilverStripe CMS 2.x codebase.
+
+## Usage
+
+[Setup and Usage Documentation](silverstripe/silverstripe-translatable/blob/master/docs/en/index.md)
 
 ## Requirements ##
 
- * SilverStripe 3.0 (both cms and sapphire modules)
+ * SilverStripe Framework 3.0+
+ * SilverStripe CMS 3.0+
 
 ## Maintainers ##
 
  * Ingo Schommer <ingo at silverstripe dot com>
-
-## Issues ##
-
-See [open.silverstripe.org](http://open.silverstripe.org/query?status=!closed&summary=~Translatable)
-
-## TODO ##
-
-This module was originally part of the SilverStripe CMS core codebase.
-While the bulk of the logic has been separated out into this module,
-there are still many places across SilverStripe CMS which this modules relies on:
-
-* CMSBatchActionHandler->handleAction()
-* ContentController->handleRequest()
-* ContentController->ContentLocale()
-* ErrorPage::response_for()
-* LeftAndMain->init()
-* ModelAsController->getNestedController()
-* RootURLController::get_homepage_link()
-* SearchForm
-* SiteConfig
-* SiteTree->RelativeLink()
-* SiteTree->getSiteConfig()
-
-These APIs mostly require either hooks for an Extension subclass,
-or refactoring to allow better customization.

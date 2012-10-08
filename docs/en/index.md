@@ -13,20 +13,20 @@ so it can easily be implemented into existing code with minimal interference.
 
 ## Screenshots
 
-![](_images/translatable4_small.png)
+![Main UI](https://raw.github.com/silverstripe/silverstripe-translatable/master/docs/en/_images/translatable4_small.png)
 
 *Translated website*
 
 
-![](_images/translatable1.png)
+![Translated website](https://raw.github.com/silverstripe/silverstripe-translatable/master/docs/en/_images/translatable1.png)
 
 *CMS: Language dropdown*
 
-![](_images/translatable2.png)
+![Language dropdown](https://raw.github.com/silverstripe/silverstripe-translatable/master/docs/en/_images/translatable2.png)
 
 *CMS: Translatable field with original value*
 
-![](_images/translatable3.png)
+![Translatable field with original value](https://raw.github.com/silverstripe/silverstripe-translatable/master/docs/en/_images/translatable3.png)
 
 *CMS: Create a new translation*
 
@@ -34,24 +34,39 @@ so it can easily be implemented into existing code with minimal interference.
 ## Caveats
 
 There are several ways to model multilingual content in a relational database.
-It is important to understand these differences in order to make an informed
+The Translatable module uses one of the presented approaches ("Storage in language rows"),
+and most of the time you don't have to worry about the underlying datamodel.
+But it is important to understand these differences in order to make an informed
 decision about which one fits your content model best. 
 
- * **Storage in language columns**: Each translated value is stored in a new database column
- alongside its original record, e.g. a `Content` column gets extended to `Content_de` and `Content_fr`.
+### Storage in language columns
+
+Each translated value is stored in a new database column
+alongside its original record, e.g. a `Content` column gets extended to `Content_de` and `Content_fr`.
    
-    * Advantages: Translation can be limited to certain columns.
-    * Disadvantages: If applied to complex data like hierarchical pages, it only works if the content structure
- is very similar between languages. It would be difficult to e.g. have a new page section just in one language,
- and still retain all the framework's features (e.g. permission checks).
- * **Storage in language rows**: Each translated record gets copied to a new row in the same table,
- retaining the original database column layout.
+Advantages: Translation can be limited to certain columns.
+
+Disadvantages: If applied to complex data like hierarchical pages, it only works if the content structure
+is very similar between languages. It would be difficult to e.g. have a new page section just in one language, and still retain all the framework's features (e.g. permission checks).
+
+### Storage in language rows
+
+Each translated record gets copied to a new row in the same table,
+retaining the original database column layout.
    
-    * Advantages: Allows for flexible structures like page trees per language,
- and permission checks per language. Works transparently with most other modules which modify queries
- (e.g. the "subsites" module). 
-    * Disadvantages: All-or-nothing approach to column translation (including columns where translation
-  doesn't make much sense, like numeric values). More complex data model with relational tables.
+Advantages: Allows for flexible structures like page trees per language,
+and permission checks per language. Works transparently with most other modules which modify queries
+(e.g. the "subsites" module). 
+
+### Storage in language tables
+
+Similar to "Storage in language rows", but creates a new table
+for each 
+
+Disadvantages: All-or-nothing approach to column translation (including columns where translation
+doesn't make much sense, like numeric values). More complex data model with relational tables.
+
+### Module approach and Alternatives
 
 The Translatable module uses the "Storage in language rows" approach.
 
