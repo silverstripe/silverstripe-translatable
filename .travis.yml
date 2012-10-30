@@ -7,14 +7,11 @@ env:
  - TESTDB=MYSQL CORE_RELEASE=3.0
  - TESTDB=MYSQL CORE_RELEASE=master
  - TESTDB=PGSQL CORE_RELEASE=master
- - TESTDB=SQLITE CORE_RELEASE=master
 
 matrix:
   exclude:
     - php: 5.4
       env: TESTDB=PGSQL CORE_RELEASE=master
-    - php: 5.4
-      env: TESTDB=SQLITE CORE_RELEASE=master
     - php: 5.4
       env: TESTDB=MYSQL CORE_RELEASE=3.0
 
