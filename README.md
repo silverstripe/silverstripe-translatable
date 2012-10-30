@@ -9,7 +9,7 @@ Note: This module was originally part of the SilverStripe CMS 2.x codebase.
 
 ## Usage
 
-[Setup and Usage Documentation](silverstripe/silverstripe-translatable/blob/master/docs/en/index.md)
+[Setup and Usage Documentation](http://github.com/silverstripe/silverstripe-translatable/blob/master/docs/en/index.md)
 
 ## Requirements ##
 
