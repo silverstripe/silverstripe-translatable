@@ -214,6 +214,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 	protected static $allowed_locales = null;
 	
 	/**
+	 * @var array An array of fields which should be excluded from
+	 * being transformed in the CMS for translated dataobjects. This
+	 * includes some default excludes and any field which has already
+	 * been transformed.
+	 */
+	protected $translatableExcludes = null;
+	
+	/**
 	 * Reset static configuration variables to their default values
 	 */
 	static function reset() {
@@ -927,6 +935,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 	
 	//-----------------------------------------------------------------------------------------------//
 	
+	function applyTranslatableFieldsUpdate($fields, $type) {
+		if (method_exists($this, $type)) {
+			$this->$type($fields);
+		} else {
+			throw new InvalidArgumentException("Method $type does not exist on object of type ".  get_class($this));
+		}
+	}
+	
 	/**
 	 * If the record is not shown in the default language, this method
 	 * will try to autoselect a master language which is shown alongside
@@ -944,6 +960,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	function updateCMSFields(FieldList $fields) {
 		$this->addTranslatableFields($fields);
+		
+		if ($this->owner->translatableFieldsAdded) return;
 
 		// Show a dropdown to create a new translation.
 		// This action is possible both when showing the "default language"
@@ -996,6 +1014,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	
 		$langDropdown->addExtraClass('languageDropdown no-change-track');
 		$createButton->addExtraClass('createTranslationButton');
+		
+		$this->owner->translatableFieldsAdded = true;
+		
 	}
 	
 	function updateSettingsFields(&$fields) {
@@ -1003,6 +1024,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 
 	protected function addTranslatableFields(&$fields) {
+		
 		// used in LeftAndMain->init() to set language state when reading/writing record
 		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale));
 		
@@ -1023,8 +1045,15 @@ class Translatable extends DataExtension implements PermissionProvider {
 			'ViewerGroups',
 			'EditorGroups',
 			'CanViewType',
-			'CanEditType'
+			'CanEditType',
+			'NewTransLang',
+			'createtranslation'
 		);
+		
+		$this->translatableExcludes = ( isset($this->translatableExcludes) && is_array($this->translatableExcludes) ) 
+				? array_merge($this->translatableExcludes, $excludeFields) 
+				: $excludeFields;
+		
 
 		// if a language other than default language is used, we're in "translation mode",
 		// hence have to modify the original fields
@@ -1059,7 +1088,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// (fields are object references, so we can replace them with the translatable CompositeField)
 			foreach($allDataFields as $dataField) {
 				if($dataField instanceof HiddenField) continue;
-				if(in_array($dataField->getName(), $excludeFields)) continue;
+				if(in_array($dataField->getName(), $this->translatableExcludes)) continue;
 				
 				if(in_array($dataField->getName(), $translatableFieldNames)) {
 					// if the field is translatable, perform transformation
@@ -1068,6 +1097,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 					// else field shouldn't be editable in translation-mode, make readonly
 					$fields->replaceField($dataField->getName(), $dataField->performReadonlyTransformation());
 				}
+				$this->translatableExcludes[] = $dataField->getName();
+				$this->translatableExcludes[] = $dataField->getName() . '_original';
 			}
 			
 		} elseif($this->owner->isNew()) {
@@ -1081,7 +1112,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 					)
 				)
 			);
-		} 
+		}
 	}
 		
 	/**

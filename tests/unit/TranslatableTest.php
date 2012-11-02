@@ -220,7 +220,8 @@ class TranslatableTest extends FunctionalTest {
 	}
 	
 	function testUpdateCMSFieldsOnSiteTree() {
-		$pageOrigLang = $this->objFromFixture('Page', 'testpage_en');
+		$pageOrigLang = new TranslatableTest_Page();
+		$pageOrigLang->write();
 		
 		// first test with default language
 		$fields = $pageOrigLang->getCMSFields();
@@ -232,6 +233,11 @@ class TranslatableTest extends FunctionalTest {
 		$this->assertNull( 
 			$fields->dataFieldByName('Title_original'),
 			'Translatable doesnt modify fields if called in default language (e.g. "non-translation mode")'
+		);
+		$this->assertInstanceOf(
+			'TextField', 
+			$fields->dataFieldByName('TranslatableProperty'),
+			'Has custom field'
 		);
 		
 		// then in "translation mode"
@@ -247,6 +253,16 @@ class TranslatableTest extends FunctionalTest {
 			$readonlyField->class, 
 			$fields->dataFieldByName('Title_original'),
 			'Translatable adds the original value as a ReadonlyField in "translation mode"'
+		);
+		$this->assertInstanceOf(
+			'ReadonlyField', 
+			$fields->dataFieldByName('TranslatableProperty_original'),
+			'Retains original custom field'
+		);
+		$this->assertInstanceOf(
+			'TextField', 
+			$fields->dataFieldByName('TranslatableProperty'),
+			'Adds custom fields as ReadonlyField'
 		);
 		
 	}
@@ -990,6 +1006,18 @@ class TranslatableTest_Page extends Page implements TestOnly {
 	static $db = array(
 		'TranslatableProperty' => 'Text'
 	);
+
+	function getCMSFields() {
+		$fields = parent::getCMSFields();
+		$fields->addFieldToTab(
+			'Root.Main',
+			new TextField('TranslatableProperty')
+		);
+
+		$this->applyTranslatableFieldsUpdate($fields, 'updateCMSFields');
+
+		return $fields;
+	}
 }
 
 DataObject::add_extension('TranslatableTest_DataObject', 'TranslatableTest_Extension');

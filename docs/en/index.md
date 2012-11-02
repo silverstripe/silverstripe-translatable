@@ -197,10 +197,10 @@ Keep in mind that the `[api:Translatable]` extension currently doesn't support t
 translated - all custom properties will automatically be fetched from their translated record on the database. This means
 you don't have to explicitly mark any custom properties as being translatable.
 
-The `[api:Translatable]` decorator applies only to the getCMSFields() method on DataObject or SiteTree, not to any fields 
-added in overloaded getCMSFields() implementations. See Translatable->updateCMSFields() for details. By default, custom 
-fields in the CMS won't show an original readonly value on a translated record, although they will save correctly. You can
-attach this behaviour to custom fields by using Translatable_Transformation as shown below.
+The `[api:Translatable]` decorator applies only to the getCMSFields() method on DataObject or SiteTree and the getSettingsFields() 
+on SiteTree, not to any fields added in overloaded getCMSFields() implementations. See Translatable->updateCMSFields() for details. 
+By default, custom fields in the CMS won't show an original readonly value on a translated record, although they will save correctly. You can
+attach this behaviour to custom fields by calling a helper function from your getCMSFields() and getSettingsFields() functions.
 
 	:::php
 	class Page extends SiteTree {
@@ -214,24 +214,27 @@ attach this behaviour to custom fields by using Translatable_Transformation as s
 	
 			// Add fields as usual
 			$additionalField = new TextField('AdditionalProperty');
-			$fields->addFieldToTab('Root.Content.Main', $additionalField);
+			$fields->addFieldToTab('Root.Main', $additionalField);
 			
-			// If a translation exists, exchange them with 
-			// original/translation field pairs
-			$translation = $this->getTranslation(Translatable::default_locale());
-			if($translation && $this->Locale != Translatable::default_locale()) {
-				$transformation = new Translatable_Transformation($translation);
-				$fields->replaceField(
-					'AdditionalProperty',
-					$transformation->transformFormField($additionalField)
-				);
-			}
+			// Apply Translatable modifications
+			$this->applyTranslatableFieldsUpdate($fields, 'updateCMSFields');
 	
 			return $fields;
 		}
-		
-	}
 
+		function getSettingsFields() {
+			$fields = parent::getSettingsFields();
+	
+			// Add fields as usual
+			$additionalField = new TextField('AdditionalProperty');
+			$fields->addFieldToTab('Root.Main', $additionalField);
+			
+			// Apply Translatable modifications
+			$this->applyTranslatableFieldsUpdate($fields, 'updateSettingsFields');
+	
+			return $fields;
+		}
+	}
 
 
 ### Translating the Homepage
