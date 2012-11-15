@@ -25,3 +25,21 @@ ul.tree span.untranslated a:visited {
 .cms-content-toolbar {
 	margin-bottom: 7px;
 }
+
+.originallang_holder {
+	border-bottom: 1px solid rgba(201, 205, 206, 0.8);
+    box-shadow: 0 1px 0 rgba(244, 245, 245, 0.8);
+	margin: 0 0 8px;
+    padding: 0 0 7px;
+}
+
+.originallang_holder .field {
+	border-bottom: none;
+	box-shadow: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.originallang_holder .originallang {
+	font-size: 90%;
+}
