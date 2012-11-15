@@ -25,5 +25,8 @@
 		},
 	"support": {
 		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
-	}
+	},
+	"autoload": {
+		"classmap": ["."]
+  }
 }
