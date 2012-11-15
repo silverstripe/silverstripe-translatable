@@ -535,7 +535,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$this->translatableFields = array_merge(
 				array_keys($this->owner->inheritedDatabaseFields()),
 				array_keys($this->owner->has_many()),
-				array_keys($this->owner->many_many())
+				array_keys($this->owner->many_many()),
+				array_keys($this->owner->has_one())
 			);
 		}
 	}
