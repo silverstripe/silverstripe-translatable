@@ -1198,6 +1198,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// When the database is being setup singleton('SiteConfig') is called.
 		if(!DB::getConn()->hasTable($this->owner->class)) return;
 		if(!DB::getConn()->hasField($this->owner->class, 'Locale')) return;
+		if(DB::getConn()->isSchemaUpdating()) return;
 		
 		// Find the best base translation for SiteConfig
 		Translatable::disable_locale_filter();
