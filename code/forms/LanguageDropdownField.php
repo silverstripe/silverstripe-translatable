@@ -76,4 +76,33 @@ class LanguageDropdownField extends GroupedDropdownField {
 	function Type() {
 		return 'languagedropdown dropdown';
 	}
+	
+	public function getAttributes() {
+		return array_merge(
+			parent::getAttributes(),
+			array('data-locale-url' => $this->Link('getLocaleForObject'))
+		);
+	}
+	
+	/**
+	 * Get the locale for an object that has the Translatable extension.
+	 * 
+	 * @return locale
+	 */
+	function getLocaleForObject() {
+		$id = (int)$this->getRequest()->requestVar('id');
+		$class = Convert::raw2sql($this->getRequest()->requestVar('class'));
+		$locale = Translatable::get_current_locale();
+		if ($id && $class && class_exists($class) && Object::has_extension($class, 'Translatable')) {
+			// temporarily disable locale filter so that we won't filter out the object 
+			Translatable::disable_locale_filter();
+			$object = DataObject::get_by_id($class, $id);
+			Translatable::enable_locale_filter();
+			if ($object) {
+				$locale = $object->Locale;
+			}
+		}
+		return $locale;
+	}
+	
 }

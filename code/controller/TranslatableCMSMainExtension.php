@@ -49,6 +49,7 @@ class TranslatableCMSMainExtension extends Extension {
 		if(
 			$requestLocale && $page && $page->hasExtension('Translatable') 
 			&& $page->Locale != $requestLocale
+			&& $req->latestParam('Action') != 'EditorToolbar'
 		) {
 			$transPage = $page->getTranslation($requestLocale);
 			if($transPage) {
