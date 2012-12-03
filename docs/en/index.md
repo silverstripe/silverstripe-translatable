@@ -30,6 +30,10 @@ so it can easily be implemented into existing code with minimal interference.
 
 *CMS: Create a new translation*
 
+## Installation
+
+Please follow the standard [module installation documentation](http://doc.silverstripe.org/framework/en/topics/modules).
+The module has to reside in a toplevel folder called `translatable/`.
 
 ## Caveats
 
