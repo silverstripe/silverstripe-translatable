@@ -1323,6 +1323,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$newTranslation->_TranslationGroupID = $translationGroupID ? $translationGroupID : $this->owner->ID;
 		if($saveTranslation) $newTranslation->write();
 		
+		// run callback on page for translation related hooks
+		$newTranslation->invokeWithExtensions('onTranslatableCreate', $saveTranslation);
+		
 		return $newTranslation;
 	}
 	
