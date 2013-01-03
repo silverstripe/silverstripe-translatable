@@ -7,9 +7,10 @@ en:
     LANGAOTHER: 'Other languages'
     LANGAVAIL: 'Available languages'
   Translatable:
+    ALLCREATED: 'All allowed translations have been created.'
     CREATE: 'Create new translation'
     CREATEBUTTON: Create
-    EXISTING: 'Existing translations:'
+    EXISTING: 'Existing translations'
     NEWLANGUAGE: 'New language'
     NOTICENEWPAGE: 'Please save this page before creating a translation'
     TRANSLATEALLPERMISSION: 'Translate into all available languages'

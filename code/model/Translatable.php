@@ -989,11 +989,23 @@ class Translatable extends DataExtension implements PermissionProvider {
 			)
 		);
 		$createButton->includeDefaultJS(false);
+		
+		if ( count($langDropdown->getSource()) < 1 ) {
+			$fields->insertAfter(
+				new LiteralField(
+					'AllTransCreated', 
+					_t('Translatable.ALLCREATED', 'All allowed translations have been created.')
+				), 
+				'CreateTransHeader'
+			);
+			$fields->removeByName('NewTransLang');
+			$fields->removeByName('createtranslation');
+		}
 
 		if($alreadyTranslatedLocales) {
 			$fields->addFieldToTab(
 				'Root.Translations',
-				new HeaderField('ExistingTransHeader', _t('Translatable.EXISTING', 'Existing translations:'), 3)
+				new HeaderField('ExistingTransHeader', _t('Translatable.EXISTING', 'Existing translations'), 3)
 			);
 			$existingTransHTML = '<ul>';
 			foreach($alreadyTranslatedLocales as $langCode) {		
