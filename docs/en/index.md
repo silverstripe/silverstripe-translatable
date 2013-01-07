@@ -444,7 +444,7 @@ The `i18n` logic has lookup tables for common locales in i18n::$common_locales, 
 If your locale is not present here, you can simply add it through `mysite/_config.php`:
 
 	:::php
-	i18n::$common_locales['de_AT'] = 'Deutsch (Oestereich)';
+	i18n::$common_locales['de_AT'] = array('German (Austria)', 'Deutsch (Österreich)');
 
 This should e.g. enable you to use `$Locale.Nice` in template code.
 
