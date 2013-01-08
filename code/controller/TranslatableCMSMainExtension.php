@@ -33,7 +33,15 @@ class TranslatableCMSMainExtension extends Extension {
 				// the CMSPagesController always needs to have the locale set, 
 				// otherwise page editing will cause an extra
 				// ajax request which looks weird due to multiple "loading"-flashes
-				return $this->owner->redirect($this->owner->Link());
+				$getVars = $req->getVars();
+				if(isset($getVars['url'])) unset($getVars['url']);
+				return $this->owner->redirect(Controller::join_links(
+					$this->owner->Link(),
+					$req->param('Action'),
+					$req->param('ID'),
+					$req->param('OtherID'),
+					'?' . http_build_query($getVars)
+				));
 			}
 		}
 		Translatable::set_current_locale($this->owner->Locale);
