@@ -212,15 +212,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * common locales.
 	 */
 	protected static $allowed_locales = null;
-	
-	/**
-	 * @var array An array of fields which should be excluded from
-	 * being transformed in the CMS for translated dataobjects. This
-	 * includes some default excludes and any field which has already
-	 * been transformed.
-	 */
-	protected $translatableExcludes = null;
-	
+		
 	/**
 	 * Reset static configuration variables to their default values
 	 */
@@ -952,6 +944,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * Translatable also adds a new tab "Translation" which shows existing
 	 * translations, as well as a formaction to create new translations based
 	 * on a dropdown with available languages.
+	 *
+	 * This method can be called multiple times on the same FieldList
+	 * because it checks which fields have already been added or modified.
 	 * 
 	 * @todo This is specific to SiteTree and CMSMain
 	 * @todo Implement a special "translation mode" which triggers display of the
@@ -961,82 +956,85 @@ class Translatable extends DataExtension implements PermissionProvider {
 	function updateCMSFields(FieldList $fields) {
 		$this->addTranslatableFields($fields);
 		
-		if ($this->owner->translatableFieldsAdded) return;
-
 		// Show a dropdown to create a new translation.
 		// This action is possible both when showing the "default language"
 		// and a translation. Include the current locale (record might not be saved yet).
 		$alreadyTranslatedLocales = $this->getTranslatedLocales();
 		$alreadyTranslatedLocales[$this->owner->Locale] = $this->owner->Locale;
 		$alreadyTranslatedLocales = array_combine($alreadyTranslatedLocales, $alreadyTranslatedLocales);
-		
-		$fields->addFieldsToTab(
-			'Root',
-			new Tab('Translations', _t('Translatable.TRANSLATIONS', 'Translations'),
-				new HeaderField('CreateTransHeader', _t('Translatable.CREATE', 'Create new translation'), 2),
-				$langDropdown = new LanguageDropdownField(
-					"NewTransLang", 
-					_t('Translatable.NEWLANGUAGE', 'New language'), 
-					$alreadyTranslatedLocales,
-					'SiteTree',
-					'Locale-English',
-					$this->owner
-				),
-				$createButton = new InlineFormAction(
-					'createtranslation',
-					_t('Translatable.CREATEBUTTON', 'Create')
-				)
-			)
-		);
-		$createButton->includeDefaultJS(false);
-		
-		if ( count($langDropdown->getSource()) < 1 ) {
-			$fields->insertAfter(
-				new LiteralField(
+
+		// Check if fields exist already to avoid adding them twice on repeat invocations
+		$tab = $fields->findOrMakeTab('Root.Translations', _t('Translatable.TRANSLATIONS', 'Translations'));
+		if(!$tab->fieldByName('CreateTransHeader')) {
+			$tab->push(new HeaderField(
+				'CreateTransHeader', 
+				_t('Translatable.CREATE', 'Create new translation'), 
+				2
+			));
+		}
+		if(!$tab->fieldByName('NewTransLang') && !$tab->fieldByName('AllTransCreated')) {
+			$langDropdown = LanguageDropdownField::create(
+				"NewTransLang", 
+				_t('Translatable.NEWLANGUAGE', 'New language'), 
+				$alreadyTranslatedLocales,
+				'SiteTree',
+				'Locale-English',
+				$this->owner
+			)->addExtraClass('languageDropdown no-change-track');
+			$tab->push($langDropdown);
+			$canAddLocale = (count($langDropdown->getSource()) > 0);
+
+			if($canAddLocale) {
+				// Only add create button if new languages are available
+				$tab->push(
+					$createButton = InlineFormAction::create(
+						'createtranslation',
+						_t('Translatable.CREATEBUTTON', 'Create')
+					)->addExtraClass('createTranslationButton')
+				);
+				$createButton->includeDefaultJS(false); // not fluent API...
+			} else {
+				$tab->removeByName('NewTransLang');
+				$tab->push(new LiteralField(
 					'AllTransCreated', 
 					_t('Translatable.ALLCREATED', 'All allowed translations have been created.')
-				), 
-				'CreateTransHeader'
-			);
-			$fields->removeByName('NewTransLang');
-			$fields->removeByName('createtranslation');
+				));
+			}
 		}
-
 		if($alreadyTranslatedLocales) {
-			$fields->addFieldToTab(
-				'Root.Translations',
-				new HeaderField('ExistingTransHeader', _t('Translatable.EXISTING', 'Existing translations'), 3)
-			);
-			$existingTransHTML = '<ul>';
-			foreach($alreadyTranslatedLocales as $langCode) {		
-				$existingTranslation = $this->owner->getTranslation($langCode);
-				if($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
-					$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
-						sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $langCode),
-						i18n::get_locale_name($langCode)
-					);
+			if(!$tab->fieldByName('ExistingTransHeader')) {
+				$tab->push(new HeaderField(
+					'ExistingTransHeader', 
+					_t('Translatable.EXISTING', 'Existing translations'), 
+					3
+				));
+				if(!$tab->fieldByName('existingtrans')) {
+					$existingTransHTML = '<ul>';
+					foreach($alreadyTranslatedLocales as $langCode) {		
+						$existingTranslation = $this->owner->getTranslation($langCode);
+						if($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
+							$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
+								sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $langCode),
+								i18n::get_locale_name($langCode)
+							);
+						}
+					}
+					$existingTransHTML .= '</ul>';	
+					$tab->push(new LiteralField('existingtrans',$existingTransHTML));
 				}
 			}
-			$existingTransHTML .= '</ul>';
-			$fields->addFieldToTab(
-				'Root.Translations',
-				new LiteralField('existingtrans',$existingTransHTML)
-			);
-		}
-	
-		$langDropdown->addExtraClass('languageDropdown no-change-track');
-		$createButton->addExtraClass('createTranslationButton');
-		
-		$this->owner->translatableFieldsAdded = true;
-		
+		}		
 	}
 	
 	function updateSettingsFields(&$fields) {
 		$this->addTranslatableFields($fields);
 	}
 
+	/**
+	 * This method can be called multiple times on the same FieldList
+	 * because it checks which fields have already been added or modified.
+	 */
 	protected function addTranslatableFields(&$fields) {
-		
 		// used in LeftAndMain->init() to set language state when reading/writing record
 		$fields->push(new HiddenField("Locale", "Locale", $this->owner->Locale));
 		
@@ -1061,17 +1059,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 			'NewTransLang',
 			'createtranslation'
 		);
-		
-		$this->translatableExcludes = ( isset($this->translatableExcludes) && is_array($this->translatableExcludes) ) 
-				? array_merge($this->translatableExcludes, $excludeFields) 
-				: $excludeFields;
-		
 
 		// if a language other than default language is used, we're in "translation mode",
 		// hence have to modify the original fields
-		$creating = false;
 		$baseClass = $this->owner->class;
-		$allFields = $fields->toArray();
 		while( ($p = get_parent_class($baseClass)) != "DataObject") $baseClass = $p;
 
 		// try to get the record in "default language"
@@ -1085,8 +1076,6 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$isTranslationMode = $this->owner->Locale != Translatable::default_locale();
 		
 		if($originalRecord && $isTranslationMode) {
-			$originalLangID = Session::get($this->owner->ID . '_originalLangID');
-			
 			// Remove parent page dropdown
 			$fields->removeByName("ParentType");
 			$fields->removeByName("ParentID");
@@ -1099,18 +1088,22 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// iterate through sequential list of all datafields in fieldset
 			// (fields are object references, so we can replace them with the translatable CompositeField)
 			foreach($allDataFields as $dataField) {
+				// Transformation is a visual helper for CMS authors, so ignore hidden fields
 				if($dataField instanceof HiddenField) continue;
-				if(in_array($dataField->getName(), $this->translatableExcludes)) continue;
+				// Some fields are explicitly excluded from transformation
+				if(in_array($dataField->getName(), $excludeFields)) continue;
+				// Readonly field which has been added previously
+				if(preg_match('/_original$/', $dataField->getName())) continue;
+				// Field already has been transformed
+				if(isset($allDataFields[$dataField->getName() . '_original'])) continue;
 				
 				if(in_array($dataField->getName(), $translatableFieldNames)) {
 					// if the field is translatable, perform transformation
 					$fields->replaceField($dataField->getName(), $transformation->transformFormField($dataField));
-				} else {
+				} elseif(!$dataField->isReadonly()) {
 					// else field shouldn't be editable in translation-mode, make readonly
 					$fields->replaceField($dataField->getName(), $dataField->performReadonlyTransformation());
 				}
-				$this->translatableExcludes[] = $dataField->getName();
-				$this->translatableExcludes[] = $dataField->getName() . '_original';
 			}
 			
 		} elseif($this->owner->isNew()) {
@@ -1128,8 +1121,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 		
 	/**
-	 * Get the names of all translatable fields on this class
-	 * as a numeric array.
+	 * Get the names of all translatable fields on this class as a numeric array.
 	 * @todo Integrate with blacklist once branches/translatable is merged back.
 	 * 
 	 * @return array
