@@ -15,3 +15,4 @@ et_EE:
     NOTICENEWPAGE: "Enne tõlke loomist salvestage see leht"
     TRANSLATEPERMISSION: "Tõlgi: %s"
     TRANSLATEALLPERMISSION: "Tõlgi kõigisse saadaolevatesse keeltesse"
+    ALLCREATED: 'Kõik lubatud tõlked on loodud.'
