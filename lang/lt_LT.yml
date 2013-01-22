@@ -1,0 +1,17 @@
+lt_LT:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: "Kalba"
+  CMSMain_left.ss:
+    GO: "Pirmyn"
+  Form:
+    LANGAVAIL: "Galimos kalbos"
+    LANGAOTHER: "Kitos kalbos"
+  Translatable:
+    TRANSLATIONS: "Vertimai"
+    CREATE: "Sukurti naują vertimą"
+    NEWLANGUAGE: "Nauja kalba"
+    CREATEBUTTON: "Sukurti"
+    EXISTING: "Esami vertimai:"
+    NOTICENEWPAGE: "Prašome išsaugoti šį puslapį prieš kuriant vertimą"
+    TRANSLATEPERMISSION: "Išversti: %s"
+    TRANSLATEALLPERMISSION: "Išversti į visas galimas kalbas"
