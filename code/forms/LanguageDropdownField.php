@@ -93,7 +93,7 @@ class LanguageDropdownField extends GroupedDropdownField {
 		$id = (int)$this->getRequest()->requestVar('id');
 		$class = Convert::raw2sql($this->getRequest()->requestVar('class'));
 		$locale = Translatable::get_current_locale();
-		if ($id && $class && class_exists($class) && Object::has_extension($class, 'Translatable')) {
+		if ($id && $class && class_exists($class) && $class::has_extension('Translatable')) {
 			// temporarily disable locale filter so that we won't filter out the object 
 			Translatable::disable_locale_filter();
 			$object = DataObject::get_by_id($class, $id);

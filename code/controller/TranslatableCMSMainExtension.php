@@ -89,7 +89,7 @@ class TranslatableCMSMainExtension extends Extension {
 	}
 	
 	function updateEditForm(&$form) {
-		if($form->getName() == 'RootForm' && Object::has_extension('SiteConfig',"Translatable")) {
+		if($form->getName() == 'RootForm' && SiteConfig::has_extension("Translatable")) {
 			$siteConfig = SiteConfig::current_site_config();
 			$form->Fields()->push(new HiddenField('Locale','', $siteConfig->Locale));
 		}
@@ -211,7 +211,7 @@ class TranslatableCMSMainExtension extends Extension {
 	 * @return boolean
 	 */
 	function IsTranslatableEnabled() {
-		return Object::has_extension('SiteTree', 'Translatable');
+		return SiteTree::has_extension('Translatable');
 	}
 	
 }
