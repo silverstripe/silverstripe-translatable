@@ -1,0 +1,15 @@
+---
+Name: translatable-extensions
+---
+SiteTree:
+  extensions:
+    ['Translatable']
+SiteConfig:
+  extensions:
+    ['Translatable']
+LeftAndMain:
+  extensions: 
+    ['TranslatableCMSMainExtension']
+HtmlEditorField_Toolbar:
+  extensions:
+    ['TranslatableEditorToolbarExtension']
