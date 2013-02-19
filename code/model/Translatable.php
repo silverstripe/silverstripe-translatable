@@ -1096,6 +1096,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 				if(preg_match('/_original$/', $dataField->getName())) continue;
 				// Field already has been transformed
 				if(isset($allDataFields[$dataField->getName() . '_original'])) continue;
+				// CheckboxField which is already transformed
+				if(preg_match('/class=\"originalvalue\"/', $dataField->Title())) continue;
 				
 				if(in_array($dataField->getName(), $translatableFieldNames)) {
 					// if the field is translatable, perform transformation
@@ -1739,23 +1741,47 @@ class Translatable_Transformation extends FormTransformation {
 		return $this->original;
 	}
 	
-	/**
-	 * @todo transformTextareaField() not used at the moment
-	 */
-	function transformTextareaField(TextareaField $field) {
-		$nonEditableField = new ToggleField($fieldname,$field->Title(),'','+','-');
-		$nonEditableField->labelMore = '+';
-		$nonEditableField->labelLess = '-';
-		return $this->baseTransform($nonEditableField, $field);
-		
-		return $nonEditableField;
-	}
-	
-	function transformFormField(FormField $field) {
+	public function transformFormField(FormField $field) {
 		$newfield = $field->performReadOnlyTransformation();
-		return $this->baseTransform($newfield, $field);
+		$fn = 'transform' . $field->class;
+		return $this->hasMethod($fn) ? $this->$fn($newfield, $field) : $this->baseTransform($newfield, $field);
 	}
 	
+	/**
+	 * Transform a translatable CheckboxField to show the field value from the default language
+	 * in the label.
+	 * 
+	 * @param FormField $nonEditableField The readonly field to contain the original value
+	 * @param FormField $originalField The original editable field containing the translated value
+	 * @return CheckboxField The field with a modified label
+	 */
+	protected function transformCheckboxField(CheckboxField $nonEditableField, CheckboxField $originalField) {
+		$label = $originalField->Title();
+		$fieldName = $originalField->getName();
+		$value = ($this->original->$fieldName) 
+			? _t('Translatable_Transform.CheckboxValueYes', 'Yes') 
+			: _t('Translatable_Transform.CheckboxValueNo', 'No');
+		$originalLabel = _t(
+			'Translatable_Transform.OriginalCheckboxLabel', 
+			'Original: {value}',
+			'Addition to a checkbox field label showing the original value of the translatable field.',
+			array('value'=>$value)
+		);
+		$originalField->setTitle($label . ' <span class="originalvalue">(' . $originalLabel . ')</span>');
+		return $originalField;
+	}
+	
+	/**
+	 * Transform a translatable field to show the field value from the default language
+	 * DataObject below the translated field.
+	 * 
+	 * This is a fallback function which handles field types that aren't transformed by
+	 * $this->transform{FieldType} functions.
+	 * 
+	 * @param FormField $nonEditableField The readonly field to contain the original value
+	 * @param FormField $originalField The original editable field containing the translated value
+	 * @return \CompositeField The transformed field
+	 */
 	protected function baseTransform($nonEditableField, $originalField) {
 		$fieldname = $originalField->getName();
 		
