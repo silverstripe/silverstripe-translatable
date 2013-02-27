@@ -495,7 +495,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	static function is_enabled() {
 		if(class_exists('SiteTree')){
-			return SiteTree::has_extension('Translatable');
+			return Object::has_extension('SiteTree', 'Translatable');
 		}else{
 			return false;
 		}
@@ -1454,7 +1454,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 	
 	function providePermissions() {
-		if(!SiteTree::has_extension('Translatable') || !class_exists('SiteTree')) return false;
+		if(!Object::has_extension('SiteTree', 'Translatable') || !class_exists('SiteTree')) return false;
 		
 		$locales = self::get_allowed_locales();
 		

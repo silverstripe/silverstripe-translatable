@@ -211,7 +211,7 @@ class TranslatableCMSMainExtension extends Extension {
 	 * @return boolean
 	 */
 	function IsTranslatableEnabled() {
-		return SiteTree::has_extension('Translatable');
+		return Object::has_extension('SiteTree', 'Translatable');
 	}
 	
 }
