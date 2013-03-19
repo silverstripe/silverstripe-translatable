@@ -990,13 +990,10 @@ class TranslatableTest_DataObject extends DataObject implements TestOnly {
 
 class TranslatableTest_Extension extends DataExtension implements TestOnly {
 	
-	function extraStatics($class = null, $extension = null) {
-		return array(
-			'db' => array(
-				'TranslatableDecoratedProperty' => 'Text'
-			)
-		);
-	}
+	static $db = array(
+		'TranslatableDecoratedProperty' => 'Text'
+	);
+	
 }
 
 class TranslatableTest_Page extends Page implements TestOnly {
