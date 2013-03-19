@@ -363,14 +363,14 @@ below can be inserted in any of your templates, for example `themes/blackcandy/t
 	:::php
 	<% if Translations %>
 	<ul class="translations">
-	<% control Translations %>
+	<% loop Translations %>
 	  <li class="$Locale.RFC1766">
 	    <a href="$Link" hreflang="$Locale.RFC1766" 
 	title="$Title">
 	    <% sprintf(_t('SHOWINPAGE','Show page in %s'),$Locale.Nice) %>
 	   </a>
 	  </li>
-	<% end_control %>
+	<% end_loop %>
 	</ul>
 	<% end_if %>
 
@@ -380,7 +380,7 @@ just work if your locale value is registered in i18n::get_common_locales().
 
 ### Page-control
 
-If you want to put static links in your template, which link to a site by their url, normally you can use the `<% control
+If you want to put static links in your template, which link to a site by their url, normally you can use the `<% loop
 Page(page-url) %>`. For sites which use Translatable, this is not possible for more than one language, because the url's
 of different pages differ.
 
@@ -401,15 +401,15 @@ For this case place the following function in your Page_Controller:
 
 So, for example if you have a german page "Kontakt", which should be translated to english as "Contact", you may use:
 
-	<% control PageByLang(Kontakt,de_DE) %>
+	<% loop PageByLang(Kontakt,de_DE) %>
 
 The control displays the link in the right language, depending on the current locale.
 
 Example:
 
-	<% control PageByLang(Kontakt,de_DE) %>
+	<% loop PageByLang(Kontakt,de_DE) %>
 	 <h2><a href="$Link" title="$Title">$Title</a></h2>
-	<% end_control %>
+	<% end_loop %>
 
 
 ### Enabling the _t() function in templates 
