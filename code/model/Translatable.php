@@ -15,7 +15,7 @@
  * <h3>Through Object::add_extension()</h3>
  * Enabling Translatable through {@link Object::add_extension()} in your _config.php:
  * <code>
- * Object::add_extension('MyClass', 'Translatable');
+ * MyClass::add_extension('Translatable');
  * </code>
  * This is the recommended approach for enabling Translatable.
  * 
@@ -79,8 +79,8 @@
  * Translatable can be used for subclasses of {@link SiteTree} as well. 
  * 
  * <code>
- * Object::add_extension('SiteTree', 'Translatable');
- * Object::add_extension('SiteConig', 'Translatable');
+ * SiteTree::add_extension('Translatable');
+ * SiteConig::add_extension('Translatable');
  * </code>
  * 
  * If a child page translation is requested without the parent
@@ -472,25 +472,25 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * Enables the multilingual feature
 	 *
-	 * @deprecated 2.4 Use Object::add_extension('SiteTree', 'Translatable')
+	 * @deprecated 2.4 Use SiteTree::add_extension('Translatable')
 	 */
 	static function enable() {
-		if(class_exists('SiteTree')) Object::add_extension('SiteTree', 'Translatable');
+		if(class_exists('SiteTree')) SiteTree::add_extension('Translatable');
 	}
 
 	/**
 	 * Disable the multilingual feature
 	 *
-	 * @deprecated 2.4 Use Object::remove_extension('SiteTree', 'Translatable')
+	 * @deprecated 2.4 Use SiteTree::remove_extension('Translatable')
 	 */
 	static function disable() {
-		if(class_exists('SiteTree')) Object::remove_extension('SiteTree', 'Translatable');
+		if(class_exists('SiteTree')) SiteTree::remove_extension('Translatable');
 	}
 	
 	/**
 	 * Check whether multilingual support has been enabled
 	 *
-	 * @deprecated 2.4 Use Object::has_extension('SiteTree', 'Translatable')
+	 * @deprecated 2.4 Use SiteTree::has_extension('Translatable')
 	 * @return boolean True if enabled
 	 */
 	static function is_enabled() {
@@ -541,15 +541,16 @@ class Translatable extends DataExtension implements PermissionProvider {
 		}
 	}
 
-	static function add_to_class($class, $extensionClass, $args = null) {
-		Config::inst()->update($class, 'defaults', array(
+	static function get_extra_config($class, $extensionClass, $args = null) {
+		$config = array();
+		$config['defaults'] = array(
 			"Locale" => Translatable::default_locale() // as an overloaded getter as well: getLang()
-		));
-		Config::inst()->update($class, 'db', array(
+		);
+		$config['db'] = array(
 			"Locale" => "DBLocale",
 			//"TranslationMasterID" => "Int" // optional relation to a "translation master"
-		));
-		parent::add_to_class($class, $extensionClass, $args);
+		);
+		return $config;
 	}
 
 	/**

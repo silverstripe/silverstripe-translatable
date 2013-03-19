@@ -1017,5 +1017,4 @@ class TranslatableTest_Page extends Page implements TestOnly {
 	}
 }
 
-DataObject::add_extension('TranslatableTest_DataObject', 'TranslatableTest_Extension');
-?>
+TranslatableTest_DataObject::add_extension('TranslatableTest_Extension');
