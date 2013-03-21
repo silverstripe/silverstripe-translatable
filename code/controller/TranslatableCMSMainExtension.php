@@ -44,7 +44,7 @@ class TranslatableCMSMainExtension extends Extension {
 					$req->param('Action'),
 					$req->param('ID'),
 					$req->param('OtherID'),
-					'?' . http_build_query($getVars)
+					($query = http_build_query($getVars)) ? "?$query" : null
 				));
 			}
 		}

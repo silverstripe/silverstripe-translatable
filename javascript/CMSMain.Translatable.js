@@ -36,10 +36,19 @@
 				this._super();
 			},
 			onchange: function(e) {
-				var url = $.path.addSearchParams(
-					document.location.href.replace(/locale=[^&]*/, ''),
-					{locale: $(e.target).val()}
-				);
+				// Get new locale code
+				locale = {locale: $(e.target).val()};
+				
+				// Check existing url
+				search = /locale=[^&]*/;
+				url = document.location.href;
+				if(url.match(search)) {
+					// Replace locale code
+					url = url.replace(search, $.param(locale));
+				} else {
+					// Add locale code
+					url = $.path.addSearchParams(url, locale);
+				}
 				$('.cms-container').loadPanel(url);
 				return false;
 			}
