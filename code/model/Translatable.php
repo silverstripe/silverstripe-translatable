@@ -1166,8 +1166,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if($this->owner->exists()) {
 			// HACK need to disable language filtering in augmentSQL(), 
 			// as we purposely want to get different language
-			self::disable_locale_filter();
-			
+			// also save state of locale-filter, revert to this state at the
+			// end of this method
+			$localeFilterEnabled = false;
+			if(self::locale_filter_enabled()) {
+				self::disable_locale_filter();
+				$localeFilterEnabled = true;
+			}
+
 			$translationGroupID = $this->getTranslationGroup();
 			
 			$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
@@ -1196,7 +1202,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 					->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 			}
 
-			self::enable_locale_filter();
+			// only re-enable locale-filter if it was enabled at the beginning of this method
+			if($localeFilterEnabled) {
+				self::enable_locale_filter();
+			}
 
 			return $translations;
 		}
