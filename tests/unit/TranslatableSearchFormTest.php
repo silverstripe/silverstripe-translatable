@@ -4,7 +4,7 @@
  */
 class TranslatableSearchFormTest extends FunctionalTest {
 	
-	static $fixture_file = 'translatable/tests/unit/TranslatableSearchFormTest.yml';
+	protected static $fixture_file = 'translatable/tests/unit/TranslatableSearchFormTest.yml';
 	
 	protected $mockController;
 

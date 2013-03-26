@@ -27,7 +27,7 @@ class LanguageDropdownField extends GroupedDropdownField {
 		else if('Common-Native' == $list) $allLocalesWithTitle = i18n::get_common_languages(true);
 		else if('Locale-English' == $list) $allLocalesWithTitle = i18n::get_common_locales();
 		else if('Locale-Native' == $list) $allLocalesWithTitle = i18n::get_common_locales(true);
-		else $allLocalesWithTitle = i18n::get_locale_list();
+		else $allLocalesWithTitle = i18n::config()->all_locales;
 
 		if(isset($allLocales[Translatable::default_locale()])) {
 			unset($allLocales[Translatable::default_locale()]);

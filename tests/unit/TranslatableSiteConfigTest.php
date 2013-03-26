@@ -4,7 +4,7 @@
  */
 class TranslatableSiteConfigTest extends SapphireTest {
 	
-	static $fixture_file = 'translatable/tests/unit/TranslatableSiteConfigTest.yml';
+	protected static $fixture_file = 'translatable/tests/unit/TranslatableSiteConfigTest.yml';
 	
 	protected $requiredExtensions = array(
 		'SiteTree' => array('Translatable'),

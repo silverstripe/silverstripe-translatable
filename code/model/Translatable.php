@@ -12,20 +12,14 @@
  * 
  * <h2>Configuration</h2>
  * 
- * <h3>Through Object::add_extension()</h3>
- * Enabling Translatable through {@link Object::add_extension()} in your _config.php:
+ * The extension is automatically enabled for SiteTree and SiteConfig records,
+ * if they can be found. Add the following to your config.yml in order to
+ * register a custom class:
+ *
  * <code>
- * MyClass::add_extension('Translatable');
- * </code>
- * This is the recommended approach for enabling Translatable.
- * 
- * <h3>Through $extensions</h3>
- * <code>
- * class MyClass extends DataObject {
- *   static $extensions = array(
- *     "Translatable"
- *   );
- * }
+ * MyClass:
+ *   extensions:
+ *     Translatable
  * </code>
  * 
  * Make sure to rebuild the database through /dev/build after enabling translatable.
@@ -76,12 +70,8 @@
  *
  * <h2>Usage for SiteTree</h2>
  * 
- * Translatable can be used for subclasses of {@link SiteTree} as well. 
- * 
- * <code>
- * SiteTree::add_extension('Translatable');
- * SiteConig::add_extension('Translatable');
- * </code>
+ * Translatable can be used for subclasses of {@link SiteTree},
+ * it is automatically configured if this class is foun.
  * 
  * If a child page translation is requested without the parent
  * page already having a translation in this language, the extension
@@ -277,7 +267,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
 		}
 		
-		$localeList = i18n::get_locale_list();
+		$localeList = i18n::config()->all_locales;
 		if(isset($localeList[$locale])) {
 			self::$default_locale = $locale;
 		} else {
@@ -1524,7 +1514,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$originalLocale = self::get_current_locale();
 
 		self::set_current_locale(self::default_locale());
-		$original = SiteTree::get_by_link(RootURLController::get_default_homepage_link());
+		$original = SiteTree::get_by_link(RootURLController::config()->default_homepage_link);
 		self::set_current_locale($originalLocale);
 
 		if($original) {
@@ -1692,12 +1682,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$IDFilter     = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
 		$parentFilter = null;
 
-		if(SiteTree::nested_urls()) {
-			if($this->owner->ParentID) {
-				$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
-			} else {
-				$parentFilter = ' AND "SiteTree"."ParentID" = 0';
-			}
+		if($this->owner->ParentID) {
+			$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
+		} else {
+			$parentFilter = ' AND "SiteTree"."ParentID" = 0';
 		}
 
 		$existingPage = SiteTree::get()

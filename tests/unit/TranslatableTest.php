@@ -6,7 +6,7 @@
  */
 class TranslatableTest extends FunctionalTest {
 	
-	static $fixture_file = 'translatable/tests/unit/TranslatableTest.yml';
+	protected static $fixture_file = 'translatable/tests/unit/TranslatableTest.yml';
 
 	protected $extraDataObjects = array(
 		'TranslatableTest_DataObject',
@@ -928,7 +928,6 @@ class TranslatableTest extends FunctionalTest {
 		$grandchildTranslation = $grandchild->createTranslation('en_AU');
 		$grandchildTranslation->write();
 		
-		SiteTree::enable_nested_urls();
 		Translatable::set_current_locale('en_AU');
 		
 		$this->assertEquals (
@@ -983,14 +982,14 @@ class TranslatableTest extends FunctionalTest {
 class TranslatableTest_DataObject extends DataObject implements TestOnly {
 	// add_extension() used to add decorator at end of file
 	
-	static $db = array(
+	private static $db = array(
 		'TranslatableProperty' => 'Text'
 	);
 }
 
 class TranslatableTest_Extension extends DataExtension implements TestOnly {
 	
-	static $db = array(
+	private static $db = array(
 		'TranslatableDecoratedProperty' => 'Text'
 	);
 	
@@ -1000,7 +999,7 @@ class TranslatableTest_Page extends Page implements TestOnly {
 	// static $extensions is inherited from SiteTree,
 	// we don't need to explicitly specify the fields
 	
-	static $db = array(
+	private static $db = array(
 		'TranslatableProperty' => 'Text'
 	);
 

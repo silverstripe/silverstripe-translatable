@@ -4,7 +4,7 @@
  */
 class TranslatableCMSMainExtension extends Extension {
 
-	static $allowed_actions = array(
+	private static $allowed_actions = array(
 		'createtranslation',
 	);
 
