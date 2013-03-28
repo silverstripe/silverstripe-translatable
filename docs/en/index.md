@@ -85,18 +85,18 @@ Alternatives:
 
 #### ThroughObject::add_extension()
 
-Enabling Translatable through *Object::add_extension()* in your *mysite/_config.php*:
+Enabling Translatable through *add_extension()* in your *mysite/_config.php*:
 
 	:::php
-	Object::add_extension('SiteTree', 'Translatable');
-	Object::add_extension('SiteConfig', 'Translatable'); // 2.4 or newer only
+	SiteTree::add_extension('Translatable');
+	SiteConfig::add_extension('Translatable'); // 2.4 or newer only
 
 
 #### Through $extensions
 
 	:::php
 	class Page extends SiteTree {
-	  static $extensions = array(
+	  private static $extensions = array(
 	    "Translatable"
 	  );
 	}
@@ -118,7 +118,7 @@ Example:
 	:::php
 	Translatable::set_default_locale(<locale>);
 	// Important: Call add_extension() after setting the default locale
-	Object::add_extension('SiteTree', 'Translatable');
+	SiteTree::add_extension('Translatable');
 
 
 For the Translatable class, a "locale" consists of a language code plus a region code separated by an underscore, 
