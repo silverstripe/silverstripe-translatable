@@ -1,24 +1,23 @@
+# See https://gist.github.com/chillu/5262316 for setup details
+
 language: php 
 php: 
  - 5.3
- - 5.4
 
 env:
- - TESTDB=MYSQL CORE_RELEASE=3.1
- - TESTDB=MYSQL CORE_RELEASE=master
- - TESTDB=PGSQL CORE_RELEASE=master
+ - DB=MYSQL CORE_RELEASE=3.1
+ - DB=MYSQL CORE_RELEASE=master
+ - DB=PGSQL CORE_RELEASE=master
 
 matrix:
-  exclude:
+  include:
     - php: 5.4
-      env: TESTDB=PGSQL CORE_RELEASE=master
-    - php: 5.4
-      env: TESTDB=MYSQL CORE_RELEASE=3.1
+      env: DB=MYSQL CORE_RELEASE=master
 
 before_script:
  - pear -q install --onlyreqdeps pear/PHP_CodeSniffer
  - phpenv rehash
- - ./tests/travis/before_script ~/builds/ss 
+ - ./tests/travis/travis_setup.php --target ~/builds/ss
  - cd ~/builds/ss
 
 script: 

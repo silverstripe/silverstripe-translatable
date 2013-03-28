@@ -9,8 +9,7 @@
 		{
 			"name": "Ingo Schommer",
 			"homepage": "http://chillu.com",
-			"email" : "ingo@silverstripe.com",
-			"role" : "tech-lead"
+			"email" : "ingo@silverstripe.com"
 		}
 	],
 	"require": 
@@ -19,6 +18,11 @@
 			"silverstripe/framework": "~3.1",
 			"silverstripe/cms": "~3.1"
 		},
+	"require-dev": {
+		"silverstripe/postgresql": "*",
+		"silverstripe/sqlite3": "*",
+		"silverstripe/mssql": "*"
+	},
 	"extra":
 		{
 			"snapshot" : "http://www.silverstripe.org/assets/Uploads/translatable4-small.png"
