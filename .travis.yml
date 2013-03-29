@@ -1,4 +1,4 @@
-# See https://gist.github.com/chillu/5262316 for setup details
+# See https://github.com/silverstripe-labs/silverstripe-travis-support for setup details
 
 language: php 
 php: 
@@ -16,7 +16,8 @@ matrix:
 before_script:
  - pear -q install --onlyreqdeps pear/PHP_CodeSniffer
  - phpenv rehash
- - ./tests/travis/travis_setup.php --target ~/builds/ss
+ - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+ - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
  - cd ~/builds/ss
 
 script: 
