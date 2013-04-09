@@ -205,7 +205,7 @@ attach this behaviour to custom fields by calling a helper function from your ge
 	:::php
 	class Page extends SiteTree {
 		
-		public static $db = array(
+		private static $db = array(
 			'AdditionalProperty' => 'Text', 
 		);
 		
