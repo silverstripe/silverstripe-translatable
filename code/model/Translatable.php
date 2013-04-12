@@ -1483,6 +1483,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			'Translate into all available languages'
 		);
 		
+		$permissions['VIEW_LANGS'] = _t(
+			'Translatable.TRANSLATEVIEWLANGS', 
+			'View language dropdown'
+		);
+		
 		return $permissions;
 	}
 	
