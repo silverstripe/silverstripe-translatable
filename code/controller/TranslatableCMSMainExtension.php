@@ -9,16 +9,20 @@ class TranslatableCMSMainExtension extends Extension {
 	);
 
 	function init() {
+		$req = $this->owner->getRequest();
+		
 		// Ignore being called on LeftAndMain base class,
 		// which is the case when requests are first routed through AdminRootController
 		// as an intermediary rather than the endpoint controller
 		if(!$this->owner->stat('tree_class')) return;
 
+		// Leave form submissions alone
+		if($req->httpMethod() != 'GET') return;
+
 		// Locale" attribute is either explicitly added by LeftAndMain Javascript logic,
 		// or implied on a translated record (see {@link Translatable->updateCMSFields()}).
 		// $Lang serves as a "context" which can be inspected by Translatable - hence it
 		// has the same name as the database property on Translatable.
-		$req = $this->owner->getRequest();
 		$id = $req->param('ID');
 		if($req->requestVar("Locale")) {
 			$this->owner->Locale = $req->requestVar("Locale");
