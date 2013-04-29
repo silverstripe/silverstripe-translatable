@@ -5,8 +5,11 @@ php:
  - 5.3
 
 env:
- - DB=MYSQL CORE_RELEASE=3.0
- - DB=PGSQL CORE_RELEASE=3.0
+  global:
+    - GITHUB_API_TOKEN=2434108664388ca0199319b98a6068af8e5dc547
+  matrix:
+    - DB=MYSQL CORE_RELEASE=3.0
+    - DB=PGSQL CORE_RELEASE=3.0
 
 matrix:
   include:
