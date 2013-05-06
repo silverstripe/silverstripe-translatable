@@ -1464,7 +1464,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 		foreach ($langlist as $langCode) {
 			if($langCode && isset($allCodes[$langCode])) {
 				if(is_array($allCodes[$langCode])) {
-					$returnMap[$langCode] = $allCodes[$langCode]['name'];
+					if(isset($allCodes[$langCode]['name'])) $returnMap[$langCode] = $allCodes[$langCode]['name'];
+					else $returnMap[$langCode] = $allCodes[$langCode][0];
 				} else {
 					$returnMap[$langCode] = $allCodes[$langCode];
 				}
