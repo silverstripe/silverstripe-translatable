@@ -1723,7 +1723,7 @@ class Translatable extends DataExtension implements PermissionProvider {
  * @param DataObject $original Needs the original record as we populate 
  *                   the readonly formfield with the original value
  * 
- * @package sapphire
+ * @package translatable
  * @subpackage misc
  */
 class Translatable_Transformation extends FormTransformation {
