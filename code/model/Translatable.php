@@ -1020,6 +1020,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 	function updateSettingsFields(&$fields) {
 		$this->addTranslatableFields($fields);
 	}
+	
+	public function updateRelativeLink(&$base, &$action) {
+		// Prevent home pages for non-default locales having their urlsegments
+		// reduced to the site root.
+		if($base === null && $this->owner->Locale != self::default_locale()){ 
+			$base = $this->owner->URLSegment; 
+		}
+	}
 
 	/**
 	 * This method can be called multiple times on the same FieldList
