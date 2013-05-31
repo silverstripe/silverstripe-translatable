@@ -1508,7 +1508,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$dbLangs = $query->execute()->column();
 		$langlist = array_merge((array)Translatable::default_locale(), (array)$dbLangs);
 		$returnMap = array();
-		$allCodes = array_merge(i18n::$all_locales, i18n::$common_locales);
+		$allLocales = Config::inst()->get('i18n', 'all_locales');
+		$commonLocales = Config::inst()->get('i18n', 'common_locales');
+		$allCodes = array_merge($allLocales, $commonLocales);
 		foreach ($langlist as $langCode) {
 			if($langCode && isset($allCodes[$langCode])) {
 				if(is_array($allCodes[$langCode])) {
