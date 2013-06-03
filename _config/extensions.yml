@@ -13,3 +13,6 @@ LeftAndMain:
 HtmlEditorField_Toolbar:
   extensions:
     ['TranslatableEditorToolbarExtension']
+DataQuery:
+  extensions:
+    ['Translatable']

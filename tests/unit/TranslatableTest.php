@@ -40,6 +40,44 @@ class TranslatableTest extends FunctionalTest {
 
 		parent::tearDown();
 	}
+
+	function testLocaleFilteringEnabledAndDisabled() {
+		$this->assertTrue(Translatable::locale_filter_enabled());
+
+		// get our base page to use for testing
+		$origPage = $this->objFromFixture('Page', 'testpage_en');
+		$origPage->MenuTitle = 'unique-key-used-in-my-query';
+		$origPage->write();
+		$origPage->publish('Stage', 'Live');
+
+		// create a translation of it so that we can see if translations are filtered
+		$translatedPage = $origPage->createTranslation('de_DE');
+		$translatedPage->MenuTitle = $origPage->MenuTitle;
+		$translatedPage->write();
+		$translatedPage->publish('Stage', 'Live');
+
+		$where = sprintf("MenuTitle = '%s'", Convert::raw2sql($origPage->MenuTitle));
+
+		// make sure that our query was filtered
+		$this->assertEquals(1, Page::get()->where($where)->count());
+
+		// test no filtering with disabled locale filter
+		Translatable::disable_locale_filter();
+		$this->assertEquals(2, Page::get()->where($where)->count());
+		Translatable::enable_locale_filter();
+
+		// make sure that our query was filtered after re-enabling the filter
+		$this->assertEquals(1, Page::get()->where($where)->count());
+
+		// test effectiveness of disabling locale filter with 3.x delayed querying
+		// see https://github.com/silverstripe/silverstripe-translatable/issues/113
+		Translatable::disable_locale_filter();
+		// create the DataList while the locale filter is disabled
+		$dataList = Page::get()->where($where);
+		Translatable::enable_locale_filter();
+		// but don't use it until later - after the filter is re-enabled
+		$this->assertEquals(2, $dataList->count());
+	}
 	
 	function testLocaleGetParamRedirectsToTranslation() {
 		$origPage = $this->objFromFixture('Page', 'testpage_en');

@@ -163,6 +163,8 @@
  */
 class Translatable extends DataExtension implements PermissionProvider {
 
+	const QUERY_LOCALE_FILTER_ENABLED = 'Translatable.LocaleFilterEnabled';
+
 	/**
 	 * The 'default' language.
 	 * @var string
@@ -560,7 +562,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * 
 	 * Use {@link disable_locale_filter()} to temporarily disable this "auto-filtering".
 	 */
-	function augmentSQL(SQLQuery &$query) {
+	function augmentSQL(SQLQuery &$query, DataQuery &$dataQuery = null) {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
@@ -575,6 +577,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$locale
 			// unless the filter has been temporarily disabled
 			&& self::locale_filter_enabled()
+			// or it was disabled when the DataQuery was created
+			&& $dataQuery->getQueryParam(self::QUERY_LOCALE_FILTER_ENABLED)
 			// DataObject::get_by_id() should work independently of language
 			&& !$query->filtersOnID() 
 			// the query contains this table
@@ -588,6 +592,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
 			$query->addWhere($qry); 
 		}
+	}
+
+	function augmentDataQueryCreation(SQLQuery &$sqlQuery, DataQuery &$dataQuery) {
+		$enabled = self::locale_filter_enabled();
+		$dataQuery->setQueryParam(self::QUERY_LOCALE_FILTER_ENABLED, $enabled);
 	}
 	
 	/**
@@ -1508,7 +1517,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$dbLangs = $query->execute()->column();
 		$langlist = array_merge((array)Translatable::default_locale(), (array)$dbLangs);
 		$returnMap = array();
-		$allCodes = array_merge(i18n::$all_locales, i18n::$common_locales);
+		$allLocales = Config::inst()->get('i18n', 'all_locales');
+		$commonLocales = Config::inst()->get('i18n', 'common_locales');
+		$allCodes = array_merge($allLocales, $commonLocales);
 		foreach ($langlist as $langCode) {
 			if($langCode && isset($allCodes[$langCode])) {
 				if(is_array($allCodes[$langCode])) {
