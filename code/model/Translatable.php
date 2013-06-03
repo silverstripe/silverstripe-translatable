@@ -15,7 +15,7 @@
  * The extension is automatically enabled for SiteTree and SiteConfig records,
  * if they can be found. Add the following to your config.yml in order to
  * register a custom class:
- *
+ * 
  * <code>
  * MyClass:
  *   extensions:
@@ -152,6 +152,8 @@
  * @package translatable
  */
 class Translatable extends DataExtension implements PermissionProvider {
+
+	const QUERY_LOCALE_FILTER_ENABLED = 'Translatable.LocaleFilterEnabled';
 
 	/**
 	 * The 'default' language.
@@ -551,7 +553,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * 
 	 * Use {@link disable_locale_filter()} to temporarily disable this "auto-filtering".
 	 */
-	function augmentSQL(SQLQuery &$query) {
+	function augmentSQL(SQLQuery &$query, DataQuery &$dataQuery = null) {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
@@ -566,6 +568,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$locale
 			// unless the filter has been temporarily disabled
 			&& self::locale_filter_enabled()
+			// or it was disabled when the DataQuery was created
+			&& $dataQuery->getQueryParam(self::QUERY_LOCALE_FILTER_ENABLED)
 			// DataObject::get_by_id() should work independently of language
 			&& !$query->filtersOnID() 
 			// the query contains this table
@@ -579,6 +583,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
 			$query->addWhere($qry); 
 		}
+	}
+
+	function augmentDataQueryCreation(SQLQuery &$sqlQuery, DataQuery &$dataQuery) {
+		$enabled = self::locale_filter_enabled();
+		$dataQuery->setQueryParam(self::QUERY_LOCALE_FILTER_ENABLED, $enabled);
 	}
 	
 	/**
@@ -1020,7 +1029,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	function updateSettingsFields(&$fields) {
 		$this->addTranslatableFields($fields);
 	}
-	
+
 	public function updateRelativeLink(&$base, &$action) {
 		// Prevent home pages for non-default locales having their urlsegments
 		// reduced to the site root.
@@ -1706,11 +1715,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$IDFilter     = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
 		$parentFilter = null;
 
-		if($this->owner->ParentID) {
-			$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
-		} else {
-			$parentFilter = ' AND "SiteTree"."ParentID" = 0';
-		}
+			if($this->owner->ParentID) {
+				$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
+			} else {
+				$parentFilter = ' AND "SiteTree"."ParentID" = 0';
+			}
 
 		$existingPage = SiteTree::get()
 			// disable get_one cache, as this otherwise may pick up results from when locale_filter was on
