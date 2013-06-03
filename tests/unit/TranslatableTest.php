@@ -56,7 +56,7 @@ class TranslatableTest extends FunctionalTest {
 		$translatedPage->write();
 		$translatedPage->publish('Stage', 'Live');
 
-		$where = sprintf("MenuTitle = '%s'", Convert::raw2sql($origPage->MenuTitle));
+		$where = sprintf("\"MenuTitle\" = '%s'", Convert::raw2sql($origPage->MenuTitle));
 
 		// make sure that our query was filtered
 		$this->assertEquals(1, Page::get()->where($where)->count());
