@@ -170,6 +170,49 @@ class TranslatableTest extends FunctionalTest {
 			$enPage->ID
 		);
 	}
+
+	function testChangingClassOfDefaultLocaleTranslationChangesOthers() {
+		// see https://github.com/silverstripe/silverstripe-translatable/issues/97
+		// create an English SiteTree
+		$enST = new SiteTree();
+		$enST->Locale = 'en_US';
+		$enST->write();
+
+		// create French and Spanish translations
+		$frST = $enST->createTranslation('fr_FR');
+		$esST = $enST->createTranslation('es_ES');
+
+		// change the class name of the default locale's translation (as CMS admin would)
+		$enST->setClassName('Page');
+		$enST->write();
+
+		// reload them all to get fresh instances
+		$enPg = DataObject::get_by_id('Page', $enST->ID, $cache = false);
+		$frPg = DataObject::get_by_id('Page', $frST->ID, $cache = false);
+		$esPg = DataObject::get_by_id('Page', $esST->ID, $cache = false);
+
+		// make sure they are all the right class
+		$this->assertEquals('Page', $enPg->ClassName);
+		$this->assertEquals('Page', get_class($enPg));
+		$this->assertEquals('Page', $frPg->ClassName);
+		$this->assertEquals('Page', get_class($frPg));
+		$this->assertEquals('Page', $esPg->ClassName);
+		$this->assertEquals('Page', get_class($esPg));
+
+		// test that we get the right translations back from each instance
+		$this->assertArrayEqualsAfterSort(
+			array('fr_FR', 'es_ES'),
+			$enPg->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'es_ES'),
+			$frPg->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'fr_FR'),
+			$esPg->getTranslations()->column('Locale')
+		);
+	}
 	
 	function testTranslationGroupsWhenTranslationIsSubclass() {
 		// create an English SiteTree
