@@ -41,6 +41,12 @@ class TranslatableTest extends FunctionalTest {
 		parent::tearDown();
 	}
 
+	function assertArrayEqualsAfterSort($expected, $actual, $message = null) {
+		sort($expected);
+		sort($actual);
+		return $this->assertEquals($expected, $actual, $message);
+	}
+
 	function testLocaleFilteringEnabledAndDisabled() {
 		$this->assertTrue(Translatable::locale_filter_enabled());
 
@@ -117,13 +123,9 @@ class TranslatableTest extends FunctionalTest {
 		
 		// test french
 		
-		$array1=$frPage->getTranslations()->column('Locale');
-		$array2=array('en_US','es_ES');
-		sort($array1);
-		sort($array2);
-		$this->assertEquals(
-			$array1,
-			$array2
+		$this->assertArrayEqualsAfterSort(
+			array('en_US','es_ES'),
+			$frPage->getTranslations()->column('Locale')
 		);
 		$this->assertNotNull($frPage->getTranslation('en_US'));
 		$this->assertEquals(
@@ -137,13 +139,9 @@ class TranslatableTest extends FunctionalTest {
 		);
 		
 		// test english
-		$expected = array('es_ES', 'fr_FR');
-		sort($expected);
-		$actual = $enPage->getTranslations()->column('Locale');
-		sort($actual);
-		$this->assertEquals(
-			$expected,
-			$actual
+		$this->assertArrayEqualsAfterSort(
+			array('es_ES', 'fr_FR'),
+			$enPage->getTranslations()->column('Locale')
 		);
 		$this->assertNotNull($frPage->getTranslation('fr_FR'));
 		$this->assertEquals(
@@ -157,13 +155,9 @@ class TranslatableTest extends FunctionalTest {
 		);
 		
 		// test spanish
-		$actual = $esPage->getTranslations()->column('Locale');
-		sort($actual);
-		$expected = array('en_US', 'fr_FR');
-		sort($expected);
-		$this->assertEquals(
-			$actual,
-			$expected
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'fr_FR'),
+			$esPage->getTranslations()->column('Locale')
 		);
 		$this->assertNotNull($esPage->getTranslation('fr_FR'));
 		$this->assertEquals(
@@ -176,7 +170,115 @@ class TranslatableTest extends FunctionalTest {
 			$enPage->ID
 		);
 	}
+
+	function testChangingClassOfDefaultLocaleTranslationChangesOthers() {
+		// see https://github.com/silverstripe/silverstripe-translatable/issues/97
+		// create an English SiteTree
+		$enST = new SiteTree();
+		$enST->Locale = 'en_US';
+		$enST->write();
+
+		// create French and Spanish translations
+		$frST = $enST->createTranslation('fr_FR');
+		$esST = $enST->createTranslation('es_ES');
+
+		// change the class name of the default locale's translation (as CMS admin would)
+		$enST->setClassName('Page');
+		$enST->write();
+
+		// reload them all to get fresh instances
+		$enPg = DataObject::get_by_id('Page', $enST->ID, $cache = false);
+		$frPg = DataObject::get_by_id('Page', $frST->ID, $cache = false);
+		$esPg = DataObject::get_by_id('Page', $esST->ID, $cache = false);
+
+		// make sure they are all the right class
+		$this->assertEquals('Page', $enPg->ClassName);
+		$this->assertEquals('Page', get_class($enPg));
+		$this->assertEquals('Page', $frPg->ClassName);
+		$this->assertEquals('Page', get_class($frPg));
+		$this->assertEquals('Page', $esPg->ClassName);
+		$this->assertEquals('Page', get_class($esPg));
+
+		// test that we get the right translations back from each instance
+		$this->assertArrayEqualsAfterSort(
+			array('fr_FR', 'es_ES'),
+			$enPg->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'es_ES'),
+			$frPg->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'fr_FR'),
+			$esPg->getTranslations()->column('Locale')
+		);
+	}
 	
+	function testTranslationGroupsWhenTranslationIsSubclass() {
+		// create an English SiteTree
+		$enST = new SiteTree();
+		$enST->Locale = 'en_US';
+		$enST->write();
+
+		// create French and Spanish translations
+		$frST = $enST->createTranslation('fr_FR');
+		$esST = $enST->createTranslation('es_ES');
+
+		// test that we get the right translations back from each instance
+		$this->assertArrayEqualsAfterSort(
+			array('fr_FR', 'es_ES'),
+			$enST->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'es_ES'),
+			$frST->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'fr_FR'),
+			$esST->getTranslations()->column('Locale')
+		);
+
+		// this should be considered an edge-case, but on some sites translations
+		// may be allowed to be a subclass of the default locale's translation of
+		// the same page.  In this case, we need to support getTranslations returning
+		// all of the translations, even if one of the translations is a different
+		// class from others
+		$esST->setClassName('Page');
+		$esST->write();
+		$esPg = DataObject::get_by_id('Page', $esST->ID, $cache = false);
+
+		// make sure we successfully changed the class
+		$this->assertEquals('Page', $esPg->ClassName);
+		$this->assertEquals('Page', get_class($esPg));
+
+		// and make sure that the class of the others did not change
+		$frST = DataObject::get_by_id('SiteTree', $frST->ID, $cache = false);
+		$this->assertEquals('SiteTree', $frST->ClassName);
+		$this->assertEquals('SiteTree', get_class($frST));
+		$enST = DataObject::get_by_id('SiteTree', $enST->ID, $cache = false);
+		$this->assertEquals('SiteTree', $enST->ClassName);
+		$this->assertEquals('SiteTree', get_class($enST));
+
+		// now that we know our edge case is successfully configured, we need to
+		// make sure that we get the right translations back from everything
+		$this->assertArrayEqualsAfterSort(
+			array('fr_FR', 'es_ES'),
+			$enST->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'es_ES'),
+			$frST->getTranslations()->column('Locale')
+		);
+		$this->assertArrayEqualsAfterSort(
+			array('en_US', 'fr_FR'),
+			$esPg->getTranslations()->column('Locale')
+		);
+		$this->assertEquals($enST->ID, $esPg->getTranslation('en_US')->ID);
+		$this->assertEquals($frST->ID, $esPg->getTranslation('fr_FR')->ID);
+		$this->assertEquals($esPg->ID, $enST->getTranslation('es_ES')->ID);
+		$this->assertEquals($esPg->ID, $frST->getTranslation('es_ES')->ID);
+	}
+
 	function testTranslationGroupNotRemovedWhenSiteTreeUnpublished() {
 		$enPage = new Page();
 		$enPage->Locale = 'en_US';
@@ -439,16 +541,13 @@ class TranslatableTest extends FunctionalTest {
 		$child4PageTranslated->write();
 		
 		Translatable::set_current_locale('en_US');
-		$actual = $parentPage->Children()->column('ID');
-		sort($actual);
-		$expected = array(
-			$child1Page->ID, 
-			$child2Page->ID,
-			$child3Page->ID
-		);
-		$this->assertEquals(
-			$actual,
-			$expected,
+		$this->assertArrayEqualsAfterSort(
+			array(
+				$child1Page->ID,
+				$child2Page->ID,
+				$child3Page->ID
+			),
+			$parentPage->Children()->column('ID'),
 			"Showing Children() in default language doesnt show children in other languages"
 		);
 		
@@ -495,17 +594,13 @@ class TranslatableTest extends FunctionalTest {
 			"Showing liveChildren() in default language doesnt show children in other languages"
 		);
 		$this->assertNotNull($parentPage->stageChildren());
-		$actual = $parentPage->stageChildren()->column('ID');
-		sort($actual);
-		$expected = array(
-			$child1Page->ID, 
-			$child2Page->ID,
-			$child3Page->ID
-		);
-		sort($expected);
-		$this->assertEquals(
-			$actual,
-			$expected,
+		$this->assertArrayEqualsAfterSort(
+			array(
+				$child1Page->ID,
+				$child2Page->ID,
+				$child3Page->ID
+			),
+			$parentPage->stageChildren()->column('ID'),
 			"Showing stageChildren() in default language doesnt show children in other languages"
 		);
 		
@@ -691,17 +786,13 @@ class TranslatableTest extends FunctionalTest {
 		SiteTree::flush_and_destroy_cache();
 		$parentPage = $this->objFromFixture('Page', 'parent');
 		$children = $parentPage->AllChildrenIncludingDeleted();
-		$expected = array(
-			$child2PageID,
-			$child3PageID,
-			$child1PageID // $child1Page was deleted from stage, so the original record doesn't have the ID set
-		);
-		sort($expected);
-		$actual = $parentPage->AllChildrenIncludingDeleted()->column('ID');
-		sort($actual);
-		$this->assertEquals(
-			$actual,
-			$expected,
+		$this->assertArrayEqualsAfterSort(
+			array(
+				$child2PageID,
+				$child3PageID,
+				$child1PageID // $child1Page was deleted from stage, so the original record doesn't have the ID set
+			),
+			$parentPage->AllChildrenIncludingDeleted()->column('ID'),
 			"Showing AllChildrenIncludingDeleted() in default language doesnt show deleted children in other languages"
 		);
 	
