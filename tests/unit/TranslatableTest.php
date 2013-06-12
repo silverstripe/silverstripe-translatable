@@ -408,10 +408,17 @@ class TranslatableTest extends FunctionalTest {
 		$translatedPage = $origPage->createTranslation('de_DE');
 		$this->assertEquals($translatedPage->URLSegment, 'testpage-de-de');
 	
-		$translatedPage->URLSegment = 'testpage';
+		$translatedPage->URLSegment = 'testpage'; // de_DE clashes with en_US
 		$translatedPage->write();
-	
 		$this->assertNotEquals($origPage->URLSegment, $translatedPage->URLSegment);
+
+		Translatable::set_current_locale('de_DE');
+		Config::inst()->update('Translatable', 'enforce_global_unique_urls', false);
+		$translatedPage->URLSegment = 'testpage'; // de_DE clashes with en_US
+		$translatedPage->write();
+		$this->assertEquals('testpage', $translatedPage->URLSegment);
+		Config::inst()->update('Translatable', 'enforce_global_unique_urls', true);
+		Translatable::set_current_locale('en_US');
 	}
 	
 	function testUpdateCMSFieldsOnSiteTree() {

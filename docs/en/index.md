@@ -167,12 +167,17 @@ Creating a translation:
 If a child page translation is requested without the parent
 page already having a translation in this language, the extension
 will recursively create translations up the tree.
-Caution: The "URLSegment" property is enforced to be unique across
+
+The `SiteTree.URLSegment` property is enforced to be unique across
 languages by auto-appending the language code at the end.
-You'll need to ensure that the appropriate "reading language" is set
-before showing links to other pages on a website through $_GET['locale'].
-Pages in different languages can have different publication states
-through the `[api:Versioned]` extension.
+It ensures that all pages can be reached through their URL without any additional setup.
+This behaviour can be turned off through the `Translatable.enforce_global_unique_urls` configuration setting,
+in which case its up to you to ensure the language context can be derived from the URL
+(e.g. through a subdomain or a language path prefix like `/en/mypage`).
+
+In either case, you'll need to take care that the appropriate "reading language" is set
+before showing links to other pages on a website, for example through
+a `locale` GET parameter (see `Translatable::choose_site_locale()`).
 
 Note: You can't get Children() for a parent page in a different language
 through set_reading_locale(). Get the translated parent first.
@@ -188,9 +193,7 @@ through set_reading_locale(). Get the translated parent first.
 By default, the URLs generated for a page can only contain western characters ("ASCII").
 You can configure this to accept the whole range of UTF8 characters as well.
 This is a SilverStripe core feature, rather than anything specific to this module.
-Add the following to your `mysite/_config.php`:
-
-	URLSegmentFilter::$default_allow_multibyte = true;
+Refer to the `URLSegmentFilter.default_allow_multibyte` configuration setting.
 
 ### Translating custom properties
 
