@@ -1197,7 +1197,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 			if($this->owner->hasExtension("Versioned")) {
 				if($stage) Versioned::reading_stage($stage);
 				$translations = Versioned::get_by_stage(
-					$this->owner->class, 
+					$baseDataClass,
 					Versioned::current_stage(), 
 					$filter, 
 					null
@@ -1205,7 +1205,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 				if($stage) Versioned::reading_stage($currentStage);
 			} else {
 				$class = $this->owner->class;
-				$translations = $class::get()
+				$translations = $baseDataClass::get()
 					->where($filter)
 					->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 			}
