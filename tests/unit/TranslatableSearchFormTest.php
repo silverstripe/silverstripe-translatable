@@ -69,7 +69,7 @@ class TranslatableSearchFormTest extends FunctionalTest {
 		// through a pseudo GET variable in getResults()
 		
 		$lang = 'en_US';
-		$results = $sf->getResults(null, array('Search'=>'content', 'locale'=>$lang));
+		$results = $sf->getResults(null, array('Search'=>'content', 'searchlocale'=>$lang));
 		$this->assertContains(
 			$publishedPage->ID,
 			$results->column('ID'),
@@ -82,7 +82,7 @@ class TranslatableSearchFormTest extends FunctionalTest {
 		);
 		
 		$lang = 'de_DE';
-		$results = $sf->getResults(null, array('Search'=>'content', 'locale'=>$lang));
+		$results = $sf->getResults(null, array('Search'=>'content', 'searchlocale'=>$lang));
 		$this->assertNotContains(
 			$publishedPage->ID,
 			$results->column('ID'),
