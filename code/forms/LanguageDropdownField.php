@@ -6,6 +6,10 @@
  * @package translatable
  */
 class LanguageDropdownField extends GroupedDropdownField {
+
+	private static $allowed_actions = array(
+		'getLocaleForObject'
+	);
 	
 	/**
 	 * Create a new LanguageDropdownField
