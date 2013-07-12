@@ -7,7 +7,7 @@
  */
 class LanguageDropdownField extends GroupedDropdownField {
 
-	public static $allowed_actions = array(
+	private static $allowed_actions = array(
 		'getLocaleForObject'
 	);
 	
