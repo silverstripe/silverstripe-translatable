@@ -1010,12 +1010,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 				));
 				if(!$tab->fieldByName('existingtrans')) {
 					$existingTransHTML = '<ul>';
-					foreach($alreadyTranslatedLocales as $langCode) {		
-						$existingTranslation = $this->owner->getTranslation($langCode);
+					foreach($this->getTranslations() as $existingTranslation) {
 						if($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
 							$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
-								sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $langCode),
-								i18n::get_locale_name($langCode)
+								sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $existingTranslation->Locale),
+								i18n::get_locale_name($existingTranslation->Locale)
 							);
 						}
 					}
