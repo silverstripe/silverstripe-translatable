@@ -1012,8 +1012,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 					$existingTransHTML = '<ul>';
 					foreach($this->getTranslations() as $existingTranslation) {
 						if($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
-							$existingTransHTML .= sprintf('<li><a href="%s">%s</a></li>',
-								sprintf('%s/?locale=%s', $existingTranslation->CMSEditLink(), $existingTranslation->Locale),
+							$existingTransHTML .= sprintf(
+								'<li><a href="%s">%s</a></li>',
+								sprintf(
+									'%s/?locale=%s', 
+									$existingTranslation->CMSEditLink(), 
+									$existingTranslation->Locale
+								),
 								i18n::get_locale_name($existingTranslation->Locale)
 							);
 						}
