@@ -368,17 +368,41 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * Enables automatic filtering by locale. This is normally called after is has been
 	 * disabled using {@link disable_locale_filter()}.
+	 *
+	 * @param $enabled (default true), if false this call is a no-op - see {@link disable_locale_filter()}
 	 */
-	public static function enable_locale_filter() {
-		self::$locale_filter_enabled = true;
+	public static function enable_locale_filter($enabled = true) {
+		if ($enabled) {
+			self::$locale_filter_enabled = true;
+		}
 	}
 	
 	/**
 	 * Disables automatic locale filtering in {@link augmentSQL()}. This can be re-enabled
 	 * using {@link enable_locale_filter()}.
+	 *
+	 * Note that all places that disable the locale filter should generally re-enable it
+	 * before returning from that block of code (function, etc). This is made easier by
+	 * using the following pattern:
+	 *
+	 * <code>
+	 * $enabled = Translatable::disable_locale_filter();
+	 * // do some work here
+	 * Translatable::enable_locale_filter($enabled);
+	 * return $whateverYouNeedTO;
+	 * </code>
+	 *
+	 * By using this pattern, the call to enable the filter will not re-enable it if it
+	 * was not enabled initially.  That will keep code that called your function from
+	 * breaking if it had already disabled the locale filter since it will not expect
+	 * calling your function to change the global state by re-enabling the filter.
+	 *
+	 * @return boolean true if the locale filter was enabled, false if it was not
 	 */
 	public static function disable_locale_filter() {
+		$enabled = self::$locale_filter_enabled;
 		self::$locale_filter_enabled = false;
+		return $enabled;
 	}
 	
 	/**
