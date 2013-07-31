@@ -322,7 +322,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$orig = Translatable::get_current_locale();
 		Translatable::set_current_locale($locale);
-		$do = $class::get()->where($filter)->sort($orderby)->First();
+		$do = $class::get()
+			->where($filter)
+			->where(sprintf('"Locale" = \'%s\'', Convert::raw2sql($locale)))
+			->sort($orderby)
+			->First();
 		Translatable::set_current_locale($orig);
 		return $do;
 	}

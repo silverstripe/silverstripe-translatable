@@ -10,6 +10,7 @@ class TranslatableTest extends FunctionalTest {
 
 	protected $extraDataObjects = array(
 		'TranslatableTest_DataObject',
+		'TranslatableTest_OneByLocaleDataObject',
 		'TranslatableTest_Page',
 	);
 	
@@ -17,6 +18,7 @@ class TranslatableTest extends FunctionalTest {
 		'SiteTree' => array('Translatable'),
 		'SiteConfig' => array('Translatable'),
 		'TranslatableTest_DataObject' => array('Translatable'),
+		'TranslatableTest_OneByLocaleDataObject' => array('Translatable'),
 	);
 	
 	private $origLocale;
@@ -45,6 +47,59 @@ class TranslatableTest extends FunctionalTest {
 		sort($expected);
 		sort($actual);
 		return $this->assertEquals($expected, $actual, $message);
+	}
+
+	function testGetOneByLocale() {
+		Translatable::disable_locale_filter();
+		$this->assertEquals(
+			0, 
+			TranslatableTest_OneByLocaleDataObject::get()->count(), 
+			'should not be any test objects yet'
+		);
+		Translatable::enable_locale_filter();
+
+		$obj = new TranslatableTest_OneByLocaleDataObject();
+		$obj->TranslatableProperty = 'test - en';
+		$obj->write();
+
+		Translatable::disable_locale_filter();
+		$this->assertEquals(
+			1, 
+			TranslatableTest_OneByLocaleDataObject::get()->count(), 
+			'should not be any test objects yet'
+		);
+		Translatable::enable_locale_filter();
+
+		$found = Translatable::get_one_by_locale('TranslatableTest_OneByLocaleDataObject', $obj->Locale);
+                $this->assertNotNull($found, 'should have found one for ' . $obj->Locale);
+		$this->assertEquals($obj->ID, $found->ID);
+
+		$translated = $obj->createTranslation('de_DE');
+		$translated->write();
+
+		Translatable::disable_locale_filter();
+		$this->assertEquals(
+			2, 
+			TranslatableTest_OneByLocaleDataObject::get()->count(), 
+			'should not be any test objects yet'
+		);
+		Translatable::enable_locale_filter();
+
+		$found = Translatable::get_one_by_locale(
+			'TranslatableTest_OneByLocaleDataObject', 
+			$translated->Locale
+		);
+		$this->assertNotNull($found, 'should have found one for ' . $translated->Locale);
+		$this->assertEquals($translated->ID, $found->ID);
+
+		// test again to make sure that get_one_by_locale works when locale filter disabled
+		Translatable::disable_locale_filter();
+		$found = Translatable::get_one_by_locale(
+			'TranslatableTest_OneByLocaleDataObject', 
+			$translated->Locale
+		);
+		$this->assertEquals($translated->ID, $found->ID);
+		Translatable::enable_locale_filter();
 	}
 
 	function testLocaleFilteringEnabledAndDisabled() {
@@ -1106,6 +1161,12 @@ class TranslatableTest extends FunctionalTest {
 			'SiteTree::get_by_link() doesnt need a locale setting to find translated pages'
 		);
 	}
+}
+
+class TranslatableTest_OneByLocaleDataObject extends DataObject implements TestOnly {
+	private static $db = array(
+		'TranslatableProperty' => 'Text'
+	);
 }
 
 class TranslatableTest_DataObject extends DataObject implements TestOnly {
