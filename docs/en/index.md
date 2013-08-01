@@ -76,7 +76,7 @@ The Translatable module uses the "Storage in language rows" approach.
 
 Alternatives:
 
- * Tractorcro's [Fluet Module](https://github.com/tractorcow/silverstripe-fluent)
+ * Tractorcow's [Fluent Module](https://github.com/tractorcow/silverstripe-fluent)
  * UncleCheese's [TranslatableDataObject](http://www.leftandmain.com/silverstripe-tips/2012/04/03/translatabledataobject-insanely-simple-translation/) (open source)
  * Kreationsbyran's [Multilingual Module 2.0](http://www.kreationsbyran.se/blogg/multilingual-module-2-0-for-silverstripe-cms-3-0/) (commercial)
 
