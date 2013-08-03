@@ -204,6 +204,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * common locales.
 	 */
 	protected static $allowed_locales = null;
+
+	/**
+	 * @var boolean Check other languages for URLSegment values (only applies to {@link SiteTree}).
+	 * Turn this off to handle language setting yourself, e.g. through language-specific subdomains
+	 * or URL path prefixes like "/en/mypage".
+	 */
+	private static $enforce_global_unique_urls = true;
 		
 	/**
 	 * Reset static configuration variables to their default values
@@ -1743,11 +1750,14 @@ class Translatable extends DataExtension implements PermissionProvider {
      */
 	public function augmentValidURLSegment() {
 		$reEnableFilter = false;
-		if(self::locale_filter_enabled()) {
+		if(!Config::inst()->get('Translatable', 'enforce_global_unique_urls')) {
+			self::enable_locale_filter();
+		} elseif(self::locale_filter_enabled()) {
 			self::disable_locale_filter();
 			$reEnableFilter = true;
 		}
-		$IDFilter     = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
+
+		$IDFilter = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
 		$parentFilter = null;
 
 			if($this->owner->ParentID) {
@@ -1759,9 +1769,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$existingPage = SiteTree::get()
 			// disable get_one cache, as this otherwise may pick up results from when locale_filter was on
 			->where("\"URLSegment\" = '{$this->owner->URLSegment}' $IDFilter $parentFilter")->First();
-		
 		if($reEnableFilter) self::enable_locale_filter();
 		
+		// By returning TRUE or FALSE, we overrule the base SiteTree->validateURLSegment() logic
 		return !$existingPage;
 	}
 		
