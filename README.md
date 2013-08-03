@@ -29,7 +29,7 @@ third party translation interface, transifex.com.
 Newly added strings will be periodically uploaded there for translation,
 and any new translations will be merged back to the project source code.
 
-Please use [https://www.transifex.com/projects/p/silverstripe-widgets/](https://www.transifex.com/projects/p/silverstripe-widgets/) to contribute translations,
+Please use [https://www.transifex.com/projects/p/silverstripe-translatable/](https://www.transifex.com/projects/p/silverstripe-translatable/) to contribute translations,
 rather than sending pull requests with YAML files.
 
 See the ["i18n" topic](http://doc.silverstripe.org/framework/en/trunk/topics/i18n) on doc.silverstripe.org for more details.
