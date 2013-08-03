@@ -1259,12 +1259,15 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if(DB::getConn()->isSchemaUpdating()) return;
 		
 		// Find the best base translation for SiteConfig
+		$enabled = Translatable::locale_filter_enabled();
 		Translatable::disable_locale_filter();
 		$existingConfig = SiteConfig::get()->filter(array(
 			'Locale' => Translatable::default_locale()
 		))->first();
 		if(!$existingConfig) $existingConfig = SiteConfig::get()->first();
-		Translatable::enable_locale_filter();
+		if ($enabled) {
+			Translatable::enable_locale_filter();
+		}
 
 		// Stage this SiteConfig and copy into the current object
 		if(
