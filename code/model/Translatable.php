@@ -873,7 +873,33 @@ class Translatable extends DataExtension implements PermissionProvider {
 		// dropdown is readonly on all translations.
 		if($this->owner->ID && $this->owner->Locale == Translatable::default_locale()) {
 			$changedFields = $this->owner->getChangedFields();
-			if(isset($changedFields['ClassName'])) {
+			$changed = isset($changedFields['ClassName']);
+
+			if ($changed && $this->owner->hasExtension('Versioned')) {
+				// this is required because when publishing a node the before/after
+				// values of $changedFields['ClassName'] will be the same because
+				// the record was already written to the stage/draft table and thus
+				// the record was updated, and then publish('Stage', 'Live') is
+				// called, which uses forceChange, which will make all the fields
+				// act as though they are changed, although the before/after values
+				// will be the same
+				// So, we load one from the current stage and test against it
+				// This is to prevent the overhead of writing all translations when
+				// the class didn't actually change.
+				$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
+				$currentStage = Versioned::current_stage();
+				$fresh = Versioned::get_one_by_stage(
+					$baseDataClass,
+					Versioned::current_stage(),
+					'"ID" = ' . $this->owner->ID,
+					null
+				);
+				if ($fresh) {
+					$changed = $changedFields['ClassName']['after'] != $fresh->ClassName;
+				}
+			}
+
+			if($changed) {
 				$this->owner->ClassName = $changedFields['ClassName']['before'];
 				$translations = $this->owner->getTranslations();
 				$this->owner->ClassName = $changedFields['ClassName']['after'];
