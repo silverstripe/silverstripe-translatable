@@ -1466,21 +1466,18 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	function MetaTags(&$tags) {
 		$template = '<link rel="alternate" type="text/html" title="%s" hreflang="%s" href="%s" />' . "\n";
-                $translations = $this->owner->getTranslations();
+              	$translations = $this->owner->getTranslations();
 		if($translations) {
-                    $tags .= sprintf($template,
-                           Convert::raw2xml($this->owner->Title),
-                           i18n::convert_rfc1766($this->owner->Locale),
-                           $this->owner->AbsoluteLink()
-                    );
-                    
-                    foreach($translations as $translation) {              
+             	    $translations = $translations->toArray();
+		    $translations[] = $this->owner;
+
+              	    foreach($translations as $translation) {
 			$tags .= sprintf($template,
 				Convert::raw2xml($translation->Title),
 				i18n::convert_rfc1766($translation->Locale),
 				$translation->AbsoluteLink()
 			);
-                    }
+            	    }
 		}
 	}
 	
