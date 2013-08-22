@@ -16,3 +16,9 @@ en:
     TRANSLATEALLPERMISSION: 'Translate into all available languages'
     TRANSLATEPERMISSION: 'Translate %s'
     TRANSLATIONS: Translations
+    TRANSLATEVIEWLANGS: 'View language dropdown'
+  Translatable_Transform:
+    CheckboxValueNo: No
+    CheckboxValueYes: Yes
+    OriginalCheckboxLabel: 'Original: {value}'
+    OriginalFieldLabel: 'Original {title}'
