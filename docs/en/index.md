@@ -336,7 +336,7 @@ By user preference (place this in your Page_Controller->init() method):
 	:::php
 	$member = Member::currentUser();
 	if($member && $member->Locale) {
-		Translatable::set_reading_locale($member->Locale);
+		Translatable::set_current_locale($member->Locale);
 	}
 
 ### Templates
