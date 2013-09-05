@@ -15,7 +15,7 @@ class TranslatableTest extends FunctionalTest {
 	);
 	
 	protected $requiredExtensions = array(
-		'SiteTree' => array('Translatable'),
+		'SiteTree' => array('Translatable', 'Versioned', 'EveryoneCanPublish'),
 		'SiteConfig' => array('Translatable'),
 		'TranslatableTest_DataObject' => array('Translatable'),
 		'TranslatableTest_OneByLocaleDataObject' => array('Translatable'),
@@ -71,7 +71,7 @@ class TranslatableTest extends FunctionalTest {
 		Translatable::enable_locale_filter();
 
 		$found = Translatable::get_one_by_locale('TranslatableTest_OneByLocaleDataObject', $obj->Locale);
-                $this->assertNotNull($found, 'should have found one for ' . $obj->Locale);
+		$this->assertNotNull($found, 'should have found one for ' . $obj->Locale);
 		$this->assertEquals($obj->ID, $found->ID);
 
 		$translated = $obj->createTranslation('de_DE');
@@ -226,6 +226,12 @@ class TranslatableTest extends FunctionalTest {
 		);
 	}
 
+	function assertClass($class, $node) {
+		$this->assertNotNull($node);
+		$this->assertEquals($class, $node->ClassName);
+		$this->assertEquals($class, get_class($node));
+	}
+
 	function testChangingClassOfDefaultLocaleTranslationChangesOthers() {
 		// see https://github.com/silverstripe/silverstripe-translatable/issues/97
 		// create an English SiteTree
@@ -247,12 +253,9 @@ class TranslatableTest extends FunctionalTest {
 		$esPg = DataObject::get_by_id('Page', $esST->ID, $cache = false);
 
 		// make sure they are all the right class
-		$this->assertEquals('Page', $enPg->ClassName);
-		$this->assertEquals('Page', get_class($enPg));
-		$this->assertEquals('Page', $frPg->ClassName);
-		$this->assertEquals('Page', get_class($frPg));
-		$this->assertEquals('Page', $esPg->ClassName);
-		$this->assertEquals('Page', get_class($esPg));
+		$this->assertClass('Page', $enPg);
+		$this->assertClass('Page', $frPg);
+		$this->assertClass('Page', $esPg);
 
 		// test that we get the right translations back from each instance
 		$this->assertArrayEqualsAfterSort(
@@ -267,6 +270,36 @@ class TranslatableTest extends FunctionalTest {
 			array('en_US', 'fr_FR'),
 			$esPg->getTranslations()->column('Locale')
 		);
+	}
+
+	function testChangingClassOfDefaultLocaleTranslationChangesOthersWhenPublished() {
+		// create an English SiteTree
+		$enST = new SiteTree();
+		$enST->Locale = 'en_US';
+		$enST->write();
+		$enST->doPublish();
+
+		// create and publish French and Spanish translations
+		$frST = $enST->createTranslation('fr_FR');
+		$this->assertTrue($frST->doPublish(), 'should have been able to publish French translation');
+		$esST = $enST->createTranslation('es_ES');
+		$this->assertTrue($esST->doPublish(), 'should have been able to publish Spanish translation');
+
+		// change the class name of the default locale's translation (as CMS admin would)
+		// and publish the change - we should see both versions of English change class
+		$enST->setClassName('Page');
+		$enST->doPublish();
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Stage', '"ID" = ' . $enST->ID));
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Live', '"ID" = ' . $enST->ID));
+
+		// and all of the draft versions of translations:
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Stage', '"ID" = ' . $frST->ID));
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Stage', '"ID" = ' . $esST->ID));
+
+		// and all of the live versions of translations as well:
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Live', '"ID" = ' . $frST->ID));
+		$this->assertClass('Page', Versioned::get_one_by_stage('SiteTree', 'Live', '"ID" = ' . $esST->ID));
+
 	}
 	
 	function testTranslationGroupsWhenTranslationIsSubclass() {
@@ -303,16 +336,13 @@ class TranslatableTest extends FunctionalTest {
 		$esPg = DataObject::get_by_id('Page', $esST->ID, $cache = false);
 
 		// make sure we successfully changed the class
-		$this->assertEquals('Page', $esPg->ClassName);
-		$this->assertEquals('Page', get_class($esPg));
+		$this->assertClass('Page', $esPg);
 
 		// and make sure that the class of the others did not change
 		$frST = DataObject::get_by_id('SiteTree', $frST->ID, $cache = false);
-		$this->assertEquals('SiteTree', $frST->ClassName);
-		$this->assertEquals('SiteTree', get_class($frST));
+		$this->assertClass('SiteTree', $frST);
 		$enST = DataObject::get_by_id('SiteTree', $enST->ID, $cache = false);
-		$this->assertEquals('SiteTree', $enST->ClassName);
-		$this->assertEquals('SiteTree', get_class($enST));
+		$this->assertClass('SiteTree', $enST);
 
 		// now that we know our edge case is successfully configured, we need to
 		// make sure that we get the right translations back from everything
@@ -1210,6 +1240,14 @@ class TranslatableTest_Page extends Page implements TestOnly {
 		$this->applyTranslatableFieldsUpdate($fields, 'updateCMSFields');
 
 		return $fields;
+	}
+}
+
+
+class EveryoneCanPublish extends DataExtension {
+
+	function canPublish($member = null) {
+		return true;
 	}
 }
 
