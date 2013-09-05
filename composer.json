@@ -25,7 +25,7 @@
 	},
 	"extra":
 		{
-			"snapshot" : "http://www.silverstripe.org/assets/Uploads/translatable4-small.png"
+			"screenshots" : ["http://www.silverstripe.org/assets/Uploads/translatable4-small.png"]
 		},
 	"support": {
 		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
