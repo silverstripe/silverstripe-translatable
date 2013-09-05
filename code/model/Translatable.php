@@ -1439,7 +1439,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 		} else {
 			$urlSegment = $newTranslation->URLSegment;
 		}
-		$newTranslation->URLSegment = $urlSegment . '-' . i18n::convert_rfc1766($locale);
+
+		// Only make segment unique if it should be enforced
+		if(Config::inst()->get('Translatable', 'enforce_global_unique_urls')) {
+			$newTranslation->URLSegment = $urlSegment . '-' . i18n::convert_rfc1766($locale);	
+		}
+		
 		// hacky way to set an existing translation group in onAfterWrite()
 		$translationGroupID = $this->getTranslationGroup();
 		$newTranslation->_TranslationGroupID = $translationGroupID ? $translationGroupID : $this->owner->ID;
