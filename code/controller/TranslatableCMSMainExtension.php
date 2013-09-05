@@ -139,19 +139,23 @@ class TranslatableCMSMainExtension extends Extension {
 	}
 
 	function updateLink(&$link) {
-		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);
+		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
+		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
 	}
 
 	function updateLinkWithSearch(&$link) {
-		if($this->owner->Locale) $link = Controller::join_links($link, '?locale=' . $this->owner->Locale);	
+		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
+		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);	
 	}
 
 	function updateExtraTreeTools(&$html) {
+		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
 		$html = $this->LangForm()->forTemplate() . $html;
 	}
 
 	function updateLinkPageAdd(&$link) {
-		if($this->owner->Locale) $link = Controller::join_links($link, '?Locale=' . $this->owner->Locale);
+		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
 	}
 	
 	/**
