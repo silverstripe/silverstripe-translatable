@@ -1,18 +1,18 @@
 et_EE:
-  CMSMain:
-    LANGUAGEDROPDOWNLABEL: "Keel"
-  CMSMain_left.ss:
-    GO: "Mine"
-  Form:
-    LANGAVAIL: "Saadaolevad keeled"
-    LANGAOTHER: "Muud keeled"
-  Translatable:
-    TRANSLATIONS: "Tõlked"
-    CREATE: "Loo uus tõlge"
-    NEWLANGUAGE: "Uus keel"
-    CREATEBUTTON: "Loo"
-    EXISTING: "Olemasolevad tõlked:"
-    NOTICENEWPAGE: "Enne tõlke loomist salvestage see leht"
-    TRANSLATEPERMISSION: "Tõlgi: %s"
-    TRANSLATEALLPERMISSION: "Tõlgi kõigisse saadaolevatesse keeltesse"
-    ALLCREATED: 'Kõik lubatud tõlked on loodud.'
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: Keel
+    ss:
+      GO: Mine
+    Form:
+      LANGAOTHER: 'Muud keeled'
+    Translatable:
+      ALLCREATED: 'Kõik lubatud tõlked on loodud.'
+      CREATE: 'Loo uus tõlge'
+      CREATEBUTTON: Loo
+      EXISTING: 'Olemasolevad tõlked:'
+      NEWLANGUAGE: 'Uus keel'
+      NOTICENEWPAGE: 'Enne tõlke loomist salvestage see leht'
+      TRANSLATEALLPERMISSION: 'Tõlgi kõigisse saadaolevatesse keeltesse'
+      TRANSLATEPERMISSION: 'Tõlgi: %s'
+      TRANSLATIONS: Tõlked
