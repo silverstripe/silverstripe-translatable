@@ -1237,52 +1237,52 @@ class Translatable extends DataExtension implements PermissionProvider {
 			throw new InvalidArgumentException(sprintf('Invalid locale "%s"', $locale));
 		}
 		
-		if($this->owner->exists()) {
-			// HACK need to disable language filtering in augmentSQL(), 
-			// as we purposely want to get different language
-			// also save state of locale-filter, revert to this state at the
-			// end of this method
-			$localeFilterEnabled = false;
-			if(self::locale_filter_enabled()) {
-				self::disable_locale_filter();
-				$localeFilterEnabled = true;
-			}
+		if(!$this->owner->exists()) return new ArrayList();
 
-			$translationGroupID = $this->getTranslationGroup();
-			
-			$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
-			$filter = sprintf('"%s_translationgroups"."TranslationGroupID" = %d', $baseDataClass, $translationGroupID);
-			if($locale) {
-				$filter .= sprintf(' AND "%s"."Locale" = \'%s\'', $baseDataClass, Convert::raw2sql($locale));
-			} else {
-				// exclude the language of the current owner
-				$filter .= sprintf(' AND "%s"."Locale" != \'%s\'', $baseDataClass, $this->owner->Locale);
-			}
-			$currentStage = Versioned::current_stage();
-			$joinOnClause = sprintf('"%s_translationgroups"."OriginalID" = "%s"."ID"', $baseDataClass, $baseDataClass);
-			if($this->owner->hasExtension("Versioned")) {
-				if($stage) Versioned::reading_stage($stage);
-				$translations = Versioned::get_by_stage(
-					$baseDataClass,
-					Versioned::current_stage(), 
-					$filter, 
-					null
-				)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
-				if($stage) Versioned::reading_stage($currentStage);
-			} else {
-				$class = $this->owner->class;
-				$translations = $baseDataClass::get()
-					->where($filter)
-					->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
-			}
-
-			// only re-enable locale-filter if it was enabled at the beginning of this method
-			if($localeFilterEnabled) {
-				self::enable_locale_filter();
-			}
-
-			return $translations;
+		// HACK need to disable language filtering in augmentSQL(), 
+		// as we purposely want to get different language
+		// also save state of locale-filter, revert to this state at the
+		// end of this method
+		$localeFilterEnabled = false;
+		if(self::locale_filter_enabled()) {
+			self::disable_locale_filter();
+			$localeFilterEnabled = true;
 		}
+
+		$translationGroupID = $this->getTranslationGroup();
+		
+		$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
+		$filter = sprintf('"%s_translationgroups"."TranslationGroupID" = %d', $baseDataClass, $translationGroupID);
+		if($locale) {
+			$filter .= sprintf(' AND "%s"."Locale" = \'%s\'', $baseDataClass, Convert::raw2sql($locale));
+		} else {
+			// exclude the language of the current owner
+			$filter .= sprintf(' AND "%s"."Locale" != \'%s\'', $baseDataClass, $this->owner->Locale);
+		}
+		$currentStage = Versioned::current_stage();
+		$joinOnClause = sprintf('"%s_translationgroups"."OriginalID" = "%s"."ID"', $baseDataClass, $baseDataClass);
+		if($this->owner->hasExtension("Versioned")) {
+			if($stage) Versioned::reading_stage($stage);
+			$translations = Versioned::get_by_stage(
+				$baseDataClass,
+				Versioned::current_stage(), 
+				$filter, 
+				null
+			)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
+			if($stage) Versioned::reading_stage($currentStage);
+		} else {
+			$class = $this->owner->class;
+			$translations = $baseDataClass::get()
+				->where($filter)
+				->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
+		}
+
+		// only re-enable locale-filter if it was enabled at the beginning of this method
+		if($localeFilterEnabled) {
+			self::enable_locale_filter();
+		}
+
+		return $translations;
 	}
 	
 	/**
