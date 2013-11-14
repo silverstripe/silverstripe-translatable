@@ -1,0 +1,19 @@
+pl_PL:
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: Język
+    ss:
+      GO: Idź
+    Form:
+      LANGAOTHER: 'Inne języki'
+      LANGAVAIL: 'Dostępne języki'
+    Translatable:
+      ALLCREATED: 'Wszystkie dozwolone tłumaczenia zostały stworzone.'
+      CREATE: 'Stwórz nowe tłumaczenie'
+      CREATEBUTTON: Stwórz
+      EXISTING: 'Istniejące tłumaczenia'
+      NEWLANGUAGE: 'Nowy język'
+      NOTICENEWPAGE: 'Zapisz stronę przet stworzeniem tłumaczenia'
+      TRANSLATEALLPERMISSION: 'Przetłumacz na wszystkie dostępne języki'
+      TRANSLATEPERMISSION: 'Tłumacz %s'
+      TRANSLATIONS: Tłumaczenia

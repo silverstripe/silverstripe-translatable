@@ -1,0 +1,23 @@
+ar:
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: لغة
+    ss:
+      GO: اذهب
+    Form:
+      LANGAOTHER: 'لغات أخرى'
+      LANGAVAIL: 'اللغات المتاحة'
+    Translatable:
+      ALLCREATED: 'قد تم إنشاء جميع التراجم المسموح بها.'
+      CREATE: 'إنشاء ترجمة جديدة'
+      CREATEBUTTON: إنشاء
+      EXISTING: 'التراجم الحالية'
+      NEWLANGUAGE: 'لغة جديدة'
+      NOTICENEWPAGE: 'الرجاء حفظ هذه الصفحة قبل إنشاء ترجمة'
+      TRANSLATEALLPERMISSION: 'ترجم إلى جميع اللغات المتاحة'
+      TRANSLATEPERMISSION: 'ترجم %s'
+      TRANSLATIONS: تراجم
+      TRANSLATEVIEWLANGS: 'أعرض قائمة اللغات'
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'الأصلية: {قيمة}'
+    OriginalFieldLabel: 'الأصلي {عنوان}'

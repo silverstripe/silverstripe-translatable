@@ -1,0 +1,23 @@
+ja:
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: 言語
+    ss:
+      GO: 実行
+    Form:
+      LANGAOTHER: '他の言語'
+      LANGAVAIL: '利用可能な言語'
+    Translatable:
+      ALLCREATED: '許可された翻訳全てが作成されました。'
+      CREATE: '新しい翻訳を行う'
+      CREATEBUTTON: 作成
+      EXISTING: '現存中の翻訳'
+      NEWLANGUAGE: '新しい言語'
+      NOTICENEWPAGE: '翻訳を作成する前にこのページを保存してください'
+      TRANSLATEALLPERMISSION: '全ての利用可能言語に翻訳'
+      TRANSLATEPERMISSION: '%sを翻訳'
+      TRANSLATIONS: 翻訳
+      TRANSLATEVIEWLANGS: '言語ドロップダウンを表示'
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'オリジナル: {value}'
+    OriginalFieldLabel: 'オリジナル {title}'

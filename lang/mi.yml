@@ -1,0 +1,23 @@
+mi:
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: Reo
+    ss:
+      GO: Haere
+    Form:
+      LANGAOTHER: 'Ngā reo kē'
+      LANGAVAIL: 'Ngā reo wātea'
+    Translatable:
+      ALLCREATED: 'Kua waihangatia ngā whakamāoritanga katoa e whakaaetia ana.'
+      CREATE: 'Waihangatia tētahi whakamāoritanga hou'
+      CREATEBUTTON: Waihanga
+      EXISTING: 'Ngā whakamāoritanga o nāianei'
+      NEWLANGUAGE: 'Reo hou'
+      NOTICENEWPAGE: 'Tiakina tēnei whārangi i mua i te waihanga whakamāoritanga'
+      TRANSLATEALLPERMISSION: 'Whakamāoritia ki ngā reo katoa e wātea ana'
+      TRANSLATEPERMISSION: 'Whakamāoritia a %s'
+      TRANSLATIONS: Ngā whakamāoritanga
+      TRANSLATEVIEWLANGS: 'Tirohia te takaiho reo'
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Taketake: {value}'
+    OriginalFieldLabel: '{title} taketake'

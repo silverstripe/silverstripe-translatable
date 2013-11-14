@@ -1,0 +1,23 @@
+zh:
+  CMSMain_left:
+    CMSMain:
+      LANGUAGEDROPDOWNLABEL: 语言
+    ss:
+      GO: 前往
+    Form:
+      LANGAOTHER: '其它语言'
+      LANGAVAIL: '可用的语言'
+    Translatable:
+      ALLCREATED: '所有允许的翻译均已创建。'
+      CREATE: '创建新的翻译'
+      CREATEBUTTON: 创建
+      EXISTING: '现存的翻译'
+      NEWLANGUAGE: '新语言'
+      NOTICENEWPAGE: '创建翻译前，请先保存本页面。'
+      TRANSLATEALLPERMISSION: '翻译成所有可用语言'
+      TRANSLATEPERMISSION: '翻译 %s'
+      TRANSLATIONS: 翻译
+      TRANSLATEVIEWLANGS: '查看语言下拉菜单'
+  Translatable_Transform:
+    OriginalCheckboxLabel: '原文：{value}'
+    OriginalFieldLabel: '原文 {title}'
