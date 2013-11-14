@@ -15,8 +15,8 @@ en:
     NOTICENEWPAGE: 'Please save this page before creating a translation'
     TRANSLATEALLPERMISSION: 'Translate into all available languages'
     TRANSLATEPERMISSION: 'Translate %s'
-    TRANSLATIONS: Translations
     TRANSLATEVIEWLANGS: 'View language dropdown'
+    TRANSLATIONS: Translations
   Translatable_Transform:
     CheckboxValueNo: No
     CheckboxValueYes: Yes
