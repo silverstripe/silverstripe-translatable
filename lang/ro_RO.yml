@@ -1,23 +1,22 @@
 ro_RO:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Limba
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Limba
-    ss:
-      GO: Start
-    Form:
-      LANGAOTHER: 'Alte traduceri'
-      LANGAVAIL: 'Limbi disponibile'
-    Translatable:
-      ALLCREATED: 'Toate traducerile autorizate au fost create.'
-      CREATE: 'Creare traducere nouă'
-      CREATEBUTTON: Creare
-      EXISTING: 'Traduceri existente'
-      NEWLANGUAGE: 'Limbă nouă'
-      NOTICENEWPAGE: 'Vă rugăm să salvați această pagină înainte de a crea o traducere'
-      TRANSLATEALLPERMISSION: 'Traduceți în toate limbile disponibile'
-      TRANSLATEPERMISSION: 'Traducere %s'
-      TRANSLATIONS: Traduceri
-      TRANSLATEVIEWLANGS: 'Vizualizați meniu pentru selecție limbă'
+    GO: Start
+  Form:
+    LANGAOTHER: 'Alte traduceri'
+    LANGAVAIL: 'Limbi disponibile'
+  Translatable:
+    ALLCREATED: 'Toate traducerile autorizate au fost create.'
+    CREATE: 'Creare traducere nouă'
+    CREATEBUTTON: Creare
+    EXISTING: 'Traduceri existente'
+    NEWLANGUAGE: 'Limbă nouă'
+    NOTICENEWPAGE: 'Vă rugăm să salvați această pagină înainte de a crea o traducere'
+    TRANSLATEALLPERMISSION: 'Traduceți în toate limbile disponibile'
+    TRANSLATEPERMISSION: 'Traducere %s'
+    TRANSLATIONS: Traduceri
+    TRANSLATEVIEWLANGS: 'Vizualizați meniu pentru selecție limbă'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

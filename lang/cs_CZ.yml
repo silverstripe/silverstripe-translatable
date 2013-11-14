@@ -1,23 +1,22 @@
 cs_CZ:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Jazyk
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Jazyk
-    ss:
-      GO: Jdi
-    Form:
-      LANGAOTHER: 'Jiné jazyky'
-      LANGAVAIL: 'Dostupné jazyky'
-    Translatable:
-      ALLCREATED: 'Všechny povolené překlady byly vytvořeny.'
-      CREATE: 'Vytvořit nový překlad'
-      CREATEBUTTON: Vytvořit
-      EXISTING: 'Existující překlady'
-      NEWLANGUAGE: 'Nový jazyk'
-      NOTICENEWPAGE: 'Uložte tuto stránku před vytvořením překladu'
-      TRANSLATEALLPERMISSION: 'Přeložit do všech dostupných jazyků'
-      TRANSLATEPERMISSION: 'Přeložit %s'
-      TRANSLATIONS: Překlady
-      TRANSLATEVIEWLANGS: 'Zobrazit jazykový seznam'
+    GO: Jdi
+  Form:
+    LANGAOTHER: 'Jiné jazyky'
+    LANGAVAIL: 'Dostupné jazyky'
+  Translatable:
+    ALLCREATED: 'Všechny povolené překlady byly vytvořeny.'
+    CREATE: 'Vytvořit nový překlad'
+    CREATEBUTTON: Vytvořit
+    EXISTING: 'Existující překlady'
+    NEWLANGUAGE: 'Nový jazyk'
+    NOTICENEWPAGE: 'Uložte tuto stránku před vytvořením překladu'
+    TRANSLATEALLPERMISSION: 'Přeložit do všech dostupných jazyků'
+    TRANSLATEPERMISSION: 'Přeložit %s'
+    TRANSLATIONS: Překlady
+    TRANSLATEVIEWLANGS: 'Zobrazit jazykový seznam'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Původní: {value}'
     OriginalFieldLabel: 'Původní {title}'

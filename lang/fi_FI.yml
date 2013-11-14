@@ -1,23 +1,22 @@
 fi_FI:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Kieli
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Kieli
-    ss:
-      GO: Siirry
-    Form:
-      LANGAOTHER: 'Muut kielet'
-      LANGAVAIL: 'Saatavilla olevat kielet'
-    Translatable:
-      ALLCREATED: 'Kaikki sallitut kielet on luotu'
-      CREATE: 'Luo uusi käännös'
-      CREATEBUTTON: Luo
-      EXISTING: 'Olemassa olevat käännökset'
-      NEWLANGUAGE: 'Uusi kieli'
-      NOTICENEWPAGE: 'Tallenna tämä sivu ennen käännöksen luontia'
-      TRANSLATEALLPERMISSION: 'Käännä kaikille saatavilla oleville kielille'
-      TRANSLATEPERMISSION: 'Käännä %s'
-      TRANSLATIONS: Käännökset
-      TRANSLATEVIEWLANGS: 'Näytä kielet'
+    GO: Siirry
+  Form:
+    LANGAOTHER: 'Muut kielet'
+    LANGAVAIL: 'Saatavilla olevat kielet'
+  Translatable:
+    ALLCREATED: 'Kaikki sallitut kielet on luotu'
+    CREATE: 'Luo uusi käännös'
+    CREATEBUTTON: Luo
+    EXISTING: 'Olemassa olevat käännökset'
+    NEWLANGUAGE: 'Uusi kieli'
+    NOTICENEWPAGE: 'Tallenna tämä sivu ennen käännöksen luontia'
+    TRANSLATEALLPERMISSION: 'Käännä kaikille saatavilla oleville kielille'
+    TRANSLATEPERMISSION: 'Käännä %s'
+    TRANSLATIONS: Käännökset
+    TRANSLATEVIEWLANGS: 'Näytä kielet'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Alkuperäinen: {value}'
     OriginalFieldLabel: 'Alkuperäinen {title}'

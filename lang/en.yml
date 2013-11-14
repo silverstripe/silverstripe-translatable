@@ -1,7 +1,7 @@
 en:
   CMSMain:
     LANGUAGEDROPDOWNLABEL: Language
-  CMSMain_left.ss:
+  CMSMain_left:
     GO: Go
   Form:
     LANGAOTHER: 'Other languages'

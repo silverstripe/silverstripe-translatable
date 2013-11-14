@@ -1,17 +1,16 @@
 en_GB:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Language
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Language
-    ss:
-      GO: Go
-    Form:
-      LANGAOTHER: 'Other languages'
-    Translatable:
-      CREATE: 'Create new translation'
-      CREATEBUTTON: Create
-      EXISTING: 'Existing translations:'
-      NEWLANGUAGE: 'New language'
-      NOTICENEWPAGE: 'Please save this page before creating a translation'
-      TRANSLATEALLPERMISSION: 'Translate into all available languages'
-      TRANSLATEPERMISSION: 'Translate %s'
-      TRANSLATIONS: Translations
+    GO: Go
+  Form:
+    LANGAOTHER: 'Other languages'
+  Translatable:
+    CREATE: 'Create new translation'
+    CREATEBUTTON: Create
+    EXISTING: 'Existing translations:'
+    NEWLANGUAGE: 'New language'
+    NOTICENEWPAGE: 'Please save this page before creating a translation'
+    TRANSLATEALLPERMISSION: 'Translate into all available languages'
+    TRANSLATEPERMISSION: 'Translate %s'
+    TRANSLATIONS: Translations

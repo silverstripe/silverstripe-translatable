@@ -191,7 +191,7 @@ class TranslatableCMSMainExtension extends Extension {
 				$field
 			),
 			new FieldList(
-				new FormAction('selectlang', _t('CMSMain_left.ss.GO','Go'))
+				new FormAction('selectlang', _t('CMSMain_left.GO','Go'))
 			)
 		);
 		$form->unsetValidator();

@@ -1,17 +1,16 @@
 lt_LT:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Kalba
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Kalba
-    ss:
-      GO: Pirmyn
-    Form:
-      LANGAOTHER: 'Kitos kalbos'
-    Translatable:
-      CREATE: 'Sukurti naują vertimą'
-      CREATEBUTTON: Sukurti
-      EXISTING: 'Esami vertimai:'
-      NEWLANGUAGE: 'Nauja kalba'
-      NOTICENEWPAGE: 'Prašome išsaugoti šį puslapį prieš kuriant vertimą'
-      TRANSLATEALLPERMISSION: 'Išversti į visas galimas kalbas'
-      TRANSLATEPERMISSION: 'Išversti: %s'
-      TRANSLATIONS: Vertimai
+    GO: Pirmyn
+  Form:
+    LANGAOTHER: 'Kitos kalbos'
+  Translatable:
+    CREATE: 'Sukurti naują vertimą'
+    CREATEBUTTON: Sukurti
+    EXISTING: 'Esami vertimai:'
+    NEWLANGUAGE: 'Nauja kalba'
+    NOTICENEWPAGE: 'Prašome išsaugoti šį puslapį prieš kuriant vertimą'
+    TRANSLATEALLPERMISSION: 'Išversti į visas galimas kalbas'
+    TRANSLATEPERMISSION: 'Išversti: %s'
+    TRANSLATIONS: Vertimai

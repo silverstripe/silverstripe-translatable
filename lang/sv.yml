@@ -1,23 +1,22 @@
 sv:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Språk
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Språk
-    ss:
-      GO: Ok
-    Form:
-      LANGAOTHER: 'Andra språk'
-      LANGAVAIL: 'Tillgängliga språk'
-    Translatable:
-      ALLCREATED: 'Alla tillåtna översättningar har skapats.'
-      CREATE: 'Skapa ny översättning'
-      CREATEBUTTON: Skapa
-      EXISTING: 'Existerande översättningar:'
-      NEWLANGUAGE: 'Nytt språk'
-      NOTICENEWPAGE: 'Vänligen spara sidan innan du översätter'
-      TRANSLATEALLPERMISSION: 'Översätt till alla språk'
-      TRANSLATEPERMISSION: 'Översätt %s'
-      TRANSLATIONS: Översättningar
-      TRANSLATEVIEWLANGS: 'Visa språk listan'
+    GO: Ok
+  Form:
+    LANGAOTHER: 'Andra språk'
+    LANGAVAIL: 'Tillgängliga språk'
+  Translatable:
+    ALLCREATED: 'Alla tillåtna översättningar har skapats.'
+    CREATE: 'Skapa ny översättning'
+    CREATEBUTTON: Skapa
+    EXISTING: 'Existerande översättningar:'
+    NEWLANGUAGE: 'Nytt språk'
+    NOTICENEWPAGE: 'Vänligen spara sidan innan du översätter'
+    TRANSLATEALLPERMISSION: 'Översätt till alla språk'
+    TRANSLATEPERMISSION: 'Översätt %s'
+    TRANSLATIONS: Översättningar
+    TRANSLATEVIEWLANGS: 'Visa språk listan'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

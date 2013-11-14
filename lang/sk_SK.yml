@@ -1,23 +1,22 @@
 sk_SK:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Jazyk
   CMSMain_left:
-    CMSMain:
-      LANGUAGEDROPDOWNLABEL: Jazyk
-    ss:
-      GO: Choď
-    Form:
-      LANGAOTHER: 'Iné jazyky'
-      LANGAVAIL: 'Dostupné jazyky'
-    Translatable:
-      ALLCREATED: 'Všetky povolené preklady boli vytvorené.'
-      CREATE: 'Vytvoriť nový preklad'
-      CREATEBUTTON: Vytvoriť
-      EXISTING: 'Existujúce preklady'
-      NEWLANGUAGE: 'Nový jazyk'
-      NOTICENEWPAGE: 'Prosím uložte stránku pred vytvorením prekladu'
-      TRANSLATEALLPERMISSION: 'Preložiť do všetkých dostupných jazykov'
-      TRANSLATEPERMISSION: 'Preložiť %s'
-      TRANSLATIONS: Preklady
-      TRANSLATEVIEWLANGS: 'Zobraziť jazykový zoznam'
+    GO: Choď
+  Form:
+    LANGAOTHER: 'Iné jazyky'
+    LANGAVAIL: 'Dostupné jazyky'
+  Translatable:
+    ALLCREATED: 'Všetky povolené preklady boli vytvorené.'
+    CREATE: 'Vytvoriť nový preklad'
+    CREATEBUTTON: Vytvoriť
+    EXISTING: 'Existujúce preklady'
+    NEWLANGUAGE: 'Nový jazyk'
+    NOTICENEWPAGE: 'Prosím uložte stránku pred vytvorením prekladu'
+    TRANSLATEALLPERMISSION: 'Preložiť do všetkých dostupných jazykov'
+    TRANSLATEPERMISSION: 'Preložiť %s'
+    TRANSLATIONS: Preklady
+    TRANSLATEVIEWLANGS: 'Zobraziť jazykový zoznam'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Pôvodné: {value}'
     OriginalFieldLabel: 'Pôvodné {title}'
