@@ -155,7 +155,7 @@ class TranslatableCMSMainExtension extends Extension {
 
 	function updateLinkPageAdd(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
+		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
 	}
 	
 	/**
