@@ -15,8 +15,8 @@ sv:
     NOTICENEWPAGE: 'Vänligen spara sidan innan du översätter'
     TRANSLATEALLPERMISSION: 'Översätt till alla språk'
     TRANSLATEPERMISSION: 'Översätt %s'
-    TRANSLATIONS: Översättningar
     TRANSLATEVIEWLANGS: 'Visa språk listan'
+    TRANSLATIONS: Översättningar
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

@@ -15,8 +15,8 @@ sk_SK:
     NOTICENEWPAGE: 'Prosím uložte stránku pred vytvorením prekladu'
     TRANSLATEALLPERMISSION: 'Preložiť do všetkých dostupných jazykov'
     TRANSLATEPERMISSION: 'Preložiť %s'
-    TRANSLATIONS: Preklady
     TRANSLATEVIEWLANGS: 'Zobraziť jazykový zoznam'
+    TRANSLATIONS: Preklady
   Translatable_Transform:
     OriginalCheckboxLabel: 'Pôvodné: {value}'
     OriginalFieldLabel: 'Pôvodné {title}'

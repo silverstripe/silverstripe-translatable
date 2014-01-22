@@ -15,8 +15,8 @@ fr:
     NOTICENEWPAGE: 'Veuillez sauvegarder cette page avant de créer une traduction'
     TRANSLATEALLPERMISSION: 'Traduire dans toutes les langues disponibles'
     TRANSLATEPERMISSION: 'Traduire %s'
-    TRANSLATIONS: Traductions
     TRANSLATEVIEWLANGS: 'Voir la liste des langues'
+    TRANSLATIONS: Traductions
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

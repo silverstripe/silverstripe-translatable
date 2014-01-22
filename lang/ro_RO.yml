@@ -15,8 +15,8 @@ ro_RO:
     NOTICENEWPAGE: 'Vă rugăm să salvați această pagină înainte de a crea o traducere'
     TRANSLATEALLPERMISSION: 'Traduceți în toate limbile disponibile'
     TRANSLATEPERMISSION: 'Traducere %s'
-    TRANSLATIONS: Traduceri
     TRANSLATEVIEWLANGS: 'Vizualizați meniu pentru selecție limbă'
+    TRANSLATIONS: Traduceri
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

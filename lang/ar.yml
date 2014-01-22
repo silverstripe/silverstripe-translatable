@@ -15,8 +15,8 @@ ar:
     NOTICENEWPAGE: 'الرجاء حفظ هذه الصفحة قبل إنشاء ترجمة'
     TRANSLATEALLPERMISSION: 'ترجم إلى جميع اللغات المتاحة'
     TRANSLATEPERMISSION: 'ترجم %s'
-    TRANSLATIONS: تراجم
     TRANSLATEVIEWLANGS: 'أعرض قائمة اللغات'
+    TRANSLATIONS: تراجم
   Translatable_Transform:
     OriginalCheckboxLabel: 'الأصلية: {قيمة}'
     OriginalFieldLabel: 'الأصلي {عنوان}'

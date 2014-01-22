@@ -15,8 +15,8 @@ cs_CZ:
     NOTICENEWPAGE: 'Uložte tuto stránku před vytvořením překladu'
     TRANSLATEALLPERMISSION: 'Přeložit do všech dostupných jazyků'
     TRANSLATEPERMISSION: 'Přeložit %s'
-    TRANSLATIONS: Překlady
     TRANSLATEVIEWLANGS: 'Zobrazit jazykový seznam'
+    TRANSLATIONS: Překlady
   Translatable_Transform:
     OriginalCheckboxLabel: 'Původní: {value}'
     OriginalFieldLabel: 'Původní {title}'

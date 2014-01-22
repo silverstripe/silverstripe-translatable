@@ -15,8 +15,8 @@ ja:
     NOTICENEWPAGE: '翻訳を作成する前にこのページを保存してください'
     TRANSLATEALLPERMISSION: '全ての利用可能言語に翻訳'
     TRANSLATEPERMISSION: '%sを翻訳'
-    TRANSLATIONS: 翻訳
     TRANSLATEVIEWLANGS: '言語ドロップダウンを表示'
+    TRANSLATIONS: 翻訳
   Translatable_Transform:
     OriginalCheckboxLabel: 'オリジナル: {value}'
     OriginalFieldLabel: 'オリジナル {title}'

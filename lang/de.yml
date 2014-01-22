@@ -15,8 +15,8 @@ de:
     NOTICENEWPAGE: 'Bitte speichern Sie diese Seite, bevor Sie eine Übersetzung erstellen'
     TRANSLATEALLPERMISSION: 'In alle verfügbaren Sprachen übersetzen'
     TRANSLATEPERMISSION: 'In %s übersetzen'
-    TRANSLATIONS: Übersetzungen
     TRANSLATEVIEWLANGS: 'Kann die verfügbaren Sprachen sehen'
+    TRANSLATIONS: Übersetzungen
   Translatable_Transform:
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

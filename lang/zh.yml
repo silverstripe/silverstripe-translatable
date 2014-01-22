@@ -15,8 +15,8 @@ zh:
     NOTICENEWPAGE: '创建翻译前，请先保存本页面。'
     TRANSLATEALLPERMISSION: '翻译成所有可用语言'
     TRANSLATEPERMISSION: '翻译 %s'
-    TRANSLATIONS: 翻译
     TRANSLATEVIEWLANGS: '查看语言下拉菜单'
+    TRANSLATIONS: 翻译
   Translatable_Transform:
     OriginalCheckboxLabel: '原文：{value}'
     OriginalFieldLabel: '原文 {title}'
