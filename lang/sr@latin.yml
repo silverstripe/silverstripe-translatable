@@ -1,0 +1,4 @@
+sr@latin:
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Original: {value}'
+    OriginalFieldLabel: 'Original {title}'
