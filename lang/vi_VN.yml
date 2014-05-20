@@ -1,1 +1,22 @@
-vi_VN: {}
+vi_VN:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Ngôn ngữ
+  CMSMain_left:
+    GO: Đi
+  Form:
+    LANGAOTHER: 'Ngôn ngữ khác'
+    LANGAVAIL: 'Ngôn ngữ hiện có'
+  Translatable:
+    ALLCREATED: 'Mọi từ bản dịch đã được tạo.'
+    CREATE: 'Tạo bản dịch m'
+    CREATEBUTTON: T
+    EXISTING: 'Bản dịch sẵn có'
+    NEWLANGUAGE: 'Ngôn ngữ mới'
+    NOTICENEWPAGE: 'Hãy lưu trang trước khi tạo bản dịch'
+    TRANSLATEALLPERMISSION: 'Dịch sang mọi ngôn gữ có th'
+    TRANSLATEPERMISSION: 'Dịch %s'
+    TRANSLATEVIEWLANGS: 'Xem danh sách ngôn ng'
+    TRANSLATIONS: Dịch thuật
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Mặc định :{value}'
+    OriginalFieldLabel: 'Mặc định:{title}'
