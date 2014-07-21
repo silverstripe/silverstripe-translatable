@@ -457,6 +457,7 @@ class TranslatableTest extends FunctionalTest {
 		
 		// first test with default language
 		$fields = $pageOrigLang->getCMSFields();
+		// title
 		$this->assertInstanceOf(
 			'TextField', 
 			$fields->dataFieldByName('Title'),
@@ -466,15 +467,23 @@ class TranslatableTest extends FunctionalTest {
 			$fields->dataFieldByName('Title_original'),
 			'Translatable doesnt modify fields if called in default language (e.g. "non-translation mode")'
 		);
+		// custom property
 		$this->assertInstanceOf(
 			'TextField', 
 			$fields->dataFieldByName('TranslatableProperty'),
 			'Has custom field'
 		);
+		// custom has_one
+		$this->assertInstanceOf(
+			'DropdownField', 
+			$fields->dataFieldByName('TranslatableObjectID'),
+			'Has custom dropdown field'
+		);
 		
 		// then in "translation mode"
 		$pageTranslated = $pageOrigLang->createTranslation('fr_FR');
 		$fields = $pageTranslated->getCMSFields();
+		// title
 		$this->assertInstanceOf(
 			'TextField', 
 			$fields->dataFieldByName('Title'),
@@ -486,15 +495,27 @@ class TranslatableTest extends FunctionalTest {
 			$fields->dataFieldByName('Title_original'),
 			'Translatable adds the original value as a ReadonlyField in "translation mode"'
 		);
+		// custom property
 		$this->assertInstanceOf(
 			'ReadonlyField', 
 			$fields->dataFieldByName('TranslatableProperty_original'),
-			'Retains original custom field'
+			'Adds original value for custom field as ReadonlyField'
 		);
 		$this->assertInstanceOf(
 			'TextField', 
 			$fields->dataFieldByName('TranslatableProperty'),
-			'Adds custom fields as ReadonlyField'
+			'Retains custom field as TextField'
+		);
+		// custom has_one
+		$this->assertInstanceOf(
+			'LookupField', 
+			$fields->dataFieldByName('TranslatableObjectID_original'),
+			'Adds original value for custom dropdown field as LookupField (= readonly version of DropdownField)'
+		);
+		$this->assertInstanceOf(
+			'DropdownField', 
+			$fields->dataFieldByName('TranslatableObjectID'),
+			'Retains custom dropdown field as DropdownField'
 		);
 		
 	}
@@ -1215,13 +1236,21 @@ class TranslatableTest_Page extends Page implements TestOnly {
 		'TranslatableProperty' => 'Text'
 	);
 
+	private static $has_one = array(
+		'TranslatableObject' => 'TranslatableTest_DataObject'
+	);
+	
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
 		$fields->addFieldToTab(
 			'Root.Main',
 			new TextField('TranslatableProperty')
 		);
-
+		$fields->addFieldToTab(
+			'Root.Main',
+			new DropdownField('TranslatableObjectID')
+		);
+		
 		$this->applyTranslatableFieldsUpdate($fields, 'updateCMSFields');
 
 		return $fields;
