@@ -1,6 +1,6 @@
 # Translatable module for SilverStripe CMS #
 
-[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png)](http://travis-ci.org/silverstripe/silverstripe-translatable)
+[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png?branch=1.1)](http://travis-ci.org/silverstripe/silverstripe-translatable)
 
 ## Introduction ##
 
