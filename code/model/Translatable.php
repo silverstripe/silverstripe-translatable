@@ -590,7 +590,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * 
 	 * Use {@link disable_locale_filter()} to temporarily disable this "auto-filtering".
 	 */
-	function augmentSQL(SQLQuery &$query, DataQuery &$dataQuery = null) {
+	function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null) {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
@@ -612,17 +612,23 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// the query contains this table
 			// @todo Isn't this always the case?!
 			&& array_search($baseTable, array_keys($query->getFrom())) !== false 
-			// or we're already filtering by Lang (either from an earlier augmentSQL() 
-			// call or through custom SQL filters)
-			&& !preg_match('/("|\'|`)Locale("|\'|`)/', implode(' ', $query->getWhere()))
 			//&& !$query->filtersOnFK()
 		)  {
-			$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
-			$query->addWhere($qry); 
+			// Or we're already filtering by Lang (either from an earlier augmentSQL() 
+			// call or through custom SQL filters)
+			$filtersOnLocale = array_filter($query->getWhere(), function($predicates) {
+				foreach($predicates as $predicate => $params) {
+					if(preg_match('/("|\'|`)Locale("|\'|`)/', $predicate)) return true;
+				}
+			});
+			if(!$filtersOnLocale) {
+				$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
+				$query->addWhere($qry);
+			}
 		}
 	}
 
-	function augmentDataQueryCreation(SQLQuery &$sqlQuery, DataQuery &$dataQuery) {
+	function augmentDataQueryCreation(SQLSelect $sqlQuery, DataQuery $dataQuery) {
 		$enabled = self::locale_filter_enabled();
 		$dataQuery->setQueryParam(self::QUERY_LOCALE_FILTER_ENABLED, $enabled);
 	}
@@ -1420,7 +1426,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$newTranslation = new $class;
 		
 		// copy all fields from owner (apart from ID)
-		$newTranslation->update($this->owner->toMap());
+		$newTranslation->update(array_diff_key($this->owner->toMap(), array('Version' => null)));
 		
 		// If the object has Hierarchy extension,
 		// check for existing translated parents and assign
