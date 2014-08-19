@@ -12,7 +12,7 @@ pl_PL:
     CREATEBUTTON: Stwórz
     EXISTING: 'Istniejące tłumaczenia'
     NEWLANGUAGE: 'Nowy język'
-    NOTICENEWPAGE: 'Zapisz stronę przet stworzeniem tłumaczenia'
+    NOTICENEWPAGE: 'Zapisz stronę przed stworzeniem tłumaczenia'
     TRANSLATEALLPERMISSION: 'Przetłumacz na wszystkie dostępne języki'
     TRANSLATEPERMISSION: 'Tłumacz %s'
     TRANSLATIONS: Tłumaczenia

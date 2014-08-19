@@ -5,13 +5,18 @@ nl:
     GO: Gaan
   Form:
     LANGAOTHER: 'Overige talen'
+    LANGAVAIL: 'Beschikbare talen'
   Translatable:
-    ALLCREATED: 'Alle beschikbare vertalingen zijn aangemaakt'
+    ALLCREATED: 'Alle toegelaten vertalingen zijn aangemaakt. '
     CREATE: 'Voeg nieuwe vertaling toe'
     CREATEBUTTON: Toevoegen
     EXISTING: 'Bestaande vertalingen'
     NEWLANGUAGE: 'Nieuwe taal'
-    NOTICENEWPAGE: 'Sla deze pagina op voordat u een nieuwe vertaling toevoegd'
+    NOTICENEWPAGE: 'Sla deze pagina op voor u een nieuwe vertaling toevoegt'
     TRANSLATEALLPERMISSION: 'Vertaal in alle beschikbare talen'
     TRANSLATEPERMISSION: 'Vertaal %s'
+    TRANSLATEVIEWLANGS: 'Toon dropdown met talen'
     TRANSLATIONS: Vertalingen
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Origineel: {value}'
+    OriginalFieldLabel: 'Originele {title}'
