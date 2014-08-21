@@ -5,28 +5,29 @@
 	"keywords": ["silverstripe", "cms", "i18n", "localization", "globalization"],
 	"license": "BSD-3-Clause",
 	"homepage": "https://github.com/silverstripe/silverstripe-translatable/",
-	"authors":[
+	"authors": [
 		{
 			"name": "Ingo Schommer",
 			"homepage": "http://chillu.com",
 			"email" : "ingo@silverstripe.com"
 		}
 	],
-	"require": 
-		{
-			"php": ">=5.3.2",
-			"silverstripe/framework": "~3.2",
-			"silverstripe/cms": "~3.2"
-		},
+	"require": {
+		"php": ">=5.3.2",
+		"silverstripe/framework": "~3.2",
+		"silverstripe/cms": "~3.2"
+	},
 	"require-dev": {
 		"silverstripe/postgresql": "*",
 		"silverstripe/sqlite3": "*",
 		"silverstripe/mssql": "*"
 	},
-	"extra":
-		{
-			"screenshots" : ["http://www.silverstripe.org/assets/Uploads/translatable4-small.png"]
-		},
+	"extra": {
+		"screenshots" : ["http://www.silverstripe.org/assets/Uploads/translatable4-small.png"],
+		"branch-alias": {
+			"dev-master": "2.1.x-dev"
+		}
+	},
 	"support": {
 		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
 	},
