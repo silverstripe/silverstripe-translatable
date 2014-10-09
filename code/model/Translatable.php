@@ -1799,11 +1799,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$IDFilter = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
 		$parentFilter = null;
 
+		if (Config::inst()->get('SiteTree', 'nested_urls')) {
 			if($this->owner->ParentID) {
 				$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
 			} else {
 				$parentFilter = ' AND "SiteTree"."ParentID" = 0';
 			}
+		}
 
 		$existingPage = SiteTree::get()
 			// disable get_one cache, as this otherwise may pick up results from when locale_filter was on
