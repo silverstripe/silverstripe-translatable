@@ -743,7 +743,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 					if(!$obj || $obj->ObsoleteClassName) continue;
 
 					$obj->Locale = Translatable::default_locale();
-					$obj->writeToStage($stage);
+
+					$oldMode = Versioned::get_reading_mode();
+					Versioned::reading_stage($stage);
+					$obj->writeWithoutVersion();
+					Versioned::set_reading_mode($oldMode);
+
 					$obj->addTranslationGroup($obj->ID);
 					$obj->destroy();
 					unset($obj);
