@@ -1,0 +1,22 @@
+eo:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Lingvo
+  CMSMain_left:
+    GO: Ek
+  Form:
+    LANGAOTHER: 'Aliaj lingvoj'
+    LANGAVAIL: 'Disponeblaj lingvoj'
+  Translatable:
+    ALLCREATED: 'Kreis ĉiujn permesitajn tradukojn.'
+    CREATE: 'Krei novan tradukon'
+    CREATEBUTTON: Krei
+    EXISTING: 'Ekzistantaj tradukoj'
+    NEWLANGUAGE: 'Nova lingvo'
+    NOTICENEWPAGE: 'Bonvole konservu ĉi tiun paĝon antaŭ ol krei tradukon'
+    TRANSLATEALLPERMISSION: 'Traduki en ĉiujn disponeblajn lingvojn'
+    TRANSLATEPERMISSION: 'Tradukti je %s'
+    TRANSLATEVIEWLANGS: 'Vidigi lingvan falliston'
+    TRANSLATIONS: Tradukoj
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Origina: {value}'
+    OriginalFieldLabel: 'Origina: {title}'
