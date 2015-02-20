@@ -263,19 +263,19 @@ meaning associating an object with a group will affect both stage and live recor
 
 SiteTree database table (abbreviated)
 
-| ID | URLSegment | Title     | Locale |
-| -- | ---------- | --------- | ------ |
-| 1  | about-us   | About us  | en_US  |
-| 2  | ueber-uns  | Über uns  | de_DE  |
-| 3  | contact    | Contact   | en_US  |
+ID   | URLSegment   | Title       | Locale
+---- | ------------ | ----------- | -----------
+`1`  | `about-us`   | `About us`  | `en_US`
+`2`  | `ueber-uns`  | `Über uns`  | `de_DE`
+`3`  | `contact`    | `Contact`   | `en_US`
 
 SiteTree_translationgroups database table
 
-| TranslationGroupID | OriginalID |
-| ------------------ | ---------- |
-| 99                 | 1          |
-| 99                 | 2          |
-| 199                | 3          |
+TranslationGroupID | OriginalID
+------------------ | ----------
+`99`                 | `1`
+`99`                 | `2`
+`199`                | `3`
 
 ### CharacterSets
 
