@@ -583,6 +583,30 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 
 	/**
+	 * Check if a given SQLQuery filters on the Locale field
+	 *
+	 * @param SQLQuery $query
+	 * @return boolean
+	 */
+	protected function filtersOnLocale($query) {
+		foreach($query->getWhere() as $condition) {
+			// Compat for 3.1/3.2 where syntax
+			if(is_array($condition)) {
+				// In >=3.2 each $condition is a single length array('condition' => array('params'))
+				reset($condition);
+				$condition = key($condition);
+			}
+			
+			// >=3.2 allows conditions to be expressed as evaluatable objects
+			if(interface_exists('SQLConditionGroup') && ($condition instanceof SQLConditionGroup)) {
+				$condition = $condition->conditionSQL($params);
+			}
+			
+			if(preg_match('/("|\'|`)Locale("|\'|`)/', $condition)) return true;
+		}
+	}
+
+	/**
 	 * Changes any SELECT query thats not filtering on an ID
 	 * to limit by the current language defined in {@link get_current_locale()}.
 	 * It falls back to "Locale='' OR Lang IS NULL" and assumes that
@@ -590,7 +614,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * 
 	 * Use {@link disable_locale_filter()} to temporarily disable this "auto-filtering".
 	 */
-	function augmentSQL(SQLQuery &$query, DataQuery &$dataQuery = null) {
+	public function augmentSQL(SQLQuery &$query, DataQuery $dataQuery = null) {
 		// If the record is saved (and not a singleton), and has a locale,
 		// limit the current call to its locale. This fixes a lot of problems
 		// with other extensions like Versioned
@@ -611,14 +635,14 @@ class Translatable extends DataExtension implements PermissionProvider {
 			&& !$query->filtersOnID() 
 			// the query contains this table
 			// @todo Isn't this always the case?!
-			&& array_search($baseTable, array_keys($query->getFrom())) !== false 
-			// or we're already filtering by Lang (either from an earlier augmentSQL() 
+			&& array_search($baseTable, array_keys($query->getFrom())) !== false
+			// or we're already filtering by Lang (either from an earlier augmentSQL()
 			// call or through custom SQL filters)
-			&& !preg_match('/("|\'|`)Locale("|\'|`)/', implode(' ', $query->getWhere()))
+			&& !$this->filtersOnLocale($query)
 			//&& !$query->filtersOnFK()
 		)  {
 			$qry = sprintf('"%s"."Locale" = \'%s\'', $baseTable, Convert::raw2sql($locale));
-			$query->addWhere($qry); 
+			$query->addWhere($qry);
 		}
 	}
 
@@ -1435,6 +1459,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$newTranslation->ID = 0;
 		$newTranslation->Locale = $locale;
+		$newTranslation->Version = 0;
 		
 		$originalPage = $this->getTranslation(self::default_locale());
 		if ($originalPage) {
@@ -1447,7 +1472,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if(Config::inst()->get('Translatable', 'enforce_global_unique_urls')) {
 			$newTranslation->URLSegment = $urlSegment . '-' . i18n::convert_rfc1766($locale);	
 		}
-		
+
 		// hacky way to set an existing translation group in onAfterWrite()
 		$translationGroupID = $this->getTranslationGroup();
 		$newTranslation->_TranslationGroupID = $translationGroupID ? $translationGroupID : $this->owner->ID;
