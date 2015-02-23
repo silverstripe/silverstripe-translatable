@@ -684,7 +684,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * @todo Find more appropriate place to hook into database building
 	 */
-	function requireDefaultRecords() {
+	public function requireDefaultRecords() {
 		// @todo This relies on the Locale attribute being on the base data class, and not any subclasses
 		if($this->owner->class != ClassInfo::baseDataClass($this->owner->class)) return false;
 		
@@ -717,7 +717,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		))->column();
 		if(!$idsWithoutLocale) return;
 		
-			if(class_exists('SiteTree') && $this->owner->class == 'SiteTree') {
+		if(class_exists('SiteTree') && $this->owner->class == 'SiteTree') {
 			foreach(array('Stage', 'Live') as $stage) {
 				foreach($idsWithoutLocale as $id) {
 					$obj = Versioned::get_one_by_stage(
@@ -725,7 +725,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 						$stage, 
 						sprintf('"SiteTree"."ID" = %d', $id)
 					);
-					if(!$obj) continue;
+					if(!$obj || $obj->ObsoleteClassName) continue;
 
 					$obj->Locale = Translatable::default_locale();
 					$obj->writeToStage($stage);
@@ -737,7 +737,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		} else {
 			foreach($idsWithoutLocale as $id) {
 				$obj = DataObject::get_by_id($this->owner->class, $id);
-				if(!$obj) continue;
+				if(!$obj || $obj->ObsoleteClassName) continue;
 
 				$obj->Locale = Translatable::default_locale();
 				$obj->write();
