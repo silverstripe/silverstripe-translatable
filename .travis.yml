@@ -1,12 +1,17 @@
 # See https://github.com/silverstripe-labs/silverstripe-travis-support for setup details
 
 language: php 
-php: 
+php:
  - 5.3
  - 5.4
 
 env:
- - DB=MYSQL CORE_RELEASE=3.1
+  - DB=MYSQL CORE_RELEASE=3.1
+
+matrix:
+  include:
+    - php: 5.4
+      env: DB=MYSQL CORE_RELEASE=3
 
 before_script:
  - pear -q install --onlyreqdeps pear/PHP_CodeSniffer
@@ -16,5 +21,5 @@ before_script:
  - cd ~/builds/ss
 
 script: 
- - phpunit translatable/tests/
+ - vendor/bin/phpunit translatable/tests/
  - phpcs --encoding=utf-8 --tab-width=4 --standard=translatable/tests/phpcs -np translatable
