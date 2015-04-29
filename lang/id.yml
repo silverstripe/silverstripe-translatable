@@ -1,0 +1,14 @@
+id:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Bahasa
+  CMSMain_left:
+    GO: Lanjut
+  Form:
+    LANGAOTHER: 'Bahasa lain'
+    LANGAVAIL: 'Bahasa yang tersedia'
+  Translatable:
+    CREATE: 'Buat terjemahan baru'
+    CREATEBUTTON: Buat
+    EXISTING: 'Terjemahan yang ada'
+    NEWLANGUAGE: 'Bahasa baru'
+    TRANSLATEPERMISSION: 'Terjemahan %s'

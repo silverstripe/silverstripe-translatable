@@ -561,10 +561,10 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if($this->owner && $this->translatableFields === null) {
 			$this->translatableFields = array_merge(
 				array_keys($this->owner->db()),
-				array_keys($this->owner->has_many()),
-				array_keys($this->owner->many_many())
+				array_keys($this->owner->hasMany()),
+				array_keys($this->owner->manyMany())
 			);
-			foreach (array_keys($this->owner->has_one()) as $fieldname) {
+			foreach (array_keys($this->owner->hasOne()) as $fieldname) {
 				$this->translatableFields[] = $fieldname.'ID';
 			}
 		}
@@ -580,6 +580,30 @@ class Translatable extends DataExtension implements PermissionProvider {
 			//"TranslationMasterID" => "Int" // optional relation to a "translation master"
 		);
 		return $config;
+	}
+
+	/**
+	 * Check if a given SQLQuery filters on the Locale field
+	 *
+	 * @param SQLQuery $query
+	 * @return boolean
+	 */
+	protected function filtersOnLocale($query) {
+		foreach($query->getWhere() as $condition) {
+			// Compat for 3.1/3.2 where syntax
+			if(is_array($condition)) {
+				// In >=3.2 each $condition is a single length array('condition' => array('params'))
+				reset($condition);
+				$condition = key($condition);
+			}
+			
+			// >=3.2 allows conditions to be expressed as evaluatable objects
+			if(interface_exists('SQLConditionGroup') && ($condition instanceof SQLConditionGroup)) {
+				$condition = $condition->conditionSQL($params);
+			}
+			
+			if(preg_match('/("|\'|`)Locale("|\'|`)/', $condition)) return true;
+		}
 	}
 
 	/**
@@ -666,7 +690,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	/**
 	 * @todo Find more appropriate place to hook into database building
 	 */
-	function requireDefaultRecords() {
+	public function requireDefaultRecords() {
 		// @todo This relies on the Locale attribute being on the base data class, and not any subclasses
 		if($this->owner->class != ClassInfo::baseDataClass($this->owner->class)) return false;
 		
@@ -699,7 +723,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		))->column();
 		if(!$idsWithoutLocale) return;
 		
-			if(class_exists('SiteTree') && $this->owner->class == 'SiteTree') {
+		if(class_exists('SiteTree') && $this->owner->class == 'SiteTree') {
 			foreach(array('Stage', 'Live') as $stage) {
 				foreach($idsWithoutLocale as $id) {
 					$obj = Versioned::get_one_by_stage(
@@ -707,7 +731,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 						$stage, 
 						sprintf('"SiteTree"."ID" = %d', $id)
 					);
-					if(!$obj) continue;
+					if(!$obj || $obj->ObsoleteClassName) continue;
 
 					$obj->Locale = Translatable::default_locale();
 					
@@ -724,7 +748,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		} else {
 			foreach($idsWithoutLocale as $id) {
 				$obj = DataObject::get_by_id($this->owner->class, $id);
-				if(!$obj) continue;
+				if(!$obj || $obj->ObsoleteClassName) continue;
 
 				$obj->Locale = Translatable::default_locale();
 				$obj->write();
@@ -1446,6 +1470,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$newTranslation->ID = 0;
 		$newTranslation->Locale = $locale;
+		$newTranslation->Version = 0;
 		
 		$originalPage = $this->getTranslation(self::default_locale());
 		if ($originalPage) {
@@ -1458,7 +1483,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if(Config::inst()->get('Translatable', 'enforce_global_unique_urls')) {
 			$newTranslation->URLSegment = $urlSegment . '-' . i18n::convert_rfc1766($locale);	
 		}
-		
+
 		// hacky way to set an existing translation group in onAfterWrite()
 		$translationGroupID = $this->getTranslationGroup();
 		$newTranslation->_TranslationGroupID = $translationGroupID ? $translationGroupID : $this->owner->ID;
@@ -1810,11 +1835,13 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$IDFilter = ($this->owner->ID) ? "AND \"SiteTree\".\"ID\" <> {$this->owner->ID}" :  null;
 		$parentFilter = null;
 
+		if (Config::inst()->get('SiteTree', 'nested_urls')) {
 			if($this->owner->ParentID) {
 				$parentFilter = " AND \"SiteTree\".\"ParentID\" = {$this->owner->ParentID}";
 			} else {
 				$parentFilter = ' AND "SiteTree"."ParentID" = 0';
 			}
+		}
 
 		$existingPage = SiteTree::get()
 			// disable get_one cache, as this otherwise may pick up results from when locale_filter was on
