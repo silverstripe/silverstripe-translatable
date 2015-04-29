@@ -13,7 +13,7 @@ Note: This module was originally part of the SilverStripe CMS 2.x codebase.
 
 ## Requirements ##
 
- * SilverStripe Framework 3.2+ (master) and CMS 3.2+ (master)
+ * SilverStripe Framework 4.x (master) and CMS 4.x (master)
 
 ## Maintainers ##
 
