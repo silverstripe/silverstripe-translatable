@@ -5,10 +5,18 @@ id:
     GO: Lanjut
   Form:
     LANGAOTHER: 'Bahasa lain'
-    LANGAVAIL: 'Bahasa yang tersedia'
+    LANGAVAIL: 'Bahasa tersedia'
   Translatable:
+    ALLCREATED: 'Semua bahasa yang diperbolehkan sudah dibuat.'
     CREATE: 'Buat terjemahan baru'
     CREATEBUTTON: Buat
     EXISTING: 'Terjemahan yang ada'
     NEWLANGUAGE: 'Bahasa baru'
-    TRANSLATEPERMISSION: 'Terjemahan %s'
+    NOTICENEWPAGE: 'Mohon simpan laman ini sebelum membuat terjemahan'
+    TRANSLATEALLPERMISSION: 'Terjemahkan ke semua bahasa tersedia'
+    TRANSLATEPERMISSION: 'Terjemahkan %s'
+    TRANSLATEVIEWLANGS: 'Tampilkan pilihan bahasa'
+    TRANSLATIONS: Terjemahan
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Asli: {value}'
+    OriginalFieldLabel: 'Asli {title}'

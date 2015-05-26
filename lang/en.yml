@@ -18,7 +18,7 @@ en:
     TRANSLATEVIEWLANGS: 'View language dropdown'
     TRANSLATIONS: Translations
   Translatable_Transform:
-    CheckboxValueNo: No
-    CheckboxValueYes: Yes
+    CheckboxValueNo: 'No'
+    CheckboxValueYes: 'Yes'
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'
