@@ -211,6 +211,21 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * or URL path prefixes like "/en/mypage".
 	 */
 	private static $enforce_global_unique_urls = true;
+
+	/**
+	 * Exclude these fields from translation
+	 *
+	 * @var array
+	 * @config
+	 */
+	private static $translate_excluded_fields = array(
+		'ViewerGroups',
+		'EditorGroups',
+		'CanViewType',
+		'CanEditType',
+		'NewTransLang',
+		'createtranslation'
+	);
 		
 	/**
 	 * Reset static configuration variables to their default values
@@ -1149,16 +1164,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 				if(is_a($this->owner, $excludedPageType)) return;
 			}
 		}
-		
-		// TODO Remove hardcoding for SiteTree properties
-		$excludeFields = array(
-			'ViewerGroups',
-			'EditorGroups',
-			'CanViewType',
-			'CanEditType',
-			'NewTransLang',
-			'createtranslation'
-		);
+
+		// Get excluded fields from translation
+		$excludeFields = $this->owner->config()->translate_excluded_fields;
 
 		// if a language other than default language is used, we're in "translation mode",
 		// hence have to modify the original fields
