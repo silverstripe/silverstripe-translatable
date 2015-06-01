@@ -26,8 +26,6 @@ class TranslatableCMSMainExtension extends Extension {
 		$id = $req->param('ID');
 		if($req->requestVar("Locale")) {
 			$this->owner->Locale = $req->requestVar("Locale");
-		} elseif($req->requestVar("locale")) {
-			$this->owner->Locale = $req->requestVar("locale");
 		} else if($id && is_numeric($id)) {
 			$record = DataObject::get_by_id($this->owner->stat('tree_class'), $id);
 			if($record && $record->Locale) $this->owner->Locale = $record->Locale;
@@ -53,8 +51,6 @@ class TranslatableCMSMainExtension extends Extension {
 		// if a locale is set, it needs to match to the current record
 		if($req->requestVar("Locale")) {
 			$requestLocale = $req->requestVar("Locale");
-		} else {
-			$requestLocale = $req->requestVar("locale");
 		}
 		
 		$page = $this->owner->currentPage();
@@ -75,7 +71,7 @@ class TranslatableCMSMainExtension extends Extension {
 				// If the record is not translated, redirect to pages overview
 				return $this->owner->redirect(Controller::join_links(
 					singleton('CMSPagesController')->Link(),
-					'?locale=' . $requestLocale
+					'?Locale=' . $requestLocale
 				));
 			}
 		}
@@ -140,12 +136,12 @@ class TranslatableCMSMainExtension extends Extension {
 
 	function updateLink(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
 	}
 
 	function updateLinkWithSearch(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);	
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);	
 	}
 
 	function updateExtraTreeTools(&$html) {
@@ -155,7 +151,7 @@ class TranslatableCMSMainExtension extends Extension {
 
 	function updateLinkPageAdd(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
 	}
 	
 	/**

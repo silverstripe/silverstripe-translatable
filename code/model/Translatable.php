@@ -1119,7 +1119,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 									'<li><a href="%s">%s</a></li>',
 									Controller::join_links(
 										$existingTranslation->CMSEditLink(),
-										'?locale=' . $existingTranslation->Locale
+										'?Locale=' . $existingTranslation->Locale
 									),
 									i18n::get_locale_name($existingTranslation->Locale)
 								);
