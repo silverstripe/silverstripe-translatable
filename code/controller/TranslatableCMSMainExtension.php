@@ -16,9 +16,6 @@ class TranslatableCMSMainExtension extends Extension {
 		// as an intermediary rather than the endpoint controller
 		if(!$this->owner->stat('tree_class')) return;
 
-		// Leave form submissions alone
-		if($req->httpMethod() != 'GET') return;
-
 		// Locale" attribute is either explicitly added by LeftAndMain Javascript logic,
 		// or implied on a translated record (see {@link Translatable->updateCMSFields()}).
 		// $Lang serves as a "context" which can be inspected by Translatable - hence it
@@ -48,14 +45,14 @@ class TranslatableCMSMainExtension extends Extension {
 		}
 		Translatable::set_current_locale($this->owner->Locale);
 
-		// if a locale is set, it needs to match to the current record
-		if($req->requestVar("Locale")) {
-			$requestLocale = $req->requestVar("Locale");
-		}
-		
+		// If a locale is set, it needs to match to the current record
+		$requestLocale = $req->requestVar("Locale");
 		$page = $this->owner->currentPage();
 		if(
-			$requestLocale && $page && $page->hasExtension('Translatable') 
+			$req->httpMethod() == 'GET' // leave form submissions alone
+			&& $requestLocale 
+			&& $page 
+			&& $page->hasExtension('Translatable') 
 			&& $page->Locale != $requestLocale
 			&& $req->latestParam('Action') != 'EditorToolbar'
 		) {
