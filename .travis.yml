@@ -4,6 +4,8 @@ language: php
 php: 
  - 5.3
 
+sudo: false
+
 env:
  - DB=MYSQL CORE_RELEASE=master
  - DB=PGSQL CORE_RELEASE=master
