@@ -16,9 +16,6 @@ class TranslatableCMSMainExtension extends Extension {
 		// as an intermediary rather than the endpoint controller
 		if(!$this->owner->stat('tree_class')) return;
 
-		// Leave form submissions alone
-		if($req->httpMethod() != 'GET') return;
-
 		// Locale" attribute is either explicitly added by LeftAndMain Javascript logic,
 		// or implied on a translated record (see {@link Translatable->updateCMSFields()}).
 		// $Lang serves as a "context" which can be inspected by Translatable - hence it
@@ -26,8 +23,6 @@ class TranslatableCMSMainExtension extends Extension {
 		$id = $req->param('ID');
 		if($req->requestVar("Locale")) {
 			$this->owner->Locale = $req->requestVar("Locale");
-		} elseif($req->requestVar("locale")) {
-			$this->owner->Locale = $req->requestVar("locale");
 		} else if($id && is_numeric($id)) {
 			$record = DataObject::get_by_id($this->owner->stat('tree_class'), $id);
 			if($record && $record->Locale) $this->owner->Locale = $record->Locale;
@@ -50,16 +45,14 @@ class TranslatableCMSMainExtension extends Extension {
 		}
 		Translatable::set_current_locale($this->owner->Locale);
 
-		// if a locale is set, it needs to match to the current record
-		if($req->requestVar("Locale")) {
-			$requestLocale = $req->requestVar("Locale");
-		} else {
-			$requestLocale = $req->requestVar("locale");
-		}
-		
+		// If a locale is set, it needs to match to the current record
+		$requestLocale = $req->requestVar("Locale");
 		$page = $this->owner->currentPage();
 		if(
-			$requestLocale && $page && $page->hasExtension('Translatable') 
+			$req->httpMethod() == 'GET' // leave form submissions alone
+			&& $requestLocale 
+			&& $page 
+			&& $page->hasExtension('Translatable') 
 			&& $page->Locale != $requestLocale
 			&& $req->latestParam('Action') != 'EditorToolbar'
 		) {
@@ -75,7 +68,7 @@ class TranslatableCMSMainExtension extends Extension {
 				// If the record is not translated, redirect to pages overview
 				return $this->owner->redirect(Controller::join_links(
 					singleton('CMSPagesController')->Link(),
-					'?locale=' . $requestLocale
+					'?Locale=' . $requestLocale
 				));
 			}
 		}
@@ -140,12 +133,12 @@ class TranslatableCMSMainExtension extends Extension {
 
 	function updateLink(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
 	}
 
 	function updateLinkWithSearch(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);	
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);	
 	}
 
 	function updateExtraTreeTools(&$html) {
@@ -155,7 +148,7 @@ class TranslatableCMSMainExtension extends Extension {
 
 	function updateLinkPageAdd(&$link) {
 		$locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-		if($locale) $link = Controller::join_links($link, '?locale=' . $locale);
+		if($locale) $link = Controller::join_links($link, '?Locale=' . $locale);
 	}
 	
 	/**
