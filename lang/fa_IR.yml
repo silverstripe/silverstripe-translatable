@@ -1,0 +1,18 @@
+fa_IR:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: زبان
+  CMSMain_left:
+    GO: برو
+  Form:
+    LANGAOTHER: 'زبان های دیگر'
+    LANGAVAIL: 'زبان های موجود'
+  Translatable:
+    ALLCREATED: 'همه ترجمه ها اجازه داده شده ایجاد شده است.'
+    CREATE: 'ایجاد ترجمه جدید'
+    CREATEBUTTON: ایجاد
+    EXISTING: 'ترجمه های موجود'
+    NEWLANGUAGE: 'زبان جدید'
+    NOTICENEWPAGE: 'لطفا قبل از ایجاد یک ترجمه این صفحه را ذخیره کنید'
+    TRANSLATEALLPERMISSION: 'ترجمه به تمام زبان های موجود'
+    TRANSLATEVIEWLANGS: 'نمایش منوی زبان'
+    TRANSLATIONS: ترجمه

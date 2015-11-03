@@ -31,7 +31,7 @@
 			onchange: function(e) {
 				// reload tree with selected locale
 				var treeDropdown = $(this).parents('form').find('#internal .treedropdown');
-				treeDropdown.data('urlTree', $.path.addSearchParams(treeDropdown.data('urlTree').replace(/locale=[^&]*/, ''), 'locale='+$(this).val()));
+				treeDropdown.data('urlTree', $.path.addSearchParams(treeDropdown.data('urlTree').replace(/Locale=[^&]*/, ''), 'Locale='+$(this).val()));
 				treeDropdown.loadTree();
 			}
 		});

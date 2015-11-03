@@ -213,6 +213,21 @@ class Translatable extends DataExtension implements PermissionProvider {
 	private static $enforce_global_unique_urls = true;
 		
 	/**
+	 * Exclude these fields from translation
+	 *
+	 * @var array
+	 * @config
+	 */
+	private static $translate_excluded_fields = array(
+		'ViewerGroups',
+		'EditorGroups',
+		'CanViewType',
+		'CanEditType',
+		'NewTransLang',
+		'createtranslation'
+	);
+		
+	/**
 	 * Reset static configuration variables to their default values
 	 */
 	static function reset() {
@@ -1115,7 +1130,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 									'<li><a href="%s">%s</a></li>',
 									Controller::join_links(
 										$existingTranslation->CMSEditLink(),
-										'?locale=' . $existingTranslation->Locale
+										'?Locale=' . $existingTranslation->Locale
 									),
 									i18n::get_locale_name($existingTranslation->Locale)
 								);
@@ -1161,15 +1176,8 @@ class Translatable extends DataExtension implements PermissionProvider {
 			}
 		}
 		
-		// TODO Remove hardcoding for SiteTree properties
-		$excludeFields = array(
-			'ViewerGroups',
-			'EditorGroups',
-			'CanViewType',
-			'CanEditType',
-			'NewTransLang',
-			'createtranslation'
-		);
+		// Get excluded fields from translation
+		$excludeFields = $this->owner->config()->translate_excluded_fields;
 
 		// if a language other than default language is used, we're in "translation mode",
 		// hence have to modify the original fields
