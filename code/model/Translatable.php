@@ -433,7 +433,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 		
 		$translationGroupID = $this->getTranslationGroup();
 		if(is_numeric($translationGroupID)) {
-			$query = new SQLQuery(
+			$query = new SQLSelect(
 				'DISTINCT "Locale"',
 				sprintf(
 					'"%s" LEFT JOIN "%s" ON "%s"."OriginalID" = "%s"."ID"',
@@ -583,9 +583,9 @@ class Translatable extends DataExtension implements PermissionProvider {
 	}
 
 	/**
-	 * Check if a given SQLQuery filters on the Locale field
+	 * Check if a given SQLSelect filters on the Locale field
 	 *
-	 * @param SQLQuery $query
+	 * @param SQLSelect $query
 	 * @return boolean
 	 */
 	protected function filtersOnLocale($query) {
@@ -1634,7 +1634,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 */
 	static function get_existing_content_languages($className = 'SiteTree', $where = '') {
 		$baseTable = ClassInfo::baseDataClass($className);
-		$query = new SQLQuery("Distinct \"Locale\"","\"$baseTable\"",$where, '', "\"Locale\"");
+		$query = new SQLSelect("Distinct \"Locale\"","\"$baseTable\"",$where, '', "\"Locale\"");
 		$dbLangs = $query->execute()->column();
 		$langlist = array_merge((array)Translatable::default_locale(), (array)$dbLangs);
 		$returnMap = array();
