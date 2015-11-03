@@ -1,0 +1,22 @@
+sr_RS@latin:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Jezik
+  CMSMain_left:
+    GO: Idi
+  Form:
+    LANGAOTHER: 'Ostali jezici'
+    LANGAVAIL: 'Raspoloživi jezici'
+  Translatable:
+    ALLCREATED: 'Svi dozvoljeni prevodi su napravljeni.'
+    CREATE: 'Napravi novi prevod'
+    CREATEBUTTON: Napravi
+    EXISTING: 'Postojeći prevodi'
+    NEWLANGUAGE: 'Novi jezik'
+    NOTICENEWPAGE: 'Molimo Vas sačuvajte ovu stranu pre pravljenja prevoda'
+    TRANSLATEALLPERMISSION: 'Prevedi na sve raspoložive jezike'
+    TRANSLATEPERMISSION: 'Prevedi %s'
+    TRANSLATEVIEWLANGS: 'Prikaži listu jezika'
+    TRANSLATIONS: Prevodi
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Original: {vrednost}'
+    OriginalFieldLabel: 'Origina {naslov}'

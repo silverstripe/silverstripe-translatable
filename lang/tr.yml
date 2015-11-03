@@ -1,0 +1,18 @@
+tr:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Lisan
+  CMSMain_left:
+    GO: Git
+  Form:
+    LANGAOTHER: 'Diğer Lisanlar'
+    LANGAVAIL: 'Mevcut Lisanlar'
+  Translatable:
+    CREATE: 'Yeni çeviri oluştur'
+    CREATEBUTTON: Oluştur
+    EXISTING: 'Mevcut Çeviriler'
+    NEWLANGUAGE: 'Yeni Lisan'
+    NOTICENEWPAGE: 'Yeni bir çeviri oluşturmadan önce lütfen sayfayı kaydediniz'
+    TRANSLATIONS: Çeviriler
+  Translatable_Transform:
+    OriginalCheckboxLabel: 'Orjinal: {değer}'
+    OriginalFieldLabel: 'Orjinal {başlık}'

@@ -37,10 +37,10 @@
 			},
 			onchange: function(e) {
 				// Get new locale code
-				locale = {locale: $(e.target).val()};
+				var locale = {Locale: $(e.target).val()};
 				
 				// Check existing url
-				search = /locale=[^&]*/;
+				search = /Locale=[^&]*/;
 				url = document.location.href;
 				if(url.match(search)) {
 					// Replace locale code
