@@ -18,5 +18,7 @@ de:
     TRANSLATEVIEWLANGS: 'Kann die verfügbaren Sprachen sehen'
     TRANSLATIONS: Übersetzungen
   Translatable_Transform:
+    CheckboxValueNo: 'Nein'
+    CheckboxValueYes: 'Ja'
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'

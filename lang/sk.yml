@@ -1,4 +1,4 @@
-sk_SK:
+sk:
   CMSMain:
     LANGUAGEDROPDOWNLABEL: Jazyk
   CMSMain_left:
@@ -12,10 +12,10 @@ sk_SK:
     CREATEBUTTON: Vytvoriť
     EXISTING: 'Existujúce preklady'
     NEWLANGUAGE: 'Nový jazyk'
-    NOTICENEWPAGE: 'Prosím uložte stránku pred vytvorením prekladu'
+    NOTICENEWPAGE: 'Pred vytvorením prekladu uložte túto stránku prosím'
     TRANSLATEALLPERMISSION: 'Preložiť do všetkých dostupných jazykov'
     TRANSLATEPERMISSION: 'Preložiť %s'
-    TRANSLATEVIEWLANGS: 'Zobraziť jazykový rozbaľovací zoznam'
+    TRANSLATEVIEWLANGS: 'Zobraziť zoznam jazykov'
     TRANSLATIONS: Preklady
   Translatable_Transform:
     CheckboxValueNo: 'Nie'
