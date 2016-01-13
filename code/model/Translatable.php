@@ -1897,7 +1897,7 @@ class Translatable_Transformation extends FormTransformation {
 	 * @param FormField $originalField The original editable field containing the translated value
 	 * @return CheckboxField The field with a modified label
 	 */
-	protected function transformCheckboxField(CheckboxField $nonEditableField, CheckboxField $originalField) {
+	protected function transformCheckboxField(CheckboxField_Readonly $nonEditableField, CheckboxField $originalField) {
 		$label = $originalField->Title();
 		$fieldName = $originalField->getName();
 		$value = ($this->original->$fieldName) 
