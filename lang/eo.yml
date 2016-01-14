@@ -18,5 +18,7 @@ eo:
     TRANSLATEVIEWLANGS: 'Vidigi lingvan falliston'
     TRANSLATIONS: Tradukoj
   Translatable_Transform:
+    CheckboxValueNo: 'Ne'
+    CheckboxValueYes: 'Jes'
     OriginalCheckboxLabel: 'Origina: {value}'
     OriginalFieldLabel: 'Origina: {title}'

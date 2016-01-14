@@ -1,18 +1,24 @@
 tr:
   CMSMain:
-    LANGUAGEDROPDOWNLABEL: Lisan
+    LANGUAGEDROPDOWNLABEL: Dil
   CMSMain_left:
-    GO: Git
+    GO: Başla
   Form:
-    LANGAOTHER: 'Diğer Lisanlar'
-    LANGAVAIL: 'Mevcut Lisanlar'
+    LANGAOTHER: 'Diğer diller'
+    LANGAVAIL: 'Mevcut diller'
   Translatable:
+    ALLCREATED: 'Tüm geçerli çeviriler oluşturuldu.'
     CREATE: 'Yeni çeviri oluştur'
     CREATEBUTTON: Oluştur
     EXISTING: 'Mevcut Çeviriler'
-    NEWLANGUAGE: 'Yeni Lisan'
+    NEWLANGUAGE: 'Yeni dil'
     NOTICENEWPAGE: 'Yeni bir çeviri oluşturmadan önce lütfen sayfayı kaydediniz'
+    TRANSLATEALLPERMISSION: 'Tüm mevcut dillere çevir'
+    TRANSLATEPERMISSION: '%s diline çevir'
+    TRANSLATEVIEWLANGS: 'Mevcut dilleri görebilir'
     TRANSLATIONS: Çeviriler
   Translatable_Transform:
-    OriginalCheckboxLabel: 'Orjinal: {değer}'
-    OriginalFieldLabel: 'Orjinal {başlık}'
+    CheckboxValueNo: 'Hayır'
+    CheckboxValueYes: 'Evet'
+    OriginalCheckboxLabel: 'Orijinal: {value}'
+    OriginalFieldLabel: 'Orijinal {title}'
