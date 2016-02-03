@@ -15,3 +15,6 @@ et_EE:
     TRANSLATEALLPERMISSION: 'Tõlgi kõigisse saadaolevatesse keeltesse'
     TRANSLATEPERMISSION: 'Tõlgi: %s'
     TRANSLATIONS: Tõlked
+  Translatable_Transform:
+    CheckboxValueNo: 'Ei'
+    CheckboxValueYes: 'Jah'

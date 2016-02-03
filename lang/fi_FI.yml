@@ -18,5 +18,7 @@ fi_FI:
     TRANSLATEVIEWLANGS: 'Näytä kielet'
     TRANSLATIONS: Käännökset
   Translatable_Transform:
+    CheckboxValueNo: 'Ei'
+    CheckboxValueYes: 'Kyllä'
     OriginalCheckboxLabel: 'Alkuperäinen: {value}'
     OriginalFieldLabel: 'Alkuperäinen {title}'
