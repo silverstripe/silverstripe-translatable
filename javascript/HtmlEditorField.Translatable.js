@@ -6,7 +6,7 @@
 				// show language field for internal links
 				var linkType = this.find(':input[name=LinkType]:checked').val(), list = ['internal', 'external', 'file', 'email'];
 				if(linkType == 'internal') {
-					this.find('.field#Language').show();
+					this.find('.field.languagedropdown').show();
 				}
 			},
 			updateFromEditor: function() {
@@ -30,7 +30,7 @@
 		$('form.htmleditorfield-linkform #Form_EditorToolbarLinkForm_Language').entwine({
 			onchange: function(e) {
 				// reload tree with selected locale
-				var treeDropdown = $(this).parents('form').find('#internal .treedropdown');
+				var treeDropdown = $(this).parents('form').find('#Form_EditorToolbarLinkForm_internal_Holder .TreeDropdownField');
 				treeDropdown.data('urlTree', $.path.addSearchParams(treeDropdown.data('urlTree').replace(/Locale=[^&]*/, ''), 'Locale='+$(this).val()));
 				treeDropdown.loadTree();
 			}
