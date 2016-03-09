@@ -240,6 +240,68 @@ attach this behaviour to custom fields by calling a helper function from your ge
 		}
 	}
 
+### Excluding fields from translation
+
+If you call `applyTranslatableFieldsUpdate()` on your form in `getCMSFields()` all fields will be translated by default.
+You can exclude fields from translation by adding them to the `$translate_excluded_fields` array on the object getting translated.
+
+*Note: Actually there are some fields that are excluded from translation by default. These are defined in `Translatable::$translate_excluded_fields`:*
+
+    :::php
+    /**
+     * Exclude these fields from translation
+     *
+     * @var array
+     * @config
+     */
+    private static $translate_excluded_fields = array(
+        'ViewerGroups',
+        'EditorGroups',
+        'CanViewType',
+        'CanEditType',
+        'NewTransLang',
+        'createtranslation'
+    );
+    :::
+
+Excluding fields from translation can be done via `mysite/config/_config.yml` or by setting the variable directly in your object.
+
+If we wanted to exclude our custom `AdditionalProperty` in the above example from being translated, we could do this via `mysite/config/_config.yml`:
+
+```yml
+Page:
+  translate_excluded_fields:
+    - AdditionalProperty
+```
+
+or directly in our `Page` class:
+
+    :::php
+    class Page extends SiteTree {
+    
+        private static $db = array(
+            'AdditionalProperty' => 'Text', 
+        );
+    
+        private static $translate_excluded_fields = array(
+            'AdditionalProperty'
+        );
+    
+        function getCMSFields() {
+            $fields = parent::getCMSFields();
+    
+            // Add fields as usual
+            $additionalField = new TextField('AdditionalProperty');
+            $fields->addFieldToTab('Root.Main', $additionalField);
+    
+            // Apply Translatable modifications
+            $this->applyTranslatableFieldsUpdate($fields, 'updateCMSFields');
+    
+            return $fields;
+        }
+    }
+    :::
+
 
 ### Translating the Homepage
 
