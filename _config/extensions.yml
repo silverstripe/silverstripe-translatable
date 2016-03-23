@@ -16,3 +16,7 @@ HtmlEditorField_Toolbar:
 DataQuery:
   extensions:
     ['Translatable']
+
+GridFieldDetailForm_ItemRequest:
+  extensions:
+    ['TranslatableCMSMainExtension']

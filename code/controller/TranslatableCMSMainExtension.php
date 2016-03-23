@@ -120,15 +120,25 @@ class TranslatableCMSMainExtension extends Extension {
 		// persist in the database before the user requests it
 		$translatedRecord = $record->createTranslation($langCode);
 
-		$url = Controller::join_links(
-			$this->owner->Link('show'),
-			$translatedRecord->ID
-		);
+		if ( $this->owner instanceof GridFieldDetailForm_ItemRequest ) {
+			$controller = $this->owner->getController();
+
+			$this->owner->record = $translatedRecord;
+
+			$url = $this->owner->Link('edit');
+		} else {
+			$controller = $this->owner;
+
+			$url = Controller::join_links(
+				$this->owner->Link('show'),
+				$translatedRecord->ID
+			);
+		}
 
 		// set the X-Pjax header to Content, so that the whole admin panel will be refreshed
-		$this->owner->getResponse()->addHeader('X-Pjax', 'Content');
+		$controller->getResponse()->addHeader('X-Pjax', 'Content');
 
-		return $this->owner->redirect($url);
+		return $controller->redirect($url);
 	}
 
 	function updateLink(&$link) {
