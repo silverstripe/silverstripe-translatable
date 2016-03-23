@@ -25,7 +25,7 @@
 	"extra": {
 		"screenshots" : ["http://www.silverstripe.org/assets/Uploads/translatable4-small.png"],
 		"branch-alias": {
-			"dev-master": "2.2.x-dev"
+			"dev-master": "3.x-dev"
 		}
 	},
 	"support": {
