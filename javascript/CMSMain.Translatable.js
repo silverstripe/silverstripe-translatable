@@ -66,7 +66,7 @@
 		 * Requires:
 		 *  jquery.metadata
 		 */
-		$('.LeftAndMain :input[name=action_createtranslation]').entwine({
+		$(':input[name=action_createtranslation]').entwine({
 			
 			onclick: function(e) {
 				this.parents('form').trigger('submit', [this]);
