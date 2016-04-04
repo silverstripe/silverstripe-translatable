@@ -100,6 +100,15 @@ class TranslatableTest extends FunctionalTest {
 		);
 		$this->assertEquals($translated->ID, $found->ID);
 		Translatable::enable_locale_filter();
+
+		//test caching of get_one when filtering is disabled
+		Translatable::set_current_locale('de_DE'); //cache failed lookup
+		$notFound = DataObject::get_one('SiteTree', '"URLSegment" = \'home\'');
+		$this->assertFalse($notFound, 'Should not have found a home page for de_DE');
+		Translatable::disable_locale_filter();
+		$found = DataObject::get_one('SiteTree', '"URLSegment" = \'home\'');
+		$this->assertInstanceOf('DataObject', $found, 'Should have found a home page with locale filtering off');
+		Translatable::enable_locale_filter();
 	}
 
 	function testLocaleFilteringEnabledAndDisabled() {
