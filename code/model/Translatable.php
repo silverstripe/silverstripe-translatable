@@ -1811,7 +1811,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * Return a piece of text to keep DataObject cache keys appropriately specific
 	 */
 	function cacheKeyComponent() {
-		return 'locale-'.self::get_current_locale();
+		return self::locale_filter_enabled() ? 'locale-'.self::get_current_locale() : 'locale-filter-disabled';
 	}
 	
 	/**
