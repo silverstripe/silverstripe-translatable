@@ -18,5 +18,6 @@ it:
     TRANSLATEVIEWLANGS: 'Visualizza menu selezione lingua'
     TRANSLATIONS: Traduzioni
   Translatable_Transform:
+    CheckboxValueNo: 'No'
     OriginalCheckboxLabel: 'Originale: {value}'
     OriginalFieldLabel: 'Originale {title}'
