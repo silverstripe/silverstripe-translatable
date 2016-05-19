@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0]
+
+* Moved translatable dependency from CMS
+* Update HtmlEditorField.Translatable.js
+* API Add support for gridfield
+* Update translations.
+
 ## [2.1.1]
 
 * Fixed issue [#213](https://github.com/silverstripe/silverstripe-translatable/issues/213) causing crash when accessing a translation with a checkbox
