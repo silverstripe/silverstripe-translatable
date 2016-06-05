@@ -508,10 +508,14 @@ the same as your current page locale.
 ### Adding a new locale
 
 The `i18n` logic has lookup tables for common locales in i18n::$common_locales, which is a subset of i18n::$all_locales.
-If your locale is not present here, you can simply add it through `mysite/_config.php`:
+If your locale is not present here, you can simply add it through `mysite/_config/config.yml`:
 
-	:::php
-	i18n::$common_locales['de_AT'] = array('German (Austria)', 'Deutsch (Österreich)');
+	:::yml
+	i18n:
+	  common_locales:
+	    de_AT:
+	      name: 'German (Austria)'
+	      native: 'Deutsch (Österreich)'
 
 This should e.g. enable you to use `$Locale.Nice` in template code.
 
