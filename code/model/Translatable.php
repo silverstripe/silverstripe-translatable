@@ -1065,72 +1065,74 @@ class Translatable extends DataExtension implements PermissionProvider {
 		$alreadyTranslatedLocales[$this->owner->Locale] = $this->owner->Locale;
 		$alreadyTranslatedLocales = array_combine($alreadyTranslatedLocales, $alreadyTranslatedLocales);
 
-		// Check if fields exist already to avoid adding them twice on repeat invocations
-		$tab = $fields->findOrMakeTab('Root.Translations', _t('Translatable.TRANSLATIONS', 'Translations'));
-		if(!$tab->fieldByName('CreateTransHeader')) {
-			$tab->push(new HeaderField(
-				'CreateTransHeader', 
-				_t('Translatable.CREATE', 'Create new translation'), 
-				2
-			));
-		}
-		if(!$tab->fieldByName('NewTransLang') && !$tab->fieldByName('AllTransCreated')) {
-			$langDropdown = LanguageDropdownField::create(
-				"NewTransLang", 
-				_t('Translatable.NEWLANGUAGE', 'New language'), 
-				$alreadyTranslatedLocales,
-				'SiteTree',
-				'Locale-English',
-				$this->owner
-			)->addExtraClass('languageDropdown no-change-track');
-			$tab->push($langDropdown);
-			$canAddLocale = (count($langDropdown->getSource()) > 0);
-
-			if($canAddLocale) {
-				// Only add create button if new languages are available
-				$tab->push(
-					$createButton = InlineFormAction::create(
-						'createtranslation',
-						_t('Translatable.CREATEBUTTON', 'Create')
-					)->addExtraClass('createTranslationButton')
-				);
-				$createButton->includeDefaultJS(false); // not fluent API...
-			} else {
-				$tab->removeByName('NewTransLang');
-				$tab->push(new LiteralField(
-					'AllTransCreated', 
-					_t('Translatable.ALLCREATED', 'All allowed translations have been created.')
+		if ($fields->hasTabSet()) {
+			// Check if fields exist already to avoid adding them twice on repeat invocations
+			$tab = $fields->findOrMakeTab('Root.Translations', _t('Translatable.TRANSLATIONS', 'Translations'));
+			if(!$tab->fieldByName('CreateTransHeader')) {
+				$tab->push(new HeaderField(
+					'CreateTransHeader', 
+					_t('Translatable.CREATE', 'Create new translation'), 
+					2
 				));
 			}
-		}
-		if($alreadyTranslatedLocales) {
-			if(!$tab->fieldByName('ExistingTransHeader')) {
-				$tab->push(new HeaderField(
-					'ExistingTransHeader', 
-					_t('Translatable.EXISTING', 'Existing translations'), 
-					3
-				));
-				if (!$tab->fieldByName('existingtrans')) {
-					$existingTransHTML = '<ul>';
-					if ($existingTranslations = $this->getTranslations()) {
-						foreach ($existingTranslations as $existingTranslation) {
-							if ($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
-								$existingTransHTML .= sprintf(
-									'<li><a href="%s">%s</a></li>',
-									Controller::join_links(
-										$existingTranslation->CMSEditLink(),
-										'?Locale=' . $existingTranslation->Locale
-									),
-									i18n::get_locale_name($existingTranslation->Locale)
-								);
-							}
-						}
-					}
-					$existingTransHTML .= '</ul>';
-					$tab->push(new LiteralField('existingtrans', $existingTransHTML));
+			if(!$tab->fieldByName('NewTransLang') && !$tab->fieldByName('AllTransCreated')) {
+				$langDropdown = LanguageDropdownField::create(
+					"NewTransLang", 
+					_t('Translatable.NEWLANGUAGE', 'New language'), 
+					$alreadyTranslatedLocales,
+					'SiteTree',
+					'Locale-English',
+					$this->owner
+				)->addExtraClass('languageDropdown no-change-track');
+				$tab->push($langDropdown);
+				$canAddLocale = (count($langDropdown->getSource()) > 0);
+
+				if($canAddLocale) {
+					// Only add create button if new languages are available
+					$tab->push(
+						$createButton = InlineFormAction::create(
+							'createtranslation',
+							_t('Translatable.CREATEBUTTON', 'Create')
+						)->addExtraClass('createTranslationButton')
+					);
+					$createButton->includeDefaultJS(false); // not fluent API...
+				} else {
+					$tab->removeByName('NewTransLang');
+					$tab->push(new LiteralField(
+						'AllTransCreated', 
+						_t('Translatable.ALLCREATED', 'All allowed translations have been created.')
+					));
 				}
 			}
-		}		
+			if($alreadyTranslatedLocales) {
+				if(!$tab->fieldByName('ExistingTransHeader')) {
+					$tab->push(new HeaderField(
+						'ExistingTransHeader', 
+						_t('Translatable.EXISTING', 'Existing translations'), 
+						3
+					));
+					if (!$tab->fieldByName('existingtrans')) {
+						$existingTransHTML = '<ul>';
+						if ($existingTranslations = $this->getTranslations()) {
+							foreach ($existingTranslations as $existingTranslation) {
+								if ($existingTranslation && $existingTranslation->hasMethod('CMSEditLink')) {
+									$existingTransHTML .= sprintf(
+										'<li><a href="%s">%s</a></li>',
+										Controller::join_links(
+											$existingTranslation->CMSEditLink(),
+											'?Locale=' . $existingTranslation->Locale
+										),
+										i18n::get_locale_name($existingTranslation->Locale)
+									);
+								}
+							}
+						}
+						$existingTransHTML .= '</ul>';
+						$tab->push(new LiteralField('existingtrans', $existingTransHTML));
+					}
+				}
+			}
+		}
 	}
 	
 	function updateSettingsFields(&$fields) {
