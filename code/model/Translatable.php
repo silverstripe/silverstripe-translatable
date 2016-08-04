@@ -1574,7 +1574,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	function MetaTags(&$tags) {
 		$template = '<link rel="alternate" type="text/html" title="%s" hreflang="%s" href="%s" />' . "\n";
 		$translations = $this->owner->getTranslations();
-		if($translations) {
+		if($translations->count()) {
 			$translations = $translations->toArray();
 			$translations[] = $this->owner;
 			
