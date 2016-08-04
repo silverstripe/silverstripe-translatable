@@ -1577,12 +1577,12 @@ class Translatable extends DataExtension implements PermissionProvider {
 		if($translations->count()) {
 			$translations = $translations->toArray();
 			$translations[] = $this->owner;
-			
-		foreach($translations as $translation) {
-			$tags .= sprintf($template,
-				Convert::raw2xml($translation->Title),
-				i18n::convert_rfc1766($translation->Locale),
-				$translation->AbsoluteLink()
+
+			foreach($translations as $translation) {
+				$tags .= sprintf($template,
+					Convert::raw2xml($translation->Title),
+					i18n::convert_rfc1766($translation->Locale),
+					$translation->AbsoluteLink()
 				);
 			}
 		}
