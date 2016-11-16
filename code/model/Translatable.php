@@ -1752,7 +1752,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 	 * @deprecated 2.4 Use get_reading_locale()
 	 */
 	static function get_reading_lang() {
-		return i18n::get_lang_from_locale(self::get_reading_locale());
+		return i18n::get_lang_from_locale(self::get_current_locale());
 	}
 	
 	/**
