@@ -1,6 +1,6 @@
 vi_VN:
   CMSMain:
-    LANGUAGEDROPDOWNLABEL: Ngôn ngữ
+    LANGUAGEDROPDOWNLABEL: 'Ngôn ngữ'
   CMSMain_left:
     GO: Đi
   Form:
@@ -16,7 +16,7 @@ vi_VN:
     TRANSLATEALLPERMISSION: 'Dịch sang mọi ngôn gữ có th'
     TRANSLATEPERMISSION: 'Dịch %s'
     TRANSLATEVIEWLANGS: 'Xem danh sách ngôn ng'
-    TRANSLATIONS: Dịch thuật
+    TRANSLATIONS: 'Dịch thuật'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Mặc định :{value}'
     OriginalFieldLabel: 'Mặc định:{title}'

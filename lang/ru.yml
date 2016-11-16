@@ -18,7 +18,7 @@ ru:
     TRANSLATEVIEWLANGS: 'Отобразить языковое выпадающее меню'
     TRANSLATIONS: Переводы
   Translatable_Transform:
-    CheckboxValueNo: 'Нет'
-    CheckboxValueYes: 'Да'
+    CheckboxValueNo: Нет
+    CheckboxValueYes: Да
     OriginalCheckboxLabel: 'Оригинальное значение: {value}'
     OriginalFieldLabel: 'Оригинальное {title}'

@@ -16,5 +16,5 @@ et_EE:
     TRANSLATEPERMISSION: 'Tõlgi: %s'
     TRANSLATIONS: Tõlked
   Translatable_Transform:
-    CheckboxValueNo: 'Ei'
-    CheckboxValueYes: 'Jah'
+    CheckboxValueNo: Ei
+    CheckboxValueYes: Jah

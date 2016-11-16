@@ -18,7 +18,7 @@ hr:
     TRANSLATEVIEWLANGS: 'Pogledaj padajući izbornik jezika'
     TRANSLATIONS: Prijevodi
   Translatable_Transform:
-    CheckboxValueNo: 'Ne'
-    CheckboxValueYes: 'Da'
+    CheckboxValueNo: Ne
+    CheckboxValueYes: Da
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'
