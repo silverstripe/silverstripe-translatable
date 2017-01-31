@@ -932,7 +932,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 				$fresh = Versioned::get_one_by_stage(
 					$baseDataClass,
 					Versioned::current_stage(),
-					'"ID" = ' . $this->owner->ID,
+					'"'.$baseDataClass.'"."ID" = ' . $this->owner->ID,
 					null
 				);
 				if ($fresh) {
