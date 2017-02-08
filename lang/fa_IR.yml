@@ -16,7 +16,7 @@ fa_IR:
     TRANSLATEALLPERMISSION: 'ترجمه به تمام زبان های موجود'
     TRANSLATEPERMISSION: 'ترجمه %s'
     TRANSLATEVIEWLANGS: 'نمایش منوی زبان'
-    TRANSLATIONS: 'ترجمه'
+    TRANSLATIONS: ترجمه
   Translatable_Transform:
     CheckboxValueNo: خیر
     CheckboxValueYes: بله

@@ -16,7 +16,7 @@ ar:
     TRANSLATEALLPERMISSION: 'ترجم إلى جميع اللغات المتاحة'
     TRANSLATEPERMISSION: 'ترجم %s'
     TRANSLATEVIEWLANGS: 'أعرض قائمة اللغات'
-    TRANSLATIONS: 'تراجم'
+    TRANSLATIONS: تراجم
   Translatable_Transform:
     OriginalCheckboxLabel: 'الأصلية: {قيمة}'
     OriginalFieldLabel: 'الأصلي {عنوان}'
