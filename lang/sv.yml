@@ -18,5 +18,7 @@ sv:
     TRANSLATEVIEWLANGS: 'Visa språk listan'
     TRANSLATIONS: Översättningar
   Translatable_Transform:
+    CheckboxValueNo: Nej
+    CheckboxValueYes: Ja
     OriginalCheckboxLabel: 'Original: {value}'
     OriginalFieldLabel: 'Original {title}'
