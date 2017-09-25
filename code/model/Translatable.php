@@ -1584,6 +1584,22 @@ class Translatable extends DataExtension implements PermissionProvider {
 				);
 			}
 		}
+		else {
+			// Added to comply with current Google recommendations
+			// If no translations found for this page, add a self referencing hreflang tag so Google does not complain
+			// Language and Local tag
+			$tags .= sprintf($template,
+				Convert::raw2xml($this->owner->Title),
+				i18n::convert_rfc1766($this->owner->Locale),
+				$this->owner->AbsoluteLink()
+			);
+			// Language only tag
+			$tags .= sprintf($template,
+				Convert::raw2xml($this->owner->Title),
+				i18n::get_lang_from_locale($this->owner->Locale),
+				$this->owner->AbsoluteLink()
+			);
+		}
 	}
 	
 	function providePermissions() {
