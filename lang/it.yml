@@ -19,5 +19,6 @@ it:
     TRANSLATIONS: Traduzioni
   Translatable_Transform:
     CheckboxValueNo: 'No'
+    CheckboxValueYes: Si
     OriginalCheckboxLabel: 'Originale: {value}'
     OriginalFieldLabel: 'Originale {title}'

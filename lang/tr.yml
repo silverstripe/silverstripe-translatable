@@ -18,7 +18,7 @@ tr:
     TRANSLATEVIEWLANGS: 'Mevcut dilleri görebilir'
     TRANSLATIONS: Çeviriler
   Translatable_Transform:
-    CheckboxValueNo: 'Hayır'
-    CheckboxValueYes: 'Evet'
+    CheckboxValueNo: Hayır
+    CheckboxValueYes: Evet
     OriginalCheckboxLabel: 'Orijinal: {value}'
     OriginalFieldLabel: 'Orijinal {title}'
