@@ -1,7 +1,7 @@
 # Translatable module for SilverStripe CMS #
 
-[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png?branch=2.1)](http://travis-ci.org/silverstripe/silverstripe-translatable)
-![helpfulrobot](https://helpfulrobot.io/silverstripe/translatable/badge)
+[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png)](http://travis-ci.org/silverstripe/silverstripe-translatable)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-translatable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-translatable/?branch=master)
 
 ## Introduction ##
 
@@ -31,4 +31,4 @@ and any new translations will be merged back to the project source code.
 Please use [https://www.transifex.com/projects/p/silverstripe-translatable/](https://www.transifex.com/projects/p/silverstripe-translatable/) to contribute translations,
 rather than sending pull requests with YAML files.
 
-See the ["i18n" topic](http://doc.silverstripe.org/framework/en/trunk/topics/i18n) on doc.silverstripe.org for more details.
+See the ["i18n" topic](https://docs.silverstripe.org/en/developer_guides/i18n/) on docs.silverstripe.org for more details.
