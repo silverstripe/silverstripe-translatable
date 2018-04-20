@@ -21,7 +21,7 @@ class LanguageDropdownField extends GroupedDropdownField {
 	 * @param string $list Indicates the source language list. 
 	 *               Can be either Common-English, Common-Native, Locale-English, Locale-Native
 	 */
-	function __construct($name, $title, $excludeLocales = array(), 
+	public function __construct($name, $title = null, $excludeLocales = array(), 
 		$translatingClass = 'SiteTree', $list = 'Common-English', $instance = null
 	) {
 		$usedLocalesWithTitle = Translatable::get_existing_content_languages($translatingClass);
