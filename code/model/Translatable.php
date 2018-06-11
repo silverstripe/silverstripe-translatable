@@ -1295,20 +1295,16 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// exclude the language of the current owner
 			$filter .= sprintf(' AND "%s"."Locale" != \'%s\'', $baseDataClass, $this->owner->Locale);
 		}
-		$currentStage = Versioned::current_stage();
 		$joinOnClause = sprintf('"%s_translationgroups"."OriginalID" = "%s"."ID"', $baseDataClass, $baseDataClass);
-		if($this->owner->hasExtension("Versioned")) {
-			if($stage) Versioned::reading_stage($stage);
+		if($this->owner->hasExtension("Versioned") && $stage) {
 			$translations = Versioned::get_by_stage(
 				$baseDataClass,
-				Versioned::current_stage(), 
+				$stage,
 				$filter, 
 				null
 			)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
-			if($stage) Versioned::reading_stage($currentStage);
 		} else {
-			$class = $this->owner->class;
-			$translations = $baseDataClass::get()
+			$translations = DataObject::get($baseDataClass)
 				->where($filter)
 				->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 		}
