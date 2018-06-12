@@ -928,13 +928,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 				// This is to prevent the overhead of writing all translations when
 				// the class didn't actually change.
 				$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
-				$currentStage = Versioned::current_stage();
-				$fresh = Versioned::get_one_by_stage(
-					$baseDataClass,
-					Versioned::current_stage(),
-					'"'.$baseDataClass.'"."ID" = ' . $this->owner->ID,
-					null
-				);
+				$fresh = DataObject::get($baseDataClass)->byId($this->owner->ID);
 				if ($fresh) {
 					$changed = $changedFields['ClassName']['after'] != $fresh->ClassName;
 				}
