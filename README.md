@@ -1,6 +1,7 @@
 # Translatable module for SilverStripe CMS #
 
 [![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png?branch=2.1)](http://travis-ci.org/silverstripe/silverstripe-translatable)
+[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 ## Introduction ##
 
