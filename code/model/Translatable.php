@@ -933,13 +933,7 @@ class Translatable extends DataExtension implements PermissionProvider {
 				// This is to prevent the overhead of writing all translations when
 				// the class didn't actually change.
 				$baseDataClass = ClassInfo::baseDataClass($this->owner->class);
-				$currentStage = Versioned::current_stage();
-				$fresh = Versioned::get_one_by_stage(
-					$baseDataClass,
-					Versioned::current_stage(),
-					'"'.$baseDataClass.'"."ID" = ' . $this->owner->ID,
-					null
-				);
+				$fresh = DataObject::get($baseDataClass)->byId($this->owner->ID);
 				if ($fresh) {
 					$changed = $changedFields['ClassName']['after'] != $fresh->ClassName;
 				}
@@ -1300,20 +1294,16 @@ class Translatable extends DataExtension implements PermissionProvider {
 			// exclude the language of the current owner
 			$filter .= sprintf(' AND "%s"."Locale" != \'%s\'', $baseDataClass, $this->owner->Locale);
 		}
-		$currentStage = Versioned::current_stage();
 		$joinOnClause = sprintf('"%s_translationgroups"."OriginalID" = "%s"."ID"', $baseDataClass, $baseDataClass);
-		if($this->owner->hasExtension("Versioned")) {
-			if($stage) Versioned::reading_stage($stage);
+		if($this->owner->hasExtension("Versioned") && $stage) {
 			$translations = Versioned::get_by_stage(
 				$baseDataClass,
-				Versioned::current_stage(), 
+				$stage,
 				$filter, 
 				null
 			)->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
-			if($stage) Versioned::reading_stage($currentStage);
 		} else {
-			$class = $this->owner->class;
-			$translations = $baseDataClass::get()
+			$translations = DataObject::get($baseDataClass)
 				->where($filter)
 				->leftJoin("{$baseDataClass}_translationgroups", $joinOnClause);
 		}
