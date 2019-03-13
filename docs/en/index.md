@@ -80,9 +80,9 @@ An alternative is Tractorcow's [Fluent Module](https://github.com/tractorcow/sil
 
 ### Configuration
 
-#### ThroughObject::add_extension()
+#### Through Object::add_extension()
 
-Enabling Translatable through *add_extension()* in your *mysite/_config.php*:
+Enabling Translatable through `add_extension()` in your `mysite/_config.php`:
 
 ```php
 SiteTree::add_extension('Translatable');
@@ -102,14 +102,14 @@ class Page extends SiteTree
 ```
 
 
-Make sure to rebuild the database through /dev/build after enabling `[api:Translatable]`.
-Use the correct set_default_locale() before building the database
+Make sure to rebuild the database through `/dev/build` after enabling `[api:Translatable]`.
+Use the correct `set_default_locale()` before building the database
 for the first time, as this locale will be written on all new records.
 
 #### Setting the default locale
 
 <div class="notice" markdown='1'>
-**Important:** If the "default language" of your site is not English (en_US), please ensure to set the appropriate default
+**Important:** If the "default language" of your site is not English (`en_US`), please ensure to set the appropriate default
 language for your content before building the database with Translatable enabled
 </div>
 
@@ -143,7 +143,7 @@ $obj = DataObject::get_by_id('MyObject', 99); // original language
 $translatedObj = $obj->getTranslation('de_DE');
 ```
 
-Getting translations through Translatable::set_reading_locale().
+Getting translations through `Translatable::set_reading_locale()`.
 This is *not* a recommended approach, but sometimes unavoidable (e.g. for `[api:Versioned]` methods).
 
 ```php
@@ -179,8 +179,8 @@ In either case, you'll need to take care that the appropriate "reading language"
 before showing links to other pages on a website, for example through
 a `locale` GET parameter (see `Translatable::choose_site_locale()`).
 
-Note: You can't get Children() for a parent page in a different language
-through set_reading_locale(). Get the translated parent first.
+Note: You can't get `Children()` for a parent page in a different language
+through `set_reading_locale()`. Get the translated parent first.
 
 ```php
 // wrong
@@ -202,10 +202,10 @@ Keep in mind that the `[api:Translatable]` extension currently doesn't support t
 translated - all custom properties will automatically be fetched from their translated record on the database. This means
 you don't have to explicitly mark any custom properties as being translatable.
 
-The `[api:Translatable]` decorator applies only to the getCMSFields() method on DataObject or SiteTree and the getSettingsFields() 
-on SiteTree, not to any fields added in overloaded getCMSFields() implementations. See Translatable->updateCMSFields() for details. 
+The `[api:Translatable]` decorator applies only to the `getCMSFields()` method on `DataObject` or `SiteTree` and the `getSettingsFields()` 
+on `SiteTree`, not to any fields added in overloaded `getCMSFields()` implementations. See `Translatable->updateCMSFields()` for details. 
 By default, custom fields in the CMS won't show an original readonly value on a translated record, although they will save correctly. You can
-attach this behaviour to custom fields by calling a helper function from your getCMSFields() and getSettingsFields() functions.
+attach this behaviour to custom fields by calling a helper function from your `getCMSFields()` and `getSettingsFields()` functions.
 
 ```php
 class Page extends SiteTree 
@@ -311,7 +311,7 @@ or directly in our `Page` class:
 
 Every homepage has a distinct URL, the default language is /home, a German translation by default would be /home-de_DE.
 They can be accessed like any other translated page. If you want to access different homepages from the "root" without a
-URL, add a "locale" GET parameter. The German homepage would also be accessible through /?locale=de_DE. 
+URL, add a `locale` GET parameter. The German homepage would also be accessible through `/?locale=de_DE`. 
 
 For this to work, please ensure that the translated homepage is a direct translation of the default homepage, and not a
 new page created through "Create page...".
@@ -319,7 +319,7 @@ new page created through "Create page...".
 ### Translation groups
 
 Each translation can have an associated "master" object in another language which it is based on,
-as defined by the "MasterTranslationID" property. This relation is optional, meaning you can
+as defined by the `MasterTranslationID` property. This relation is optional, meaning you can
 create translations which have no representation in the "default language".
 This "original" doesn't have to be in a default language, meaning
 a french translation can have a german original, without either of them having a representation
@@ -327,7 +327,7 @@ in the default English language tree.
 Caution: There is no versioning for translation groups,
 meaning associating an object with a group will affect both stage and live records.
 
-SiteTree database table (abbreviated)
+`SiteTree` database table (abbreviated)
 
 ID   | URLSegment   | Title       | Locale
 ---- | ------------ | ----------- | -----------
@@ -335,7 +335,7 @@ ID   | URLSegment   | Title       | Locale
 `2`  | `ueber-uns`  | `Über uns`  | `de_DE`
 `3`  | `contact`    | `Contact`   | `en_US`
 
-SiteTree_translationgroups database table
+`SiteTree_translationgroups` database table
 
 TranslationGroupID | OriginalID
 ------------------ | ----------
@@ -343,7 +343,7 @@ TranslationGroupID | OriginalID
 `99`                 | `2`
 `199`                | `3`
 
-### CharacterSets
+### Character sets
 
 <div class="warning" markdown='1'>
 **Caution:** Does not apply any character-set conversion, it is assumed that all content
@@ -381,7 +381,7 @@ of the currently displayed page, and falls back to `i18n::get_locale()`).
 Disabling Translatable after creating translations will lead to all
 pages being shown in the default sitetree regardless of their language.
 It is advised to start with a new database after uninstalling Translatable,
-or manually filter out translated objects through their "Locale" property
+or manually filter out translated objects through their `Locale` property
 in the database.
 
 ## Recipes
@@ -398,7 +398,7 @@ By URL:
 http://<mysite>/mypage/?locale=de_DE
 ```
 
-By user preference (place this in your Page_Controller->init() method):
+By user preference (place this in your `Page_Controller->init()` method):
 
 ```php
 $member = Member::currentUser();
@@ -417,7 +417,7 @@ Declaring the language for HTML templates:
 	:::ss
 	<html lang="$ContentLocale">...</html>
 
-Declaring the language for HTML templates:
+Declaring the language for XHTML templates:
 
 	:::ss
 	<html lang="$ContentLocale" xml:lang="$ContentLocale" xmlns= "http://www.w3.org/1999/xhtml">
@@ -428,11 +428,11 @@ has only one language. But how does a user coming to your English default langua
 of this page? 
 By default, SilverStripe core doesn't provide any switching of languages through sessions or browser cookies. As a
 SEO-friendly CMS, it contains all this information in the URL. Each page in SilverStripe is aware of its translations
-through the *getTranslations()* method. We can use this method in our template to build a simple language switcher. It
+through the `getTranslations()` method. We can use this method in our template to build a simple language switcher. It
 shows all available translations in an unordered list with links to the same page in a different language. The example
 below can be inserted in any of your templates, for example `themes/blackcandy/templates/Layout/Page.ss`.
 
-
+```php
 <% if Translations %>
 <ul class="translations">
 <% loop Translations %>
@@ -445,10 +445,10 @@ title="$Title">
 <% end_loop %>
 </ul>
 <% end_if %>
+```
 
-
-Keep in mind that this will only show you available translations for the current page. The $Locale.Nice casting will
-just work if your locale value is registered in i18n::get_common_locales().
+Keep in mind that this will only show you available translations for the current page. The `$Locale.Nice` casting will
+just work if your locale value is registered in `i18n::get_common_locales()`.
 
 ### Page-control
 
@@ -456,7 +456,7 @@ If you want to put static links in your template, which link to a site by their 
 Page(page-url) %>`. For sites which use Translatable, this is not possible for more than one language, because the url's
 of different pages differ.
 
-For this case place the following function in your Page_Controller:
+For this case place the following function in your `Page_Controller`:
 
  ```php
 public function PageByLang($url, $lang) 
@@ -515,7 +515,7 @@ class Page_Controller extends ContentController {
 
 ### Adding a new locale
 
-The `i18n` logic has lookup tables for common locales in i18n::$common_locales, which is a subset of i18n::$all_locales.
+The `i18n` logic has lookup tables for common locales in `i18n::$common_locales`, which is a subset of `i18n::$all_locales`.
 If your locale is not present here, you can simply add it through `mysite/_config/config.yml`:
 
 ```yml
