@@ -459,7 +459,32 @@ class TranslatableTest extends FunctionalTest {
 		Config::inst()->update('Translatable', 'enforce_global_unique_urls', true);
 		Translatable::set_current_locale('en_US');
 	}
-	
+
+	public function testMultibyteUrlsWorkWhenTranslated()
+	{
+		Config::inst()->update('URLSegmentFilter', 'default_allow_multibyte', true);
+
+		$page = new Page();
+		$page->URLSegment = 'schön-döner';
+		$page->Content = 'Kebabs in Berlin are amazing.';
+		$page->write();
+		$page->doPublish();
+
+		$translatedPage = $page->createTranslation('de_DE');
+		$translatedPage->Content = 'Döner in Berlin sind unglaublich';
+		$translatedPage->doPublish();
+		$this->assertSame('schön-döner-de-de', rawurldecode($translatedPage->URLSegment));
+
+		// Test pinging the page on the frontend
+		$pageResult = $this->get('schön-döner');
+		$this->assertEquals(200, $pageResult->getStatusCode());
+		$this->assertContains('Kebabs in Berlin', (string) $pageResult->getBody());
+
+		$translatedPageResult = $this->get('schön-döner-de-de');
+		$this->assertEquals(200, $translatedPageResult->getStatusCode());
+		$this->assertContains('Döner in Berlin', (string) $translatedPageResult->getBody());
+	}
+
 	function testUpdateCMSFieldsOnSiteTree() {
 		$pageOrigLang = new TranslatableTest_Page();
 		$pageOrigLang->write();

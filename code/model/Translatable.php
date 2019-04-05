@@ -1473,6 +1473,11 @@ class Translatable extends DataExtension implements PermissionProvider {
 			$urlSegment = $newTranslation->URLSegment;
 		}
 
+		if (URLSegmentFilter::singleton()->getAllowMultibyte()) {
+			// Decode the URL segment, it will be re-encoded again on write
+			$urlSegment = rawurldecode($urlSegment);
+		}
+
 		// Only make segment unique if it should be enforced
 		if(Config::inst()->get('Translatable', 'enforce_global_unique_urls')) {
 			$newTranslation->URLSegment = $urlSegment . '-' . i18n::convert_rfc1766($locale);	
