@@ -18,7 +18,7 @@ sk_SK:
     TRANSLATEVIEWLANGS: 'Zobraziť jazykový rozbaľovací zoznam'
     TRANSLATIONS: Preklady
   Translatable_Transform:
-    CheckboxValueNo: 'Nie'
-    CheckboxValueYes: 'Áno'
+    CheckboxValueNo: Nie
+    CheckboxValueYes: Áno
     OriginalCheckboxLabel: 'Pôvodné: {value}'
     OriginalFieldLabel: 'Pôvodné {title}'
