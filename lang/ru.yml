@@ -1,0 +1,24 @@
+ru:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Язык
+  CMSMain_left:
+    GO: Выполн.
+  Form:
+    LANGAOTHER: 'Другие языки'
+    LANGAVAIL: 'Доступные языки'
+  Translatable:
+    ALLCREATED: 'Все переводы на доступные языки созданы.'
+    CREATE: 'Создать новый перевод'
+    CREATEBUTTON: Создать
+    EXISTING: 'Существующие переводы'
+    NEWLANGUAGE: 'Добавить язык'
+    NOTICENEWPAGE: 'Пожалуйста, сохраните данную страницу прежде чем создавать перевод'
+    TRANSLATEALLPERMISSION: 'Перевести на все доступные языки'
+    TRANSLATEPERMISSION: 'Перевести %s'
+    TRANSLATEVIEWLANGS: 'Отобразить языковое выпадающее меню'
+    TRANSLATIONS: Переводы
+  Translatable_Transform:
+    CheckboxValueNo: Нет
+    CheckboxValueYes: Да
+    OriginalCheckboxLabel: 'Оригинальное значение: {value}'
+    OriginalFieldLabel: 'Оригинальное {title}'

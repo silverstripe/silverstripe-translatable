@@ -1,6 +1,7 @@
 # Translatable module for SilverStripe CMS #
 
 [![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png?branch=2.1)](http://travis-ci.org/silverstripe/silverstripe-translatable)
+[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 ## Introduction ##
 
@@ -27,7 +28,7 @@ third party translation interface, transifex.com.
 Newly added strings will be periodically uploaded there for translation,
 and any new translations will be merged back to the project source code.
 
-Please use [https://www.transifex.com/projects/p/silverstripe-translatable/](https://www.transifex.com/projects/p/silverstripe-translatable/) to contribute translations,
+Please use [https://www.transifex.com/silverstripe/silverstripe-translatable/](https://www.transifex.com/projects/p/silverstripe-translatable/) to contribute translations,
 rather than sending pull requests with YAML files.
 
-See the ["i18n" topic](http://doc.silverstripe.org/framework/en/trunk/topics/i18n) on doc.silverstripe.org for more details.
+See the ["i18n" topic](https://docs.silverstripe.org/en/3/developer_guides/i18n/) on doc.silverstripe.org for more details.

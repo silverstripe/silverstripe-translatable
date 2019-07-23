@@ -22,6 +22,9 @@ class TranslatableSiteConfigTest extends SapphireTest {
 				
 		$this->origLocale = Translatable::default_locale();
 		Translatable::set_default_locale("en_US");
+
+		// Delete any default records created outside of fixtures
+		SiteConfig::get()->exclude('ID', $this->allFixtureIDs('SiteConfig'))->removeAll();
 	}
 	
 	function tearDown() {

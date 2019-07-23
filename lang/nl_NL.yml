@@ -1,0 +1,20 @@
+nl_NL:
+  CMSMain:
+    LANGUAGEDROPDOWNLABEL: Taal
+  CMSMain_left:
+    GO: Gaan
+  Form:
+    LANGAOTHER: 'Andere talen'
+    LANGAVAIL: 'Beschikbare talen'
+  Translatable:
+    ALLCREATED: 'Alle toegestane vertalingen werden gecreëerd.'
+    CREATE: 'Nieuwe vertaling creëren'
+    CREATEBUTTON: Creëren
+    EXISTING: 'Bestaande vertalingen'
+    NEWLANGUAGE: 'Nieuwe taal'
+    TRANSLATEALLPERMISSION: 'Vertaal in alle beschikbare talen'
+    TRANSLATEPERMISSION: 'Vertaal %s'
+    TRANSLATIONS: Vertalingen
+  Translatable_Transform:
+    CheckboxValueNo: Neen
+    CheckboxValueYes: Ja

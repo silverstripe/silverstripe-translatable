@@ -16,7 +16,7 @@ mi:
     TRANSLATEALLPERMISSION: 'Whakamāoritia ki ngā reo katoa e wātea ana'
     TRANSLATEPERMISSION: 'Whakamāoritia a %s'
     TRANSLATEVIEWLANGS: 'Tirohia te takaiho reo'
-    TRANSLATIONS: Ngā whakamāoritanga
+    TRANSLATIONS: 'Ngā whakamāoritanga'
   Translatable_Transform:
     OriginalCheckboxLabel: 'Taketake: {value}'
     OriginalFieldLabel: '{title} taketake'
