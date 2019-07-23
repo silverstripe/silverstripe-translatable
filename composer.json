@@ -30,10 +30,7 @@
 	"extra": {
 		"screenshots": [
 			"http://www.silverstripe.org/assets/Uploads/translatable4-small.png"
-		],
-		"branch-alias": {
-			"2.x-dev": "2.4.x-dev"
-		}
+		]
 	},
 	"support": {
 		"issues": "https://github.com/silverstripe/silverstripe-translatable/issues?state=open"
