@@ -1,3 +1,9 @@
+# IMPORTANT NOTE
+
+Silverstripe Translatable is only compatible with Silverstripe CMS 3. [Silverstripe CMS 3 has entered limited support in June 2018](https://www.silverstripe.org/blog/update-on-silverstripe-5-x/). This means we'll only be fixing critical bugs and security issues for Silverstripe CMS 3 going forward. This applies to _Translatable_ as well.
+
+[`silverstripe/fluent`](https://github.com/tractorcow-farm/silverstripe-fluent) is the recommended alternative for Silverstripe CMS 4.
+
 # Translatable module for SilverStripe CMS #
 
 [![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-translatable.png?branch=2.1)](http://travis-ci.org/silverstripe/silverstripe-translatable)
