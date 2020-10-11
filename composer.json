@@ -27,7 +27,7 @@
 		"silverstripe/postgresql": "*",
 		"silverstripe/sqlite3": "*",
 		"silverstripe/mssql": "*",
-		"phpunit/PHPUnit": "~3.7@stable"
+		"phpunit/phpunit": "~3.7@stable"
 	},
 	"extra": {
 		"screenshots": [
