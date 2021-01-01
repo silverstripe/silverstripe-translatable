@@ -1,5 +1,7 @@
+---
 title: Working with translations
 summary: Adding translated content to your website.
+---
 
 # Working with translations
 
